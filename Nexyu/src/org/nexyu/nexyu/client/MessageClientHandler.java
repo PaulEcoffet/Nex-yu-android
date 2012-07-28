@@ -3,13 +3,18 @@
  */
 package org.nexyu.nexyu.client;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelFuture;
+import org.jboss.netty.channel.ChannelFutureListener;
+import org.jboss.netty.channel.ChannelHandlerContext;
+import org.jboss.netty.channel.ChannelStateEvent;
+import org.jboss.netty.channel.ExceptionEvent;
+import org.jboss.netty.channel.MessageEvent;
+import org.jboss.netty.channel.SimpleChannelHandler;
 
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.channel.*;
+import android.util.Log;
 
-import static org.jboss.netty.buffer.ChannelBuffers.*;
+import com.google.gson.JsonObject;
 
 /**
  * @author Paul Ecoffet
@@ -22,37 +27,43 @@ public class MessageClientHandler extends SimpleChannelHandler
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 	{
 		Channel ch = e.getChannel();
-		ChannelBuffer buf = dynamicBuffer();
-		
-		
-		ch.close();
+		JsonObject data = (JsonObject) e.getMessage();
+		ChannelFuture f = ch.close();
+		f.addListener(new ChannelFutureListener() {
+			@Override
+			public void operationComplete(ChannelFuture future) throws Exception
+			{
+				Log.d("NEX", "Disconnected");
+			}
+		});
+		manageDataReceived(data);
+	}
+
+	/**
+	 * @param data
+	 */
+	private void manageDataReceived(JsonObject data)
+	{
+		String type = data.get("type").getAsString();
+		if(type.equals("pong"))
+			Log.d("NEX", "Pong received");
+		else
+			Log.d("NEX", "Unknown type");
 	}
 
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e)
 	{
+		Log.d("NEX", "Connected");
 		Channel ch = e.getChannel();
-		ChannelBuffer buf = dynamicBuffer();
-		ByteArrayOutputStream message = new ByteArrayOutputStream();
-		String data = "{\"type\":\"message\"}";
-		try
-		{
-			message.write(data.getBytes().length);
-			message.write(data.getBytes());
-		}
-		catch (IOException err)
-		{
-			err.printStackTrace();
-		}
-		buf.writeBytes(message.toByteArray());
-
+		String buf = "{\"type\":\"ping\"}";
 		ChannelFuture future = ch.write(buf);
 		future.addListener(new ChannelFutureListener() {
 
 			@Override
 			public void operationComplete(ChannelFuture arg0) throws Exception
 			{
-				System.out.println("JSON sent");
+				Log.d("NEX", "Ping");
 			}
 		});
 	}
