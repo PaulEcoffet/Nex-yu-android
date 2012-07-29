@@ -29,23 +29,9 @@ import android.widget.Toast;
 public class ConnectActivity extends Activity
 {
 
-	@Override
-	public void onCreate(Bundle savedInstanceState)
-	{
-
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_connect);
-		ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-		NetworkInfo ni = cm.getActiveNetworkInfo();
-		if (ni != null && ni.isConnected())
-			connect();
-		else
-			Toast.makeText(ConnectActivity.this, "The device is not connected to the Internet",
-					Toast.LENGTH_LONG).show();
-	}
-
 	/**
 	 * 
+	 * @author Paul Ecoffet
 	 */
 	private void connect()
 	{
@@ -78,6 +64,21 @@ public class ConnectActivity extends Activity
 		}
 		fuConn.getChannel().getCloseFuture().awaitUninterruptibly();
 		factory.releaseExternalResources();
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_connect);
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+		NetworkInfo ni = cm.getActiveNetworkInfo();
+		if (ni != null && ni.isConnected())
+			connect();
+		else
+			Toast.makeText(ConnectActivity.this, "The device is not connected to the Internet",
+					Toast.LENGTH_LONG).show();
 	}
 
 	@Override
