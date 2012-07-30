@@ -15,16 +15,14 @@ import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
 import org.jboss.netty.handler.codec.string.StringDecoder;
 import org.jboss.netty.handler.codec.string.StringEncoder;
 import org.jboss.netty.util.CharsetUtil;
+import org.nexyu.nexyu.SMSManagement.ConversationsGatherer;
 import org.nexyu.nexyu.client.JSONDecoder;
 import org.nexyu.nexyu.client.MessageClientHandler;
 
 import android.app.Activity;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.widget.Toast;
 
 public class ConnectActivity extends Activity
 {
@@ -72,13 +70,17 @@ public class ConnectActivity extends Activity
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_connect);
-		ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-		NetworkInfo ni = cm.getActiveNetworkInfo();
-		if (ni != null && ni.isConnected())
-			connect();
-		else
-			Toast.makeText(ConnectActivity.this, "The device is not connected to the Internet",
-					Toast.LENGTH_LONG).show();
+		ConversationsGatherer cg = new ConversationsGatherer(this);
+		cg.gatherSMS();
+		
+		/*
+		 * ConnectivityManager cm = (ConnectivityManager)
+		 * getSystemService(CONNECTIVITY_SERVICE); NetworkInfo ni =
+		 * cm.getActiveNetworkInfo(); if (ni != null && ni.isConnected())
+		 * connect(); else Toast.makeText(ConnectActivity.this,
+		 * "The device is not connected to the Internet",
+		 * Toast.LENGTH_LONG).show();
+		 */
 	}
 
 	@Override
