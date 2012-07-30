@@ -15,16 +15,17 @@ import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
 import org.jboss.netty.handler.codec.string.StringDecoder;
 import org.jboss.netty.handler.codec.string.StringEncoder;
 import org.jboss.netty.util.CharsetUtil;
+
 import org.nexyu.nexyu.SMSManagement.ConversationsGatherer;
 import org.nexyu.nexyu.client.JSONDecoder;
 import org.nexyu.nexyu.client.MessageClientHandler;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 
-public class ConnectActivity extends Activity
+public class ConnectActivity extends FragmentActivity
 {
 
 	/**
@@ -71,6 +72,7 @@ public class ConnectActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_connect);
 		ConversationsGatherer cg = new ConversationsGatherer(this);
+		getSupportLoaderManager().initLoader(0, null, cg);
 		cg.gatherSMS();
 		
 		/*
