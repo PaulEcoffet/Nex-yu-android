@@ -72,7 +72,6 @@ public class ConnectActivity extends FragmentActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_connect);
 		ConversationsGatherer cg = new ConversationsGatherer(this);
-		getSupportLoaderManager().initLoader(0, null, cg);
 		cg.gatherSMS();
 		
 		/*
