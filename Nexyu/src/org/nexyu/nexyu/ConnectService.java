@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
+import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelPipeline;
@@ -15,26 +16,52 @@ import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
 import org.jboss.netty.handler.codec.string.StringDecoder;
 import org.jboss.netty.handler.codec.string.StringEncoder;
 import org.jboss.netty.util.CharsetUtil;
-
-import org.nexyu.nexyu.SMSManagement.ConversationsGatherer;
 import org.nexyu.nexyu.client.JSONDecoder;
 import org.nexyu.nexyu.client.MessageClientHandler;
 
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.app.IntentService;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Binder;
+import android.os.IBinder;
 import android.util.Log;
-import android.view.Menu;
+import android.widget.Toast;
 
-public class ConnectActivity extends FragmentActivity
+public class ConnectService extends IntentService
 {
 
+	public class ConnectBinder extends Binder
+	{
+		ConnectService getService()
+		{
+			return ConnectService.this;
+		}
+	}
+	/**
+	 * 
+	 */
+	private final static String	TAG		= "service";
+	private final static String NAME = "nexConnectService";
+	protected ChannelFactory	factory	= null;
+	protected Channel			chan	= null;
+	private final IBinder		mBinder	= new ConnectBinder();
+
+	
+
+	public ConnectService()
+	{
+		super(NAME);
+	}
+
+	
 	/**
 	 * 
 	 * @author Paul Ecoffet
 	 */
 	private void connect()
 	{
-		ChannelFactory factory = new OioClientSocketChannelFactory(Executors.newCachedThreadPool());
+		factory = new OioClientSocketChannelFactory(Executors.newCachedThreadPool());
 		ClientBootstrap bootstrap = new ClientBootstrap(factory);
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 			@Override
@@ -58,37 +85,73 @@ public class ConnectActivity extends FragmentActivity
 		fuConn.awaitUninterruptibly();
 		if (!fuConn.isSuccess())
 		{
-			Log.d("NEX", "Not a success");
+			Log.e(TAG, "Impossible to connect.");
 			fuConn.getCause().printStackTrace();
 		}
-		fuConn.getChannel().getCloseFuture().awaitUninterruptibly();
-		factory.releaseExternalResources();
+		chan = fuConn.getChannel();
 	}
 
+	/**
+	 * @see android.app.Service#onBind(android.content.Intent)
+	 */
 	@Override
-	public void onCreate(Bundle savedInstanceState)
+	public IBinder onBind(Intent intent)
 	{
+		return mBinder;
+	}
 
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_connect);
-		ConversationsGatherer cg = new ConversationsGatherer(this);
-		cg.gatherSMS();
+	/**
+	 * @see android.app.Service#onCreate()
+	 */
+	@Override
+	public void onCreate()
+	{
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+		NetworkInfo ni = cm.getActiveNetworkInfo();
+		if (ni != null && ni.isConnected())
+		{
+			connect();
+		}
+		else
+		{
+			Toast.makeText(this, "The device is not connected to the Internet", Toast.LENGTH_LONG)
+					.show();
+			stopSelf();
+		}
+	}
+
+	/**
+	 * @see android.app.Service#onDestroy()
+	 */
+	@Override
+	public void onDestroy()
+	{
+		if (chan.isConnected())
+		{
+			chan.close().awaitUninterruptibly();
+			factory.releaseExternalResources();
+			Log.i(TAG, "Connection closed");
+		}
+		Log.i(TAG, "Service destroyed");
+	}
+
+	/**
+	 * @see android.app.Service#onStartCommand(android.content.Intent, int, int)
+	 */
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId)
+	{
+		Log.i(TAG, "Received start id " + startId + ": " + intent);
+		return super.onStartCommand(intent, flags, startId);
+	}
+
+	/**
+	 * @see android.app.IntentService#onHandleIntent(android.content.Intent)
+	 */
+	@Override
+	protected void onHandleIntent(Intent intent)
+	{
 		
-		/*
-		 * ConnectivityManager cm = (ConnectivityManager)
-		 * getSystemService(CONNECTIVITY_SERVICE); NetworkInfo ni =
-		 * cm.getActiveNetworkInfo(); if (ni != null && ni.isConnected())
-		 * connect(); else Toast.makeText(ConnectActivity.this,
-		 * "The device is not connected to the Internet",
-		 * Toast.LENGTH_LONG).show();
-		 */
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		getMenuInflater().inflate(R.menu.activity_connect, menu);
-		return true;
 	}
 
 }
