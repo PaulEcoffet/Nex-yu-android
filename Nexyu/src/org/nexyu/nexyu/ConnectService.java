@@ -14,39 +14,32 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
 public class ConnectService extends IntentService
 {
-
-	public class ConnectBinder extends Binder
-	{
-		ConnectService getService()
-		{
-			return ConnectService.this;
-		}
-	}
-
 	/**
 	 * 
 	 */
-	private final static String	TAG						= "service";
+	private final static String	TAG						= "ConnectService";
 	private final static String	NAME					= "nexConnectService";
 	private static final int	ONGOING_NOTIFICATION	= 0;
-	protected ChannelFactory	factory					= null;
-	protected Channel			chan					= null;
-	private final IBinder		mBinder					= new ConnectBinder();
+	protected ChannelFactory	factory;
+	protected Channel			chan;
 	private Notification		notification;
 
 	public ConnectService()
 	{
 		super(NAME);
+		chan = null;
+		notification = null;
+		factory = null;
 	}
 
 	/**
@@ -55,7 +48,7 @@ public class ConnectService extends IntentService
 	 * @param ip
 	 *            The IP to connect to.
 	 * @param port
-	 *            TODO
+	 *            The port to connect on.
 	 * @author Paul Ecoffet
 	 */
 	private void connect(String ip, int port)
@@ -77,20 +70,12 @@ public class ConnectService extends IntentService
 	}
 
 	/**
-	 * @see android.app.Service#onBind(android.content.Intent)
-	 */
-	@Override
-	public IBinder onBind(Intent intent)
-	{
-		return mBinder;
-	}
-
-	/**
 	 * @see android.app.Service#onCreate()
 	 */
 	@Override
 	public void onCreate()
 	{
+		super.onCreate();
 		notification = new Notification(R.drawable.ic_launcher, getText(R.string.app_name),
 				System.currentTimeMillis());
 		Intent notificationIntent = new Intent(this, MainActivity.class);
@@ -113,31 +98,7 @@ public class ConnectService extends IntentService
 			Log.i(TAG, "Connection closed");
 		}
 		Log.i(TAG, "Service destroyed");
-	}
-
-	/**
-	 * @see android.app.Service#onStartCommand(android.content.Intent, int, int)
-	 */
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId)
-	{
-		Log.i(TAG, "Received start id " + startId + ": " + intent);
-		ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-		NetworkInfo ni = cm.getActiveNetworkInfo();
-		if (ni != null && ni.isConnected())
-		{
-			String ip = intent.getStringExtra("ip");
-			connect(ip, 4242);
-		}
-		else
-		{
-			Toast.makeText(
-					this,
-					R.string.the_device_is_not_connected_to_the_internet_impossible_to_connect_to_the_computer,
-					Toast.LENGTH_LONG).show();
-			stopSelf();
-		}
-		return super.onStartCommand(intent, flags, startId);
+		super.onDestroy();
 	}
 
 	/**
@@ -146,7 +107,39 @@ public class ConnectService extends IntentService
 	@Override
 	protected void onHandleIntent(Intent intent)
 	{
+		if (intent.getStringExtra("action") != null)
+			handleCommand(intent.getExtras());
+		else
+			Log.e(TAG, "no intended action");
+	}
 
+	/**
+	 * @param stringExtra
+	 */
+	private void handleCommand(Bundle bundle)
+	{
+		String action = bundle.getString("action");
+		if (action.equals("kill"))
+			stopSelf();
+		else if (action.equals("connect"))
+		{
+			ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+			NetworkInfo ni = cm.getActiveNetworkInfo();
+			if (ni != null && ni.isConnected())
+			{
+				String ip = bundle.getString("ip");
+				connect(ip, 4242);
+			}
+			else
+			{
+				Toast.makeText(
+						this,
+						R.string.the_device_is_not_connected_to_the_internet_impossible_to_connect_to_the_computer,
+						Toast.LENGTH_LONG).show();
+			}
+		}
+		else
+			Log.e(TAG, "undefined action");
 	}
 
 }
