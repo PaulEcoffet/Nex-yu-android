@@ -38,28 +38,31 @@ public class ConnectService extends IntentService
 			return ConnectService.this;
 		}
 	}
+
 	/**
 	 * 
 	 */
 	private final static String	TAG		= "service";
-	private final static String NAME = "nexConnectService";
+	private final static String	NAME	= "nexConnectService";
 	protected ChannelFactory	factory	= null;
 	protected Channel			chan	= null;
 	private final IBinder		mBinder	= new ConnectBinder();
-
-	
 
 	public ConnectService()
 	{
 		super(NAME);
 	}
 
-	
 	/**
+	 * Connect the service to the ip given on port PORT.
 	 * 
+	 * @param ip
+	 *            The ip to connect to.
+	 * @param port
+	 *            TODO
 	 * @author Paul Ecoffet
 	 */
-	private void connect()
+	private void connect(String ip, int port)
 	{
 		factory = new OioClientSocketChannelFactory(Executors.newCachedThreadPool());
 		ClientBootstrap bootstrap = new ClientBootstrap(factory);
@@ -81,7 +84,7 @@ public class ConnectService extends IntentService
 
 		bootstrap.setOption("tcpNoDelay", true);
 		bootstrap.setOption("keepAlive", true);
-		ChannelFuture fuConn = bootstrap.connect(new InetSocketAddress("10.0.2.2", 4242));
+		ChannelFuture fuConn = bootstrap.connect(new InetSocketAddress(ip, port));
 		fuConn.awaitUninterruptibly();
 		if (!fuConn.isSuccess())
 		{
@@ -106,18 +109,6 @@ public class ConnectService extends IntentService
 	@Override
 	public void onCreate()
 	{
-		ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-		NetworkInfo ni = cm.getActiveNetworkInfo();
-		if (ni != null && ni.isConnected())
-		{
-			connect();
-		}
-		else
-		{
-			Toast.makeText(this, "The device is not connected to the Internet", Toast.LENGTH_LONG)
-					.show();
-			stopSelf();
-		}
 	}
 
 	/**
@@ -142,6 +133,20 @@ public class ConnectService extends IntentService
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
 		Log.i(TAG, "Received start id " + startId + ": " + intent);
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+		NetworkInfo ni = cm.getActiveNetworkInfo();
+		if (ni != null && ni.isConnected())
+		{
+			String ip = intent.getByteArrayExtra("ip").toString();
+			connect(ip, 4242);
+		}
+		else
+		{
+			Toast.makeText(this, "The device is not connected to the Internet", Toast.LENGTH_LONG)
+					.show();
+			stopSelf();
+		}
+	}
 		return super.onStartCommand(intent, flags, startId);
 	}
 
@@ -151,7 +156,7 @@ public class ConnectService extends IntentService
 	@Override
 	protected void onHandleIntent(Intent intent)
 	{
-		
+
 	}
 
 }
