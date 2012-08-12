@@ -5,5 +5,8 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_connect">ConnectActivity</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="impossible_to_connect">Impossible to connect.</string>
+    <string name="notification_title">Nex yu is active</string>
+    <string name="notif_not_connected">Not connected</string>
 
 </resources>

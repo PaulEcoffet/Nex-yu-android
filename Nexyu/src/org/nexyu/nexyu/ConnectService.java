@@ -20,7 +20,10 @@ import org.nexyu.nexyu.client.JSONDecoder;
 import org.nexyu.nexyu.client.MessageClientHandler;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Binder;
@@ -42,11 +45,13 @@ public class ConnectService extends IntentService
 	/**
 	 * 
 	 */
-	private final static String	TAG		= "service";
-	private final static String	NAME	= "nexConnectService";
-	protected ChannelFactory	factory	= null;
-	protected Channel			chan	= null;
-	private final IBinder		mBinder	= new ConnectBinder();
+	private final static String	TAG						= "service";
+	private final static String	NAME					= "nexConnectService";
+	private static final int	ONGOING_NOTIFICATION	= 0;
+	protected ChannelFactory	factory					= null;
+	protected Channel			chan					= null;
+	private final IBinder		mBinder					= new ConnectBinder();
+	private Notification		notification;
 
 	public ConnectService()
 	{
@@ -54,10 +59,10 @@ public class ConnectService extends IntentService
 	}
 
 	/**
-	 * Connect the service to the ip given on port PORT.
+	 * Connect the service to the IP given on port PORT.
 	 * 
 	 * @param ip
-	 *            The ip to connect to.
+	 *            The IP to connect to.
 	 * @param port
 	 *            TODO
 	 * @author Paul Ecoffet
@@ -88,7 +93,7 @@ public class ConnectService extends IntentService
 		fuConn.awaitUninterruptibly();
 		if (!fuConn.isSuccess())
 		{
-			Log.e(TAG, "Impossible to connect.");
+			Log.e(TAG, getString(R.string.impossible_to_connect));
 			fuConn.getCause().printStackTrace();
 		}
 		chan = fuConn.getChannel();
@@ -109,6 +114,13 @@ public class ConnectService extends IntentService
 	@Override
 	public void onCreate()
 	{
+		notification = new Notification(R.drawable.ic_launcher, getText(R.string.app_name),
+				System.currentTimeMillis());
+		Intent notificationIntent = new Intent(this, MainActivity.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+		notification.setLatestEventInfo(this, getText(R.string.notification_title),
+				getText(R.string.notif_not_connected), pendingIntent);
+		startForeground(ONGOING_NOTIFICATION, notification);
 	}
 
 	/**
@@ -137,16 +149,17 @@ public class ConnectService extends IntentService
 		NetworkInfo ni = cm.getActiveNetworkInfo();
 		if (ni != null && ni.isConnected())
 		{
-			String ip = intent.getByteArrayExtra("ip").toString();
+			String ip = intent.getStringExtra("ip");
 			connect(ip, 4242);
 		}
 		else
 		{
-			Toast.makeText(this, "The device is not connected to the Internet", Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(
+					this,
+					"The device is not connected to the Internet, impossible to connect to the computer",
+					Toast.LENGTH_LONG).show();
 			stopSelf();
 		}
-	}
 		return super.onStartCommand(intent, flags, startId);
 	}
 

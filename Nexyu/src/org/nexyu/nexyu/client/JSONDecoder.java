@@ -6,6 +6,7 @@ package org.nexyu.nexyu.client;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
+import org.nexyu.nexyu.R;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
