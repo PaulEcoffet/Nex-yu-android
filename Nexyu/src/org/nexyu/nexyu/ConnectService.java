@@ -7,17 +7,8 @@ import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelFuture;
-import org.jboss.netty.channel.ChannelPipeline;
-import org.jboss.netty.channel.ChannelPipelineFactory;
-import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.oio.OioClientSocketChannelFactory;
-import org.jboss.netty.handler.codec.frame.LengthFieldBasedFrameDecoder;
-import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
-import org.jboss.netty.handler.codec.string.StringDecoder;
-import org.jboss.netty.handler.codec.string.StringEncoder;
-import org.jboss.netty.util.CharsetUtil;
-import org.nexyu.nexyu.client.JSONDecoder;
-import org.nexyu.nexyu.client.MessageClientHandler;
+import org.nexyu.nexyu.client.ClientPipeline;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -70,23 +61,9 @@ public class ConnectService extends IntentService
 	private void connect(String ip, int port)
 	{
 		factory = new OioClientSocketChannelFactory(Executors.newCachedThreadPool());
-		ClientBootstrap bootstrap = new ClientBootstrap(factory);
-		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
-			@Override
-			public ChannelPipeline getPipeline() throws Exception
-			{
-				LengthFieldBasedFrameDecoder lengthDecod = new LengthFieldBasedFrameDecoder(
-						Integer.MAX_VALUE, 0, Integer.SIZE / Byte.SIZE, 0, Integer.SIZE / Byte.SIZE);
-				StringDecoder stringDecod = new StringDecoder(CharsetUtil.UTF_8);
-				JSONDecoder jsonDecoder = new JSONDecoder();
-				MessageClientHandler messageClientHandler = new MessageClientHandler();
-				LengthFieldPrepender lengthFieldPrepender = new LengthFieldPrepender(4);
-				StringEncoder stringEncoder = new StringEncoder(CharsetUtil.UTF_8);
-				return Channels.pipeline(lengthDecod, stringDecod, jsonDecoder,
-						messageClientHandler, lengthFieldPrepender, stringEncoder);
-			}
-		});
 
+		ClientBootstrap bootstrap = new ClientBootstrap(factory);
+		bootstrap.setPipelineFactory(new ClientPipeline());
 		bootstrap.setOption("tcpNoDelay", true);
 		bootstrap.setOption("keepAlive", true);
 		ChannelFuture fuConn = bootstrap.connect(new InetSocketAddress(ip, port));
@@ -156,7 +133,7 @@ public class ConnectService extends IntentService
 		{
 			Toast.makeText(
 					this,
-					"The device is not connected to the Internet, impossible to connect to the computer",
+					R.string.the_device_is_not_connected_to_the_internet_impossible_to_connect_to_the_computer,
 					Toast.LENGTH_LONG).show();
 			stopSelf();
 		}
