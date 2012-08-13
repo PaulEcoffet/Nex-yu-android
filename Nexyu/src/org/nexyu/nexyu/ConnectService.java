@@ -85,6 +85,8 @@ public class ConnectService extends IntentService
 		notification.setLatestEventInfo(this, getText(R.string.notification_title),
 				getText(R.string.notif_not_connected), pendingIntent);
 		startForeground(ONGOING_NOTIFICATION, notification);
+
+		Log.i(TAG, "service started");
 	}
 
 	/**
@@ -93,7 +95,7 @@ public class ConnectService extends IntentService
 	@Override
 	public void onDestroy()
 	{
-		if (chan.isConnected())
+		if (chan != null && chan.isConnected())
 		{
 			chan.close().awaitUninterruptibly();
 			factory.releaseExternalResources();
@@ -122,7 +124,9 @@ public class ConnectService extends IntentService
 	{
 		String action = bundle.getString("action");
 		if (action.equals("kill"))
+		{
 			stopSelf();
+		}
 		else if (action.equals("connect"))
 		{
 			ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
@@ -140,7 +144,9 @@ public class ConnectService extends IntentService
 						Toast.LENGTH_LONG).show();
 			}
 		}
-		else
-			Log.e(TAG, "undefined action");
+		else if (action != null)
+		{
+			Log.e(TAG, "undefined action:" + action);
+		}
 	}
 }
