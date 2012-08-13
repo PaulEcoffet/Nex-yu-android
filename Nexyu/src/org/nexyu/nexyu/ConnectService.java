@@ -16,9 +16,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Binder;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -27,7 +25,7 @@ public class ConnectService extends IntentService
 	/**
 	 * 
 	 */
-	private static final int	DEF_PORT	= 4242;
+	private static final int	DEF_PORT				= 4242;
 	/**
 	 * 
 	 */
@@ -145,5 +143,4 @@ public class ConnectService extends IntentService
 		else
 			Log.e(TAG, "undefined action");
 	}
-
 }
