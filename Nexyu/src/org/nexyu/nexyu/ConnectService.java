@@ -27,6 +27,10 @@ public class ConnectService extends IntentService
 	/**
 	 * 
 	 */
+	private static final int	DEF_PORT	= 4242;
+	/**
+	 * 
+	 */
 	private final static String	TAG						= "ConnectService";
 	private final static String	NAME					= "nexConnectService";
 	private static final int	ONGOING_NOTIFICATION	= 0;
@@ -128,7 +132,7 @@ public class ConnectService extends IntentService
 			if (ni != null && ni.isConnected())
 			{
 				String ip = bundle.getString("ip");
-				connect(ip, 4242);
+				connect(ip, DEF_PORT);
 			}
 			else
 			{
