@@ -1,4 +1,4 @@
-package org.nexyu.nexyu;
+package org.nexyu.nexyu.service;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
@@ -8,19 +8,25 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.socket.oio.OioClientSocketChannelFactory;
+import org.nexyu.nexyu.MainActivity;
+import org.nexyu.nexyu.R;
+import org.nexyu.nexyu.R.drawable;
+import org.nexyu.nexyu.R.string;
 import org.nexyu.nexyu.client.ClientPipeline;
 
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-public class ConnectService extends IntentService
+public class ConnectService extends Service
 {
 	/**
 	 * 
@@ -30,15 +36,13 @@ public class ConnectService extends IntentService
 	 * 
 	 */
 	private final static String	TAG						= "ConnectService";
-	private final static String	NAME					= "nexConnectService";
-	private static final int	ONGOING_NOTIFICATION	= 0;
+	private static final int	ONGOING_NOTIFICATION	= 34340;
 	protected ChannelFactory	factory;
 	protected Channel			chan;
 	private Notification		notification;
 
 	public ConnectService()
 	{
-		super(NAME);
 		chan = null;
 		notification = null;
 		factory = null;
@@ -106,18 +110,6 @@ public class ConnectService extends IntentService
 	}
 
 	/**
-	 * @see android.app.IntentService#onHandleIntent(android.content.Intent)
-	 */
-	@Override
-	protected void onHandleIntent(Intent intent)
-	{
-		if (intent.getStringExtra("action") != null)
-			handleCommand(intent.getExtras());
-		else
-			Log.e(TAG, "no intended action");
-	}
-
-	/**
 	 * @param stringExtra
 	 */
 	private void handleCommand(Bundle bundle)
@@ -148,5 +140,15 @@ public class ConnectService extends IntentService
 		{
 			Log.e(TAG, "undefined action:" + action);
 		}
+	}
+
+	/**
+	 * @see android.app.Service#onBind(android.content.Intent)
+	 */
+	@Override
+	public IBinder onBind(Intent arg0)
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

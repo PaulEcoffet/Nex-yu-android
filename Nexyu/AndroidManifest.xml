@@ -23,7 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".ConnectService"
+        <service android:name=".service.ConnectService"
             ></service>
     </application>
 

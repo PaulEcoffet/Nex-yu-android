@@ -1,5 +1,7 @@
 package org.nexyu.nexyu;
 
+import org.nexyu.nexyu.service.ConnectService;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +29,14 @@ public class MainActivity extends Activity implements View.OnClickListener
 	{
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
+	}
+
+	@Override
+	public void onDestroy()
+	{
+		Intent serv = new Intent(this, ConnectService.class);
+			stopService(serv);
+		super.onDestroy();
 	}
 
 	/**
