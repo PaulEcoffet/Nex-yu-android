@@ -1,5 +1,6 @@
 package org.nexyu.nexyu.service;
 
+import java.lang.ref.WeakReference;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
@@ -10,54 +11,77 @@ import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.socket.oio.OioClientSocketChannelFactory;
 import org.nexyu.nexyu.MainActivity;
 import org.nexyu.nexyu.R;
-import org.nexyu.nexyu.R.drawable;
-import org.nexyu.nexyu.R.string;
 import org.nexyu.nexyu.client.ClientPipeline;
 
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
 import android.util.Log;
-import android.widget.Toast;
 
 public class ConnectService extends Service
 {
 	/**
-	 * 
+	 *
 	 */
-	private static final int	DEF_PORT				= 4242;
-	/**
-	 * 
-	 */
+	public static final int		DEF_PORT				= 34340;
 	private final static String	TAG						= "ConnectService";
 	private static final int	ONGOING_NOTIFICATION	= 34340;
+	public static final int		MSG_CONNECT				= 1;
 	protected ChannelFactory	factory;
 	protected Channel			chan;
 	private Notification		notification;
+	private Messenger			messenger;
+
+	static class IncomingHandler extends Handler
+	{
+		private final WeakReference<ConnectService>	mService;
+
+		/**
+		 *
+		 */
+		public IncomingHandler(ConnectService service)
+		{
+			mService = new WeakReference<ConnectService>(service);
+		}
+
+		@Override
+		public void handleMessage(Message msg)
+		{
+			ConnectService service = mService.get();
+			switch (msg.what)
+			{
+			case MSG_CONNECT:
+				service.connect(msg.getData().getString("ip"), msg.getData().getInt("port"));
+				break;
+			default:
+				super.handleMessage(msg);
+			}
+		}
+	}
 
 	public ConnectService()
 	{
 		chan = null;
 		notification = null;
 		factory = null;
+		messenger = new Messenger(new IncomingHandler(this));
 	}
 
 	/**
 	 * Connect the service to the IP given on port PORT.
-	 * 
+	 *
 	 * @param ip
 	 *            The IP to connect to.
 	 * @param port
 	 *            The port to connect on.
 	 * @author Paul Ecoffet
 	 */
-	private void connect(String ip, int port)
+	private boolean connect(String ip, int port)
 	{
 		factory = new OioClientSocketChannelFactory(Executors.newCachedThreadPool());
 
@@ -65,14 +89,13 @@ public class ConnectService extends Service
 		bootstrap.setPipelineFactory(new ClientPipeline());
 		bootstrap.setOption("tcpNoDelay", true);
 		bootstrap.setOption("keepAlive", true);
+
+		if (port == 0) // TODO Remove this
+			port = DEF_PORT;
 		ChannelFuture fuConn = bootstrap.connect(new InetSocketAddress(ip, port));
 		fuConn.awaitUninterruptibly();
-		if (!fuConn.isSuccess())
-		{
-			Log.e(TAG, getString(R.string.impossible_to_connect));
-			fuConn.getCause().printStackTrace();
-		}
 		chan = fuConn.getChannel();
+		return fuConn.isSuccess();
 	}
 
 	/**
@@ -109,37 +132,10 @@ public class ConnectService extends Service
 		super.onDestroy();
 	}
 
-	/**
-	 * @param stringExtra
-	 */
-	private void handleCommand(Bundle bundle)
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId)
 	{
-		String action = bundle.getString("action");
-		if (action.equals("kill"))
-		{
-			stopSelf();
-		}
-		else if (action.equals("connect"))
-		{
-			ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-			NetworkInfo ni = cm.getActiveNetworkInfo();
-			if (ni != null && ni.isConnected())
-			{
-				String ip = bundle.getString("ip");
-				connect(ip, DEF_PORT);
-			}
-			else
-			{
-				Toast.makeText(
-						this,
-						R.string.the_device_is_not_connected_to_the_internet_impossible_to_connect_to_the_computer,
-						Toast.LENGTH_LONG).show();
-			}
-		}
-		else if (action != null)
-		{
-			Log.e(TAG, "undefined action:" + action);
-		}
+		return START_STICKY;
 	}
 
 	/**
@@ -148,7 +144,6 @@ public class ConnectService extends Service
 	@Override
 	public IBinder onBind(Intent arg0)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return messenger.getBinder();
 	}
 }
