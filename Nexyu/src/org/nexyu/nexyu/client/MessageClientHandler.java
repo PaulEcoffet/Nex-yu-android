@@ -3,6 +3,8 @@
  */
 package org.nexyu.nexyu.client;
 
+import java.net.SocketTimeoutException;
+
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
@@ -49,8 +51,9 @@ public class MessageClientHandler extends SimpleChannelHandler
 	}
 
 	/**
-	 * Callback triggered when a exception is caught during the process of gathering data.
-	 * it displays the error in LogCat and then prints the Stack Trace. Then it closes the channel.
+	 * Callback triggered when a exception is caught during the process of
+	 * gathering data. it displays the error in LogCat and then prints the Stack
+	 * Trace. Then it closes the channel.
 	 * 
 	 * @author Paul Ecoffet
 	 * @see org.jboss.netty.channel.SimpleChannelHandler#exceptionCaught(org.jboss.netty.channel.ChannelHandlerContext,
@@ -59,10 +62,15 @@ public class MessageClientHandler extends SimpleChannelHandler
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e)
 	{
-		Log.e("NEX", e.getCause().toString());
-		e.getCause().printStackTrace();
-		Channel ch = e.getChannel();
-		ch.close();
+		// TODO Handle correctly this exception (see
+		// http://stackoverflow.com/questions/3726696/setting-socket-timeout-on-netty-channel
+		// )
+		if (e.getCause() instanceof SocketTimeoutException)
+		{
+			Channel ch = e.getChannel();
+			ch.close();
+		}
+
 	}
 
 	/**
