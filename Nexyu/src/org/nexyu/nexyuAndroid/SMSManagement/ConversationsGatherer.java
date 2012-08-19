@@ -1,11 +1,10 @@
 /**
  * 
  */
-package org.nexyu.nexyu.SMSManagement;
+package org.nexyu.nexyuAndroid.SMSManagement;
 
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
-import org.nexyu.nexyu.R;
 
 /**
  * @author Paul Ecoffet

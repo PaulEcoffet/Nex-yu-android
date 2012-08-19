@@ -1,4 +1,4 @@
-package org.nexyu.nexyu.service;
+package org.nexyu.nexyuAndroid.service;
 
 import java.lang.ref.WeakReference;
 import java.net.InetSocketAddress;
@@ -9,9 +9,9 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.socket.oio.OioClientSocketChannelFactory;
-import org.nexyu.nexyu.MainActivity;
-import org.nexyu.nexyu.R;
-import org.nexyu.nexyu.client.ClientPipeline;
+import org.nexyu.nexyuAndroid.MainActivity;
+import org.nexyu.nexyuAndroid.R;
+import org.nexyu.nexyuAndroid.client.ClientPipeline;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -23,11 +23,14 @@ import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
 
+/**
+ * Service that maintain the connection between Nex yu Android & Nex yu computer.
+ * 
+ * @author Paul Ecoffet
+ *
+ */
 public class ConnectService extends Service
 {
-	/**
-	 *
-	 */
 	public static final int		DEF_PORT				= 34340;
 	private final static String	TAG						= "ConnectService";
 	private static final int	ONGOING_NOTIFICATION	= 34340;
@@ -74,7 +77,7 @@ public class ConnectService extends Service
 
 	/**
 	 * Connect the service to the IP given on port PORT.
-	 *
+	 * 
 	 * @param ip
 	 *            The IP to connect to.
 	 * @param port
@@ -117,6 +120,9 @@ public class ConnectService extends Service
 	}
 
 	/**
+	 * Called when the service is destroy. It close the connection between the
+	 * phone & the computer if any, then free resources (netty side)
+	 * 
 	 * @see android.app.Service#onDestroy()
 	 */
 	@Override

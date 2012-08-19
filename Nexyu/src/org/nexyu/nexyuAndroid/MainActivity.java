@@ -1,6 +1,6 @@
-package org.nexyu.nexyu;
+package org.nexyu.nexyuAndroid;
 
-import org.nexyu.nexyu.service.ConnectService;
+import org.nexyu.nexyuAndroid.service.ConnectService;
 
 import android.app.Activity;
 import android.content.ComponentName;

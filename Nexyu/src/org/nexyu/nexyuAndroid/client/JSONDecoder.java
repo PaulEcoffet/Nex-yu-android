@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.nexyu.nexyu.client;
+package org.nexyu.nexyuAndroid.client;
 
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;

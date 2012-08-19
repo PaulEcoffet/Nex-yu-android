@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.nexyu.nexyu.client;
+package org.nexyu.nexyuAndroid.client;
 
 import java.net.SocketTimeoutException;
 

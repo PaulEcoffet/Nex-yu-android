@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.nexyu.nexyu.client;
+package org.nexyu.nexyuAndroid.client;
 
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
