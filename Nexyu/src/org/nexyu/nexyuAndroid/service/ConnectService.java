@@ -24,10 +24,11 @@ import android.os.Messenger;
 import android.util.Log;
 
 /**
- * Service that maintain the connection between Nex yu Android & Nex yu computer.
+ * Service that maintain the connection between Nex yu Android & Nex yu
+ * computer.
  * 
  * @author Paul Ecoffet
- *
+ * 
  */
 public class ConnectService extends Service
 {
@@ -40,18 +41,34 @@ public class ConnectService extends Service
 	private Notification		notification;
 	private Messenger			messenger;
 
+	/**
+	 * Message handler that call the service function depending on the message
+	 * received.
+	 * 
+	 * @author Paul Ecoffet
+	 */
 	static class IncomingHandler extends Handler
 	{
 		private final WeakReference<ConnectService>	mService;
 
 		/**
-		 *
+		 * Unique constructor, create a reference to the service that must be
+		 * manipulated.
+		 * 
+		 * @author Paul Ecoffet
 		 */
 		public IncomingHandler(ConnectService service)
 		{
 			mService = new WeakReference<ConnectService>(service);
 		}
 
+		/**
+		 * Callback called when a message is received. It manage which function
+		 * of the service is called depending of the type of message received
+		 * 
+		 * @author Paul Ecoffet
+		 * @see android.os.Handler#handleMessage(android.os.Message)
+		 */
 		@Override
 		public void handleMessage(Message msg)
 		{
@@ -67,6 +84,11 @@ public class ConnectService extends Service
 		}
 	}
 
+	/**
+	 * Default constructor.
+	 * 
+	 * @author Paul Ecoffet
+	 */
 	public ConnectService()
 	{
 		chan = null;
@@ -128,14 +150,25 @@ public class ConnectService extends Service
 	@Override
 	public void onDestroy()
 	{
+		disconnect();
+		Log.i(TAG, "Service destroyed");
+		super.onDestroy();
+	}
+
+	/**
+	 * Disconnect the android app from the computer server if the connection
+	 * exist.
+	 * 
+	 * @author Paul Ecoffet
+	 */
+	private void disconnect()
+	{
 		if (chan != null && chan.isConnected())
 		{
 			chan.close().awaitUninterruptibly();
 			factory.releaseExternalResources();
 			Log.i(TAG, "Connection closed");
 		}
-		Log.i(TAG, "Service destroyed");
-		super.onDestroy();
 	}
 
 	@Override
@@ -145,6 +178,8 @@ public class ConnectService extends Service
 	}
 
 	/**
+	 * Return the binder from the messenger.
+	 * 
 	 * @see android.app.Service#onBind(android.content.Intent)
 	 */
 	@Override
