@@ -3,6 +3,7 @@ package org.nexyu.nexyuAndroid.service;
 import java.lang.ref.WeakReference;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
@@ -10,6 +11,9 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.socket.oio.OioClientSocketChannelFactory;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.nexyu.nexyuAndroid.MainActivity;
 import org.nexyu.nexyuAndroid.R;
 import org.nexyu.nexyuAndroid.SMSManagement.SMSReceiver;
@@ -20,12 +24,10 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
-import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
@@ -88,6 +90,7 @@ public class ConnectService extends Service
 						.getInt("port"));
 				if (success)
 				{
+					Log.d(TAG, "Connection is a sucess");
 					service.activateSMSReceiver();
 				}
 				else
@@ -123,6 +126,7 @@ public class ConnectService extends Service
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("android.provider.Telephony.SMS_RECEIVED");
 		registerReceiver(smsReceiver, filter);
+		Log.d(TAG, "SMSReceiver registered.");
 	}
 
 	public void deactivateSMSReceiver()
@@ -207,11 +211,6 @@ public class ConnectService extends Service
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
-		if (connected())
-		{
-			Bundle extras = intent.getExtras();
-			extras.get("sms");
-		}
 		return START_STICKY;
 	}
 
@@ -239,9 +238,39 @@ public class ConnectService extends Service
 	 */
 	public void sendMessages(ArrayList<SmsMessage> messages)
 	{
+		Log.i(TAG, "Messages to be sent");
 		if(connected())
 		{
-			
+			JSONObject output = new JSONObject();
+			JSONArray messArray = new JSONArray();
+			for (Iterator<SmsMessage> iterator = messages.iterator(); iterator.hasNext();)
+			{
+				SmsMessage message = iterator.next();
+				JSONObject jsonMess = new JSONObject();
+
+				try
+				{
+					jsonMess.put("body", message.getMessageBody());
+					jsonMess.put("sender", message.getOriginatingAddress());
+					jsonMess.put("timestamp", message.getTimestampMillis());
+				}
+				catch (JSONException e)
+				{
+					e.printStackTrace();
+				}
+				messArray.put(jsonMess);
+			}
+			try
+			{
+				output.put("what", "messages");
+				output.put("data", messArray);
+			}
+			catch (JSONException e)
+			{
+				e.printStackTrace();
+			}
+			Log.i(TAG, output.toString());
+			chan.write(output.toString());
 		}
 	}
 }

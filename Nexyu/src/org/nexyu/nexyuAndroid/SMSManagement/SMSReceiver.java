@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import android.util.Log;
 
 /**
  * @author Paul Ecoffet
@@ -20,6 +21,7 @@ import android.telephony.SmsMessage;
 public class SMSReceiver extends BroadcastReceiver
 {
 	private static final String	SMS_RECEIVED	= "android.provider.Telephony.SMS_RECEIVED";
+	private static final String	TAG	= "SMSReceiver";
 	private ConnectService	mService;
 	
 	public SMSReceiver(ConnectService service)
@@ -35,6 +37,7 @@ public class SMSReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
+		Log.i(TAG, "SMS received.");
 		if(intent.getAction().equals(SMS_RECEIVED))
 		{
 			Bundle bundle = intent.getExtras();
