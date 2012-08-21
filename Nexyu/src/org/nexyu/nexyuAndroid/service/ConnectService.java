@@ -2,6 +2,7 @@ package org.nexyu.nexyuAndroid.service;
 
 import java.lang.ref.WeakReference;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
@@ -11,17 +12,23 @@ import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.socket.oio.OioClientSocketChannelFactory;
 import org.nexyu.nexyuAndroid.MainActivity;
 import org.nexyu.nexyuAndroid.R;
+import org.nexyu.nexyuAndroid.SMSManagement.SMSReceiver;
 import org.nexyu.nexyuAndroid.client.ClientPipeline;
 
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
+import android.telephony.SmsMessage;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Service that maintain the connection between Nex yu Android & Nex yu
@@ -33,13 +40,14 @@ import android.util.Log;
 public class ConnectService extends Service
 {
 	public static final int		DEF_PORT				= 34340;
-	private final static String	TAG						= "ConnectService";
+	private static final String	TAG						= "ConnectService";
 	private static final int	ONGOING_NOTIFICATION	= 34340;
 	public static final int		MSG_CONNECT				= 1;
 	protected ChannelFactory	factory;
 	protected Channel			chan;
 	private Notification		notification;
 	private Messenger			messenger;
+	private SMSReceiver			smsReceiver;
 
 	/**
 	 * Message handler that call the service function depending on the message
@@ -76,7 +84,16 @@ public class ConnectService extends Service
 			switch (msg.what)
 			{
 			case MSG_CONNECT:
-				service.connect(msg.getData().getString("ip"), msg.getData().getInt("port"));
+				boolean success = service.connect(msg.getData().getString("ip"), msg.getData()
+						.getInt("port"));
+				if (success)
+				{
+					service.activateSMSReceiver();
+				}
+				else
+				{
+					Toast.makeText(service, R.string.impossible_to_connect, Toast.LENGTH_LONG).show();
+				}
 				break;
 			default:
 				super.handleMessage(msg);
@@ -95,6 +112,22 @@ public class ConnectService extends Service
 		notification = null;
 		factory = null;
 		messenger = new Messenger(new IncomingHandler(this));
+		smsReceiver = new SMSReceiver(this);
+	}
+
+	/**
+	 * 
+	 */
+	public void activateSMSReceiver()
+	{
+		IntentFilter filter = new IntentFilter();
+		filter.addAction("android.provider.Telephony.SMS_RECEIVED");
+		registerReceiver(smsReceiver, filter);
+	}
+
+	public void deactivateSMSReceiver()
+	{
+		unregisterReceiver(smsReceiver);
 	}
 
 	/**
@@ -137,7 +170,6 @@ public class ConnectService extends Service
 		notification.setLatestEventInfo(this, getText(R.string.notification_title),
 				getText(R.string.notif_not_connected), pendingIntent);
 		startForeground(ONGOING_NOTIFICATION, notification);
-
 		Log.i(TAG, "service started");
 	}
 
@@ -150,6 +182,7 @@ public class ConnectService extends Service
 	@Override
 	public void onDestroy()
 	{
+		deactivateSMSReceiver();
 		disconnect();
 		Log.i(TAG, "Service destroyed");
 		super.onDestroy();
@@ -163,7 +196,7 @@ public class ConnectService extends Service
 	 */
 	private void disconnect()
 	{
-		if (chan != null && chan.isConnected())
+		if (connected())
 		{
 			chan.close().awaitUninterruptibly();
 			factory.releaseExternalResources();
@@ -174,7 +207,20 @@ public class ConnectService extends Service
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
+		if (connected())
+		{
+			Bundle extras = intent.getExtras();
+			extras.get("sms");
+		}
 		return START_STICKY;
+	}
+
+	/**
+	 * @return
+	 */
+	private boolean connected()
+	{
+		return chan != null && chan.isConnected();
 	}
 
 	/**
@@ -186,5 +232,16 @@ public class ConnectService extends Service
 	public IBinder onBind(Intent arg0)
 	{
 		return messenger.getBinder();
+	}
+
+	/**
+	 * @param messages
+	 */
+	public void sendMessages(ArrayList<SmsMessage> messages)
+	{
+		if(connected())
+		{
+			
+		}
 	}
 }
