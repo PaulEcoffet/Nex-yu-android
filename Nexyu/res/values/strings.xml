@@ -1,10 +1,8 @@
 <resources>
 
     <string name="app_name">Nex yu - Send and receive SMS from your computer</string>
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
-    <string name="title_activity_connect">ConnectActivity</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Nex yu</string>
     <string name="impossible_to_connect">Impossible to connect.</string>
     <string name="notification_title">Nex yu is active</string>
     <string name="notif_not_connected">Not connected</string>
