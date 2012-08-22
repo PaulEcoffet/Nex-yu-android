@@ -6,8 +6,6 @@ package org.nexyu.nexyuAndroid.client;
 import java.net.SocketTimeoutException;
 
 import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelFuture;
-import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
@@ -37,17 +35,6 @@ public class MessageClientHandler extends SimpleChannelHandler
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e)
 	{
 		Log.d("NEX", "Connected");
-		Channel ch = e.getChannel();
-		String buf = "{\"type\":\"ping\"}";
-		ChannelFuture future = ch.write(buf);
-		future.addListener(new ChannelFutureListener() {
-
-			@Override
-			public void operationComplete(ChannelFuture arg0) throws Exception
-			{
-				Log.d("NEX", "Ping");
-			}
-		});
 	}
 
 	/**
@@ -110,7 +97,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 	{
-		if (!(e.getMessage() instanceof JsonObject))
+		if (e.getMessage() instanceof JsonObject)
 		{
 			Channel ch = e.getChannel();
 			JsonObject data = (JsonObject) e.getMessage();
