@@ -11,13 +11,17 @@ import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
+import org.nexyu.nexyuAndroid.service.ConnectService;
 
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
 
 /**
- * Handler that trigger the different actions of the app depending of the
+ * Handler that triggers the different actions of the app depending of the
  * received data.
  * 
  * @author Paul Ecoffet
@@ -25,6 +29,16 @@ import com.google.gson.JsonObject;
  */
 public class MessageClientHandler extends SimpleChannelHandler
 {
+
+	private Messenger	mService;
+
+	/**
+	 * @param service
+	 */
+	public MessageClientHandler(Messenger service)
+	{
+		mService = service;
+	}
 
 	/**
 	 * @author Paul Ecoffet
@@ -35,6 +49,15 @@ public class MessageClientHandler extends SimpleChannelHandler
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e)
 	{
 		Log.d("NEX", "Connected");
+		Message to_service = Message.obtain(null, ConnectService.MSG_CONNECTED);
+		try
+		{
+			mService.send(to_service);
+		}
+		catch (RemoteException ex)
+		{
+			ex.printStackTrace();
+		}
 	}
 
 	/**
@@ -57,7 +80,6 @@ public class MessageClientHandler extends SimpleChannelHandler
 			Channel ch = e.getChannel();
 			ch.close();
 		}
-
 	}
 
 	/**
@@ -77,6 +99,10 @@ public class MessageClientHandler extends SimpleChannelHandler
 		String type = data.get("type").getAsString();
 		if (type.equals("pong"))
 			Log.d("NEX", "Pong received");
+		else if(type.equals("send"))
+		{
+			
+		}
 		else if(type.equals("ok"));
 		else
 			Log.d("NEX", "Unknown type");		
