@@ -90,16 +90,9 @@ public class MessageClientHandler extends SimpleChannelHandler
 		String type = data.get("type").getAsString();
 		if (type.equals("pong"))
 			Log.d("NEX", "Pong received");
+		else if(type.equals("ok"));
 		else
-			Log.d("NEX", "Unknown type");
-		ChannelFuture f = ch.close();
-		f.addListener(new ChannelFutureListener() {
-			@Override
-			public void operationComplete(ChannelFuture future) throws Exception
-			{
-				Log.d("NEX", "Disconnected");
-			}
-		});
+			Log.d("NEX", "Unknown type");		
 	}
 
 	/**
@@ -119,11 +112,11 @@ public class MessageClientHandler extends SimpleChannelHandler
 	{
 		if (!(e.getMessage() instanceof JsonObject))
 		{
-			Log.e("NEX", "Message received is not a JsonObject");
-			return;
+			Channel ch = e.getChannel();
+			JsonObject data = (JsonObject) e.getMessage();
+			manageReceivedData(data, ch);
 		}
-		Channel ch = e.getChannel();
-		JsonObject data = (JsonObject) e.getMessage();
-		manageReceivedData(data, ch);
+		else
+			Log.e("NEX", "Message received is not a JsonObject");
 	}
 }

@@ -10,6 +10,7 @@ import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelFuture;
+import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.socket.oio.OioClientSocketChannelFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,9 +36,9 @@ import android.widget.Toast;
 /**
  * Service that maintain the connection between Nex yu Android & Nex yu
  * computer.
- * 
+ *
  * @author Paul Ecoffet
- * 
+ *
  */
 public class ConnectService extends Service
 {
@@ -54,7 +55,7 @@ public class ConnectService extends Service
 	/**
 	 * Message handler that call the service function depending on the message
 	 * received.
-	 * 
+	 *
 	 * @author Paul Ecoffet
 	 */
 	static class IncomingHandler extends Handler
@@ -64,7 +65,7 @@ public class ConnectService extends Service
 		/**
 		 * Unique constructor, create a reference to the service that must be
 		 * manipulated.
-		 * 
+		 *
 		 * @author Paul Ecoffet
 		 */
 		public IncomingHandler(ConnectService service)
@@ -75,7 +76,7 @@ public class ConnectService extends Service
 		/**
 		 * Callback called when a message is received. It manage which function
 		 * of the service is called depending of the type of message received
-		 * 
+		 *
 		 * @author Paul Ecoffet
 		 * @see android.os.Handler#handleMessage(android.os.Message)
 		 */
@@ -106,7 +107,7 @@ public class ConnectService extends Service
 
 	/**
 	 * Default constructor.
-	 * 
+	 *
 	 * @author Paul Ecoffet
 	 */
 	public ConnectService()
@@ -119,7 +120,7 @@ public class ConnectService extends Service
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public void activateSMSReceiver()
 	{
@@ -136,7 +137,7 @@ public class ConnectService extends Service
 
 	/**
 	 * Connect the service to the IP given on port PORT.
-	 * 
+	 *
 	 * @param ip
 	 *            The IP to connect to.
 	 * @param port
@@ -180,7 +181,7 @@ public class ConnectService extends Service
 	/**
 	 * Called when the service is destroy. It close the connection between the
 	 * phone & the computer if any, then free resources (netty side)
-	 * 
+	 *
 	 * @see android.app.Service#onDestroy()
 	 */
 	@Override
@@ -195,16 +196,22 @@ public class ConnectService extends Service
 	/**
 	 * Disconnect the android app from the computer server if the connection
 	 * exist.
-	 * 
+	 *
 	 * @author Paul Ecoffet
 	 */
 	private void disconnect()
 	{
 		if (connected())
 		{
-			chan.close().awaitUninterruptibly();
-			factory.releaseExternalResources();
-			Log.i(TAG, "Connection closed");
+			ChannelFuture f = chan.close();
+			f.addListener(new ChannelFutureListener() {
+				@Override
+				public void operationComplete(ChannelFuture future) throws Exception
+				{
+					Log.d(TAG, "Disconnected");
+					factory.releaseExternalResources();
+				}
+			});
 		}
 	}
 
@@ -224,7 +231,7 @@ public class ConnectService extends Service
 
 	/**
 	 * Return the binder from the messenger.
-	 * 
+	 *
 	 * @see android.app.Service#onBind(android.content.Intent)
 	 */
 	@Override
@@ -238,7 +245,6 @@ public class ConnectService extends Service
 	 */
 	public void sendMessages(ArrayList<SmsMessage> messages)
 	{
-		Log.i(TAG, "Messages to be sent");
 		if(connected())
 		{
 			JSONObject output = new JSONObject();
@@ -262,7 +268,7 @@ public class ConnectService extends Service
 			}
 			try
 			{
-				output.put("what", "messages");
+				output.put("type", "messages");
 				output.put("data", messArray);
 			}
 			catch (JSONException e)
