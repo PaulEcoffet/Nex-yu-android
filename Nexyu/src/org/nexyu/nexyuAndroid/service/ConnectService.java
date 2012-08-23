@@ -88,7 +88,7 @@ public class ConnectService extends Service
 	 *            The port to connect on.
 	 * @author Paul Ecoffet
 	 */
-	boolean connect(String ip, int port)
+	void connect(String ip, int port)
 	{
 		factory = new OioClientSocketChannelFactory(Executors.newCachedThreadPool());
 
@@ -100,9 +100,15 @@ public class ConnectService extends Service
 		if (port == 0) // TODO Remove this
 			port = DEF_PORT;
 		ChannelFuture fuConn = bootstrap.connect(new InetSocketAddress(ip, port));
-		fuConn.awaitUninterruptibly();
-		chan = fuConn.getChannel();
-		return fuConn.isSuccess();
+		fuConn.addListener(new ChannelFutureListener() {
+			
+			@Override
+			public void operationComplete(ChannelFuture fuConn) throws Exception
+			{
+				chan = fuConn.getChannel();
+			}
+		});
+
 	}
 
 	/**
