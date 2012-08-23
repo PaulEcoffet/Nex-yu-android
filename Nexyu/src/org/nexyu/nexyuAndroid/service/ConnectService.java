@@ -13,7 +13,7 @@ import org.jboss.netty.channel.socket.oio.OioClientSocketChannelFactory;
 import org.nexyu.nexyuAndroid.MainActivity;
 import org.nexyu.nexyuAndroid.R;
 import org.nexyu.nexyuAndroid.SMSManagement.SMSReceiver;
-import org.nexyu.nexyuAndroid.client.ClientPipeline;
+import org.nexyu.nexyuAndroid.client.ClientPipelineFactory;
 import org.nexyu.nexyuAndroid.client.protocol.SMSReceivedNetworkMessage;
 
 import android.app.Notification;
@@ -91,7 +91,7 @@ public class ConnectService extends Service
 		factory = new OioClientSocketChannelFactory(Executors.newCachedThreadPool());
 
 		ClientBootstrap bootstrap = new ClientBootstrap(factory);
-		bootstrap.setPipelineFactory(new ClientPipeline(messenger.getBinder()));
+		bootstrap.setPipelineFactory(new ClientPipelineFactory(messenger.getBinder()));
 		bootstrap.setOption("tcpNoDelay", true);
 		bootstrap.setOption("keepAlive", true);
 

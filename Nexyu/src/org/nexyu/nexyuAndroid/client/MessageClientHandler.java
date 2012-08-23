@@ -11,6 +11,7 @@ import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
+import org.nexyu.nexyuAndroid.client.protocol.NetworkMessage;
 import org.nexyu.nexyuAndroid.service.ConnectService;
 
 import android.os.Message;
@@ -21,8 +22,8 @@ import android.util.Log;
 import com.google.gson.JsonObject;
 
 /**
- * Handler that triggers the different actions of the app depending of the
- * received data.
+ * Handler that triggers the different actions of the application depending of
+ * the received data.
  * 
  * @author Paul Ecoffet
  * @see org.jboss.netty.channel.SimpleChannelHandler
@@ -107,13 +108,14 @@ public class MessageClientHandler extends SimpleChannelHandler
 		String type = data.get("type").getAsString();
 		if (type.equals("pong"))
 			Log.d("NEX", "Pong received");
-		else if(type.equals("send"))
+		else if (type.equals("send"))
 		{
-			
+
 		}
-		else if(type.equals("ok"));
+		else if (type.equals("ok"))
+			;
 		else
-			Log.d("NEX", "Unknown type");		
+			Log.d("NEX", "Unknown type");
 	}
 
 	/**
@@ -139,5 +141,14 @@ public class MessageClientHandler extends SimpleChannelHandler
 		}
 		else
 			Log.e("NEX", "Message received is not a JsonObject");
+	}
+
+	@Override
+	public void writeRequested(ChannelHandlerContext ctx, MessageEvent evt)
+	{
+		if (evt.getMessage() instanceof NetworkMessage)
+			ctx.sendDownstream(evt);
+		else
+			Log.e("NEX", "Message to send is not a NetworkMessage object.");
 	}
 }

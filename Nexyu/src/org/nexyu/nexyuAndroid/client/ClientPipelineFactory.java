@@ -19,12 +19,12 @@ import android.os.Messenger;
  * @author Paul Ecoffet
  * 
  */
-public final class ClientPipeline implements ChannelPipelineFactory
+public final class ClientPipelineFactory implements ChannelPipelineFactory
 {
 	private Messenger				mService;
 	private MessageClientHandler	messageClientHandler;
 
-	public ClientPipeline(IBinder service)
+	public ClientPipelineFactory(IBinder service)
 	{
 		mService = new Messenger(service);
 		messageClientHandler = new MessageClientHandler(mService);
@@ -37,10 +37,11 @@ public final class ClientPipeline implements ChannelPipelineFactory
 				Integer.MAX_VALUE, 0, Integer.SIZE / Byte.SIZE, 0, Integer.SIZE / Byte.SIZE);
 		StringDecoder stringDecod = new StringDecoder(CharsetUtil.UTF_8);
 		JSONDecoder jsonDecoder = new JSONDecoder();
+		NetMessageToJSONEncoder jsonEncoder = new NetMessageToJSONEncoder();
 		LengthFieldPrepender lengthFieldPrepender = new LengthFieldPrepender(4);
 		StringEncoder stringEncoder = new StringEncoder(CharsetUtil.UTF_8);
-		return Channels.pipeline(lengthDecod, stringDecod, jsonDecoder, messageClientHandler,
-				lengthFieldPrepender, stringEncoder);
+		return Channels.pipeline(lengthDecod, stringDecod, jsonDecoder,
+				lengthFieldPrepender, stringEncoder, jsonEncoder, messageClientHandler);
 	}
 
 	public MessageClientHandler getMessageClientHandler()

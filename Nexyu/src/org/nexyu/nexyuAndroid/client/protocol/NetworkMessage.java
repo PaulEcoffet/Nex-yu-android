@@ -15,7 +15,7 @@ public abstract class NetworkMessage
 	protected String type;
 	protected JsonElement data;
 	
-	public NetworkMessage(String what, Object data)
+	protected NetworkMessage(String what, Object data)
 	{
 		Gson gson = new Gson();
 		type = what;
