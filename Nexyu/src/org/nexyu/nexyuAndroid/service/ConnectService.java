@@ -2,7 +2,6 @@ package org.nexyu.nexyuAndroid.service;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
@@ -11,13 +10,11 @@ import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.socket.oio.OioClientSocketChannelFactory;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.nexyu.nexyuAndroid.MainActivity;
 import org.nexyu.nexyuAndroid.R;
 import org.nexyu.nexyuAndroid.SMSManagement.SMSReceiver;
 import org.nexyu.nexyuAndroid.client.ClientPipeline;
+import org.nexyu.nexyuAndroid.client.protocol.SMSReceivedNetworkMessage;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -43,6 +40,7 @@ public class ConnectService extends Service
 	private static final int	ONGOING_NOTIFICATION	= 34340;
 	public static final int		MSG_CONNECT				= 1;
 	public static final int		MSG_CONNECTED			= 2;
+	public static final int		MSG_IMPOSSIBLE_CONNECT	= 3;
 	protected ChannelFactory	factory;
 	protected Channel			chan;
 	private Notification		notification;
@@ -101,11 +99,12 @@ public class ConnectService extends Service
 			port = DEF_PORT;
 		ChannelFuture fuConn = bootstrap.connect(new InetSocketAddress(ip, port));
 		fuConn.addListener(new ChannelFutureListener() {
-			
+
 			@Override
 			public void operationComplete(ChannelFuture fuConn) throws Exception
 			{
 				chan = fuConn.getChannel();
+				activateSMSReceiver();
 			}
 		});
 
@@ -197,35 +196,8 @@ public class ConnectService extends Service
 	{
 		if (connected())
 		{
-			JSONObject output = new JSONObject();
-			JSONArray messArray = new JSONArray();
-			for (Iterator<SmsMessage> iterator = messages.iterator(); iterator.hasNext();)
-			{
-				SmsMessage message = iterator.next();
-				JSONObject jsonMess = new JSONObject();
-
-				try
-				{
-					jsonMess.put("body", message.getMessageBody());
-					jsonMess.put("sender", message.getOriginatingAddress());
-					jsonMess.put("timestamp", message.getTimestampMillis());
-				}
-				catch (JSONException e)
-				{
-					e.printStackTrace();
-				}
-				messArray.put(jsonMess);
-			}
-			try
-			{
-				output.put("type", "messages");
-				output.put("data", messArray);
-			}
-			catch (JSONException e)
-			{
-				e.printStackTrace();
-			}
-			chan.write(output.toString());
+			SMSReceivedNetworkMessage toSend = new SMSReceivedNetworkMessage(messages);
+			chan.write(toSend);
 		}
 	}
 }

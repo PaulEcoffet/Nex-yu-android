@@ -29,7 +29,6 @@ import com.google.gson.JsonObject;
  */
 public class MessageClientHandler extends SimpleChannelHandler
 {
-
 	private Messenger	mService;
 
 	/**
@@ -77,6 +76,15 @@ public class MessageClientHandler extends SimpleChannelHandler
 		// )
 		if (e.getCause() instanceof SocketTimeoutException)
 		{
+			Message message = Message.obtain(null, ConnectService.MSG_IMPOSSIBLE_CONNECT);
+			try
+			{
+				mService.send(message);
+			}
+			catch (RemoteException e1)
+			{
+				e1.printStackTrace();
+			}
 			Channel ch = e.getChannel();
 			ch.close();
 		}

@@ -20,7 +20,7 @@ import android.widget.Toast;
  */
 class ServiceHandler extends Handler
 {
-	private static final String	TAG	= "IncomingHandler";
+	private static final String					TAG	= "IncomingHandler";
 	private final WeakReference<ConnectService>	mService;
 
 	/**
@@ -35,8 +35,8 @@ class ServiceHandler extends Handler
 	}
 
 	/**
-	 * Callback called when a message is received. It manage which function
-	 * of the service is called depending of the type of message received
+	 * Callback called when a message is received. It manage which function of
+	 * the service is called depending of the type of message received
 	 * 
 	 * @author Paul Ecoffet
 	 * @see android.os.Handler#handleMessage(android.os.Message)
@@ -48,22 +48,15 @@ class ServiceHandler extends Handler
 		switch (msg.what)
 		{
 		case ConnectService.MSG_CONNECT:
-			boolean success = service.connect(msg.getData().getString("ip"), msg.getData()
-					.getInt("port"));
-			if (success)
-			{
-				Log.d(TAG, "Connection is a sucess");
-				service.activateSMSReceiver();
-			}
-			else
-			{
-				Toast.makeText(service, R.string.impossible_to_connect, Toast.LENGTH_LONG)
-						.show();
-			}
+			service.connect(msg.getData().getString("ip"), msg.getData().getInt("port"));
 			break;
 		case ConnectService.MSG_CONNECTED:
 			Log.i(TAG, "Connected message received");
 			Toast.makeText(service, "Connected", Toast.LENGTH_SHORT).show();
+			break;
+		case ConnectService.MSG_IMPOSSIBLE_CONNECT:
+			Toast.makeText(service, R.string.impossible_to_connect, Toast.LENGTH_LONG).show();
+			break;
 		default:
 			super.handleMessage(msg);
 		}
