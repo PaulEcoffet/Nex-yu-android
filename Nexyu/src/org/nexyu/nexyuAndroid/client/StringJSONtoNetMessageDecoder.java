@@ -6,9 +6,11 @@ package org.nexyu.nexyuAndroid.client;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
+import org.nexyu.nexyuAndroid.client.protocol.NetworkMessage;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 /**
  * Handler that convert a String into a JsonObject using gson
@@ -17,12 +19,12 @@ import com.google.gson.JsonParser;
  * @author Paul Ecoffet
  */
 
-public class JSONDecoder extends OneToOneDecoder
+public class StringJSONtoNetMessageDecoder extends OneToOneDecoder
 {
 
 	/**
 	 * Decode the Object buf (which will be cast into a String) into a
-	 * {@link JsonObject}. The object buf must be with a {@link JSONDecoder} or a similar
+	 * {@link JsonObject}. The object buf must be with a {@link StringJSONtoNetMessageDecoder} or a similar
 	 * decoder before it is launch.
 	 * 
 	 * @param ctx
@@ -49,8 +51,9 @@ public class JSONDecoder extends OneToOneDecoder
 		if (!(buf instanceof String))
 			throw new Exception("JSONDecoder.decode must receive a String");
 		String str = (String) buf;
-		JsonParser parser = new JsonParser();
-		JsonObject json = parser.parse(str).getAsJsonObject();
-		return json;
+		Gson gson = new Gson();
+		JsonElement json = gson.toJsonTree(str);
+		NetworkMessage message = gson.fromJson(json, NetworkMessage.class);
+		return message;
 	}
 }

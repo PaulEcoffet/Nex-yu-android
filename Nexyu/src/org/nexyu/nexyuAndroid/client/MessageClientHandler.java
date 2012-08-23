@@ -95,17 +95,17 @@ public class MessageClientHandler extends SimpleChannelHandler
 	 * Trigger different actions depending of the type of request written in the
 	 * received data.
 	 * 
-	 * @param data
+	 * @param message
 	 *            The data received from the computer application of Nexyu in
 	 *            JSON
 	 * @param ch
 	 *            The channel from where the data were received
 	 * @author Paul Ecoffet
 	 */
-	private void manageReceivedData(JsonObject data, Channel ch)
+	private void manageReceivedData(NetworkMessage message, Channel ch)
 	{
 
-		String type = data.get("type").getAsString();
+		String type = message.getType();
 		if (type.equals("pong"))
 			Log.d("NEX", "Pong received");
 		else if (type.equals("send"))
@@ -121,7 +121,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	/**
 	 * messageReceived is the callback triggered when data are received. They
 	 * are cast in a JsonObject, they must have been handled beforehand with
-	 * {@link JSONDecoder}. Once messageReceived has checked the received data
+	 * {@link StringJSONtoNetMessageDecoder}. Once messageReceived has checked the received data
 	 * are in JSON and has cast this into a JsonObject, it call the function
 	 * {@link MessageClientHandler#manageReceivedData(JsonObject, Channel)} that
 	 * trigger the action requested by the received data
@@ -133,10 +133,10 @@ public class MessageClientHandler extends SimpleChannelHandler
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 	{
-		if (e.getMessage() instanceof JsonObject)
+		if (e.getMessage() instanceof NetworkMessage)
 		{
 			Channel ch = e.getChannel();
-			JsonObject data = (JsonObject) e.getMessage();
+			NetworkMessage data = (NetworkMessage) e.getMessage();
 			manageReceivedData(data, ch);
 		}
 		else

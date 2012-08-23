@@ -36,7 +36,7 @@ public final class ClientPipelineFactory implements ChannelPipelineFactory
 		LengthFieldBasedFrameDecoder lengthDecod = new LengthFieldBasedFrameDecoder(
 				Integer.MAX_VALUE, 0, Integer.SIZE / Byte.SIZE, 0, Integer.SIZE / Byte.SIZE);
 		StringDecoder stringDecod = new StringDecoder(CharsetUtil.UTF_8);
-		JSONDecoder jsonDecoder = new JSONDecoder();
+		StringJSONtoNetMessageDecoder jsonDecoder = new StringJSONtoNetMessageDecoder();
 		NetMessageToJSONEncoder jsonEncoder = new NetMessageToJSONEncoder();
 		LengthFieldPrepender lengthFieldPrepender = new LengthFieldPrepender(4);
 		StringEncoder stringEncoder = new StringEncoder(CharsetUtil.UTF_8);

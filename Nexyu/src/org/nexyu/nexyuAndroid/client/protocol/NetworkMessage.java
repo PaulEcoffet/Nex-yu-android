@@ -23,18 +23,18 @@ public abstract class NetworkMessage
 	}
 	
 	/**
-	 * @return the what
+	 * @return the type
 	 */
-	public String getWhat()
+	public String getType()
 	{
 		return type;
 	}
 	/**
-	 * @param what the what to set
+	 * @param type the type to set
 	 */
-	public void setWhat(String what)
+	public void setType(String type)
 	{
-		this.type = what;
+		this.type = type;
 	}
 	/**
 	 * @return the data
