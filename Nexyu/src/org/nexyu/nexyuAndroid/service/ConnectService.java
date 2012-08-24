@@ -96,8 +96,6 @@ public class ConnectService extends Service
 		bootstrap.setOption("tcpNoDelay", true);
 		bootstrap.setOption("keepAlive", true);
 
-		if (port == 0) // TODO Remove this
-			port = DEF_PORT;
 		ChannelFuture fuConn = bootstrap.connect(new InetSocketAddress(ip, port));
 		fuConn.addListener(new ChannelFutureListener() {
 
