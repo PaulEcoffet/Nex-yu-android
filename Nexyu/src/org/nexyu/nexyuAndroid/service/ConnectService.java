@@ -103,6 +103,12 @@ public class ConnectService extends Service
 			public void operationComplete(ChannelFuture fuConn) throws Exception
 			{
 				chan = fuConn.getChannel();
+				if(fuConn.isSuccess())
+					Log.i(TAG, "YEAH");
+				else
+				{
+					Log.w(TAG, "NOOON");
+				}
 				activateSMSReceiver();
 			}
 		});

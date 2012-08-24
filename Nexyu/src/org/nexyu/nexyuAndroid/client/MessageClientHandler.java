@@ -78,10 +78,12 @@ public class MessageClientHandler extends SimpleChannelHandler
 		// )
 		if (e.getCause() instanceof SocketTimeoutException)
 		{
+			Log.w("Nex", "fail de connection");
 			Message message = Message.obtain(null, ConnectService.MSG_IMPOSSIBLE_CONNECT);
 			try
 			{
 				mService.send(message);
+				Log.w("NEX", "Impossible de se connecter");
 			}
 			catch (RemoteException e1)
 			{
