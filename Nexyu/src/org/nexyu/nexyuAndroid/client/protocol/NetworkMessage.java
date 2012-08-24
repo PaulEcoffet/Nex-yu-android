@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nexyu.nexyuAndroid.client.protocol;
 
@@ -7,6 +7,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 /**
+ * Class that represents a message received or to send over the network.
+ *
+ *  Note: Should be abstract but gson doesn't support it.
  * @author Paul Ecoffet
  *
  */
@@ -14,20 +17,23 @@ public class NetworkMessage
 {
 	protected String type;
 	protected JsonElement data;
-	
+
+	/**
+	 * Default constructor as recommanded by Gson.
+	 */
 	public NetworkMessage()
 	{
 		type = "unknown";
 		data = null;
 	}
-	
+
 	protected NetworkMessage(String what, Object data)
 	{
 		Gson gson = new Gson();
 		type = what;
 		this.data = gson.toJsonTree(data);
 	}
-	
+
 	/**
 	 * @return the type
 	 */
@@ -35,6 +41,7 @@ public class NetworkMessage
 	{
 		return type;
 	}
+
 	/**
 	 * @param type the type to set
 	 */
@@ -42,6 +49,7 @@ public class NetworkMessage
 	{
 		this.type = type;
 	}
+
 	/**
 	 * @return the data
 	 */
@@ -49,6 +57,7 @@ public class NetworkMessage
 	{
 		return data;
 	}
+
 	/**
 	 * @param data the data to set
 	 */
