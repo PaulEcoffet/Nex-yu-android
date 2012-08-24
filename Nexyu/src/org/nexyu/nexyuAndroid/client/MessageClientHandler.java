@@ -14,6 +14,7 @@ import org.jboss.netty.channel.SimpleChannelHandler;
 import org.nexyu.nexyuAndroid.client.protocol.NetworkMessage;
 import org.nexyu.nexyuAndroid.service.ConnectService;
 
+import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
@@ -96,7 +97,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	 * received data.
 	 * 
 	 * @param message
-	 *            The data received from the computer application of Nexyu in
+	 *            The data received from the computer application of Nex yu in
 	 *            JSON
 	 * @param ch
 	 *            The channel from where the data were received
@@ -104,13 +105,21 @@ public class MessageClientHandler extends SimpleChannelHandler
 	 */
 	private void manageReceivedData(NetworkMessage message, Channel ch)
 	{
-
 		String type = message.getType();
-		if (type.equals("pong"))
-			Log.d("NEX", "Pong received");
-		else if (type.equals("send"))
+		if (type.equals("send"))
 		{
-
+			Bundle data = new Bundle();
+			Message toService = Message.obtain(null, ConnectService.MSG_SEND_MESSAGE);
+			data.putString("data", message.getData().toString());
+			toService.setData(data);
+			try
+			{
+				mService.send(toService);
+			}
+			catch (RemoteException e)
+			{
+				e.printStackTrace();
+			}
 		}
 		else if (type.equals("ok"))
 			;
@@ -121,8 +130,9 @@ public class MessageClientHandler extends SimpleChannelHandler
 	/**
 	 * messageReceived is the callback triggered when data are received. They
 	 * are cast in a JsonObject, they must have been handled beforehand with
-	 * {@link StringJSONtoNetMessageDecoder}. Once messageReceived has checked the received data
-	 * are in JSON and has cast this into a JsonObject, it call the function
+	 * {@link StringJSONtoNetMessageDecoder}. Once messageReceived has checked
+	 * the received data are in JSON and has cast this into a JsonObject, it
+	 * call the function
 	 * {@link MessageClientHandler#manageReceivedData(JsonObject, Channel)} that
 	 * trigger the action requested by the received data
 	 * 

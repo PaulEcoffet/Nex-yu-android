@@ -29,9 +29,9 @@ import android.util.Log;
 /**
  * Service that maintain the connection between Nex yu Android & Nex yu
  * computer.
- * 
+ *
  * @author Paul Ecoffet
- * 
+ *
  */
 public class ConnectService extends Service
 {
@@ -41,6 +41,7 @@ public class ConnectService extends Service
 	public static final int		MSG_CONNECT				= 1;
 	public static final int		MSG_CONNECTED			= 2;
 	public static final int		MSG_IMPOSSIBLE_CONNECT	= 3;
+	public static final int		MSG_SEND_MESSAGE		= 4;
 	protected ChannelFactory	factory;
 	protected Channel			chan;
 	private Notification		notification;
@@ -49,7 +50,7 @@ public class ConnectService extends Service
 
 	/**
 	 * Default constructor.
-	 * 
+	 *
 	 * @author Paul Ecoffet
 	 */
 	public ConnectService()
@@ -79,7 +80,7 @@ public class ConnectService extends Service
 
 	/**
 	 * Connect the service to the IP given on port PORT.
-	 * 
+	 *
 	 * @param ip
 	 *            The IP to connect to.
 	 * @param port
@@ -130,7 +131,7 @@ public class ConnectService extends Service
 	/**
 	 * Called when the service is destroy. It close the connection between the
 	 * phone & the computer if any, then free resources (netty side)
-	 * 
+	 *
 	 * @see android.app.Service#onDestroy()
 	 */
 	@Override
@@ -145,7 +146,7 @@ public class ConnectService extends Service
 	/**
 	 * Disconnect the android app from the computer server if the connection
 	 * exist.
-	 * 
+	 *
 	 * @author Paul Ecoffet
 	 */
 	private void disconnect()
@@ -180,7 +181,7 @@ public class ConnectService extends Service
 
 	/**
 	 * Return the binder from the messenger.
-	 * 
+	 *
 	 * @see android.app.Service#onBind(android.content.Intent)
 	 */
 	@Override
