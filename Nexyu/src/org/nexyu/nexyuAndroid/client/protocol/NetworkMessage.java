@@ -10,10 +10,16 @@ import com.google.gson.JsonElement;
  * @author Paul Ecoffet
  *
  */
-public abstract class NetworkMessage
+public class NetworkMessage
 {
 	protected String type;
 	protected JsonElement data;
+	
+	public NetworkMessage()
+	{
+		type = "unknown";
+		data = null;
+	}
 	
 	protected NetworkMessage(String what, Object data)
 	{

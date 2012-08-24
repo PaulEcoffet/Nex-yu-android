@@ -122,7 +122,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 			}
 		}
 		else if (type.equals("ok"))
-			;
+			Log.i("NEX", "ok");
 		else
 			Log.d("NEX", "Unknown type");
 	}
