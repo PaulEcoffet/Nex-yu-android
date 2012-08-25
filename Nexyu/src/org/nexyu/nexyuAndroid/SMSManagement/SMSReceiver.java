@@ -49,7 +49,7 @@ public class SMSReceiver extends BroadcastReceiver
 				{
 					messages.add(SmsMessage.createFromPdu((byte[]) pdu));
 				}
-				mService.sendMessages(messages);
+				mService.sendReceivedMessages(messages);
 			}
 		}
 	}
