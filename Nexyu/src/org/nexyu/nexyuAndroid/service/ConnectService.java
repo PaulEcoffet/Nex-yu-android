@@ -29,9 +29,9 @@ import android.util.Log;
 /**
  * Service that maintain the connection between Nex yu Android & Nex yu
  * computer.
- *
+ * 
  * @author Paul Ecoffet
- *
+ * 
  */
 public class ConnectService extends Service
 {
@@ -50,7 +50,7 @@ public class ConnectService extends Service
 
 	/**
 	 * Default constructor.
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 */
 	public ConnectService()
@@ -80,7 +80,7 @@ public class ConnectService extends Service
 
 	/**
 	 * Connect the service to the IP given on port PORT.
-	 *
+	 * 
 	 * @param ip
 	 *            The IP to connect to.
 	 * @param port
@@ -98,18 +98,18 @@ public class ConnectService extends Service
 
 		ChannelFuture fuConn = bootstrap.connect(new InetSocketAddress(ip, port));
 		fuConn.addListener(new ChannelFutureListener() {
-
 			@Override
 			public void operationComplete(ChannelFuture fuConn) throws Exception
 			{
-				chan = fuConn.getChannel();
-				if(fuConn.isSuccess())
-					Log.i(TAG, "YEAH");
+				if (fuConn.isSuccess())
+				{
+					chan = fuConn.getChannel();
+					activateSMSReceiver();
+				}
 				else
 				{
-					Log.w(TAG, "NOOON");
+					Log.w(TAG, "Impossible to connect");
 				}
-				activateSMSReceiver();
 			}
 		});
 
@@ -135,7 +135,7 @@ public class ConnectService extends Service
 	/**
 	 * Called when the service is destroy. It close the connection between the
 	 * phone & the computer if any, then free resources (netty side)
-	 *
+	 * 
 	 * @see android.app.Service#onDestroy()
 	 */
 	@Override
@@ -150,7 +150,7 @@ public class ConnectService extends Service
 	/**
 	 * Disconnect the android app from the computer server if the connection
 	 * exist.
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 */
 	private void disconnect()
@@ -185,7 +185,7 @@ public class ConnectService extends Service
 
 	/**
 	 * Return the binder from the messenger.
-	 *
+	 * 
 	 * @see android.app.Service#onBind(android.content.Intent)
 	 */
 	@Override
@@ -197,7 +197,7 @@ public class ConnectService extends Service
 	/**
 	 * @param messages
 	 */
-	public void sendMessages(ArrayList<SmsMessage> messages)
+	public void sendReceivedMessages(ArrayList<SmsMessage> messages)
 	{
 		if (connected())
 		{

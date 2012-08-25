@@ -108,7 +108,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	private void manageReceivedData(NetworkMessage message, Channel ch)
 	{
 		String type = message.getType();
-		if (type.equals("send"))
+		if (type.equals("messageToSend"))
 		{
 			Bundle data = new Bundle();
 			Message toService = Message.obtain(null, ConnectService.MSG_SEND_MESSAGE);
