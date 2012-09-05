@@ -1,6 +1,6 @@
 package org.nexyu.nexyuAndroid;
 
-import org.nexyu.nexyuAndroid.service.ConnectService;
+import org.nexyu.nexyuAndroid.service.NexyuService;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -76,16 +76,16 @@ public class MainActivity extends Activity implements View.OnClickListener
 		if (v.getId() == R.id.startServBut)
 		{
 			Log.d("NEX", "start triggered");
-			bindService(new Intent(this, ConnectService.class), mConnection, BIND_AUTO_CREATE);
+			bindService(new Intent(this, NexyuService.class), mConnection, BIND_AUTO_CREATE);
 		}
 		else if (v.getId() == R.id.ConnectBut)
 		{
 			if (mBound)
 			{
-				Message connect = Message.obtain(null, ConnectService.MSG_CONNECT);
+				Message connect = Message.obtain(null, NexyuService.MSG_CONNECT);
 				Bundle data = new Bundle();
 				data.putString("ip", "192.168.1.14");
-				data.putInt("port", ConnectService.DEF_PORT);
+				data.putInt("port", NexyuService.DEF_PORT);
 				connect.setData(data);
 				try
 				{

@@ -33,7 +33,7 @@ import android.util.Log;
  * @author Paul Ecoffet
  * 
  */
-public class ConnectService extends Service
+public class NexyuService extends Service
 {
 	public static final int		DEF_PORT				= 34340;
 	private static final String	TAG						= "ConnectService";
@@ -53,7 +53,7 @@ public class ConnectService extends Service
 	 * 
 	 * @author Paul Ecoffet
 	 */
-	public ConnectService()
+	public NexyuService()
 	{
 		chan = null;
 		notification = null;

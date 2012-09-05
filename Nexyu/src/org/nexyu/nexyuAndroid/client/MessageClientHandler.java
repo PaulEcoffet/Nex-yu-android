@@ -12,7 +12,7 @@ import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.nexyu.nexyuAndroid.client.protocol.NetworkMessage;
-import org.nexyu.nexyuAndroid.service.ConnectService;
+import org.nexyu.nexyuAndroid.service.NexyuService;
 
 import android.os.Bundle;
 import android.os.Message;
@@ -50,7 +50,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e)
 	{
 		Log.d("NEX", "Connected");
-		Message to_service = Message.obtain(null, ConnectService.MSG_CONNECTED);
+		Message to_service = Message.obtain(null, NexyuService.MSG_CONNECTED);
 		try
 		{
 			mService.send(to_service);
@@ -79,7 +79,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 		if (e.getCause() instanceof SocketTimeoutException)
 		{
 			Log.w("Nex", "fail de connection");
-			Message message = Message.obtain(null, ConnectService.MSG_IMPOSSIBLE_CONNECT);
+			Message message = Message.obtain(null, NexyuService.MSG_IMPOSSIBLE_CONNECT);
 			try
 			{
 				mService.send(message);
@@ -111,7 +111,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 		if (type.equals("messageToSend"))
 		{
 			Bundle data = new Bundle();
-			Message toService = Message.obtain(null, ConnectService.MSG_SEND_MESSAGE);
+			Message toService = Message.obtain(null, NexyuService.MSG_SEND_MESSAGE);
 			data.putString("data", message.getData().toString());
 			toService.setData(data);
 			try

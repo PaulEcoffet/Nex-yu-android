@@ -5,7 +5,7 @@ package org.nexyu.nexyuAndroid.SMSManagement;
 
 import java.util.ArrayList;
 
-import org.nexyu.nexyuAndroid.service.ConnectService;
+import org.nexyu.nexyuAndroid.service.NexyuService;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,9 +22,9 @@ public class SMSReceiver extends BroadcastReceiver
 {
 	private static final String	SMS_RECEIVED	= "android.provider.Telephony.SMS_RECEIVED";
 	private static final String	TAG	= "SMSReceiver";
-	private ConnectService	mService;
+	private NexyuService	mService;
 	
-	public SMSReceiver(ConnectService service)
+	public SMSReceiver(NexyuService service)
 	{
 		super();
 		mService = service;

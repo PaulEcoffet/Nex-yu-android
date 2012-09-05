@@ -27,7 +27,7 @@
 				</activity>
 
 				<service
-						android:name=".service.ConnectService"
+						android:name=".service.NexyuService"
 						android:process=":remote" >
 				</service>
 		</application>
