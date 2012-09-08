@@ -42,10 +42,14 @@ public class MessageClientHandler extends SimpleChannelHandler
 	}
 
 	/**
+	 * Callback called when the connection between Nex yu Android is connected to Nex yu Comp.
+	 * 
 	 * @author Paul Ecoffet
 	 * @see org.jboss.netty.channel.SimpleChannelHandler#channelConnected(org.jboss.netty.channel.ChannelHandlerContext,
 	 *      org.jboss.netty.channel.ChannelStateEvent)
 	 */
+	
+	//TODO Really Useful? Could be done with a ChannelFutureListener
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e)
 	{
@@ -95,7 +99,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	}
 
 	/**
-	 * Trigger different actions depending of the type of request written in the
+	 * Triggers different actions depending of the type of request written in the
 	 * received data.
 	 * 
 	 * @param message
