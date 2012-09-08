@@ -27,8 +27,9 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 
 /**
- * Service that maintain the connection between Nex yu Android & Nex yu
- * computer.
+ * Core service of Nex yu Android. It receive message from the UI thread, the
+ * SMS receiver thread & the client thread and trigger main action of the
+ * software.
  * 
  * @author Paul Ecoffet
  * 
@@ -37,14 +38,12 @@ public class NexyuService extends Service
 {
 	public static final int		DEF_PORT				= 34340;
 	private static final String	TAG						= "ConnectService";
-	private static final int	ONGOING_NOTIFICATION	= 34340;
 	public static final int		MSG_CONNECT				= 1;
 	public static final int		MSG_CONNECTED			= 2;
 	public static final int		MSG_IMPOSSIBLE_CONNECT	= 3;
-	public static final int		MSG_SEND_SMS		= 4;
+	public static final int		MSG_SEND_SMS			= 4;
 	protected ChannelFactory	factory;
 	protected Channel			chan;
-	private Notification		notification;
 	private Messenger			messenger;
 	private SMSReceiver			smsReceiver;
 
@@ -63,7 +62,9 @@ public class NexyuService extends Service
 	}
 
 	/**
+	 * Activate the SMSReceiver which will notify the service when a SMS is received.
 	 *
+	 * @author Paul Ecoffet
 	 */
 	public void activateSMSReceiver()
 	{
@@ -73,6 +74,12 @@ public class NexyuService extends Service
 		Log.d(TAG, "SMSReceiver registered.");
 	}
 
+	
+	/**
+	 * Deactivate the SMSReceiver which communicate with this service.
+	 * 
+	 * @author Paul Ecoffet
+	 */
 	public void deactivateSMSReceiver()
 	{
 		unregisterReceiver(smsReceiver);
@@ -113,23 +120,6 @@ public class NexyuService extends Service
 			}
 		});
 
-	}
-
-	/**
-	 * @see android.app.Service#onCreate()
-	 */
-	@Override
-	public void onCreate()
-	{
-		super.onCreate();
-		notification = new Notification(R.drawable.ic_launcher, getText(R.string.app_name),
-				System.currentTimeMillis());
-		Intent notificationIntent = new Intent(this, MainActivity.class);
-		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		notification.setLatestEventInfo(this, getText(R.string.notification_title),
-				getText(R.string.notif_not_connected), pendingIntent);
-		startForeground(ONGOING_NOTIFICATION, notification);
-		Log.i(TAG, "service started");
 	}
 
 	/**
@@ -196,8 +186,9 @@ public class NexyuService extends Service
 
 	/**
 	 * Send the list of messages in arguments to the computer.
+	 * 
 	 * @param messages
-	 * 					The list of messages to send to the computer.
+	 *            The list of messages to send to the computer.
 	 */
 	public void sendMessagesToComputer(ArrayList<SmsMessage> messages)
 	{
