@@ -14,7 +14,7 @@ import org.nexyu.nexyuAndroid.MainActivity;
 import org.nexyu.nexyuAndroid.R;
 import org.nexyu.nexyuAndroid.SMSManagement.SMSReceiver;
 import org.nexyu.nexyuAndroid.client.ClientPipelineFactory;
-import org.nexyu.nexyuAndroid.client.protocol.SMSReceivedNetworkMessage;
+import org.nexyu.nexyuAndroid.client.protocol.SMSToSendNetworkMessage;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -41,7 +41,7 @@ public class NexyuService extends Service
 	public static final int		MSG_CONNECT				= 1;
 	public static final int		MSG_CONNECTED			= 2;
 	public static final int		MSG_IMPOSSIBLE_CONNECT	= 3;
-	public static final int		MSG_SEND_MESSAGE		= 4;
+	public static final int		MSG_SEND_SMS		= 4;
 	protected ChannelFactory	factory;
 	protected Channel			chan;
 	private Notification		notification;
@@ -176,7 +176,7 @@ public class NexyuService extends Service
 	}
 
 	/**
-	 * @return
+	 * @return whether the application is connected to Nex yu Comp or not.
 	 */
 	private boolean connected()
 	{
@@ -195,13 +195,15 @@ public class NexyuService extends Service
 	}
 
 	/**
+	 * Send the list of messages in arguments to the computer.
 	 * @param messages
+	 * 					The list of messages to send to the computer.
 	 */
-	public void sendReceivedMessages(ArrayList<SmsMessage> messages)
+	public void sendMessagesToComputer(ArrayList<SmsMessage> messages)
 	{
 		if (connected())
 		{
-			SMSReceivedNetworkMessage toSend = new SMSReceivedNetworkMessage(messages);
+			SMSToSendNetworkMessage toSend = new SMSToSendNetworkMessage(messages);
 			chan.write(toSend);
 		}
 	}

@@ -62,7 +62,7 @@ class ServiceHandler extends Handler
 		case NexyuService.MSG_IMPOSSIBLE_CONNECT:
 			Toast.makeText(service, R.string.impossible_to_connect, Toast.LENGTH_LONG).show();
 			break;
-		case NexyuService.MSG_SEND_MESSAGE:
+		case NexyuService.MSG_SEND_SMS:
 			SmsManager smsManager = SmsManager.getDefault();
 			smsManager.sendTextMessage(data.getString(key), scAddress, text, sentIntent,
 					deliveryIntent);

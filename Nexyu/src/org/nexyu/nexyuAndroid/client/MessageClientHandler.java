@@ -111,7 +111,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 		if (type.equals("messageToSend"))
 		{
 			Bundle data = new Bundle();
-			Message toService = Message.obtain(null, NexyuService.MSG_SEND_MESSAGE);
+			Message toService = Message.obtain(null, NexyuService.MSG_SEND_SMS);
 			data.putString("data", message.getData().toString());
 			toService.setData(data);
 			try

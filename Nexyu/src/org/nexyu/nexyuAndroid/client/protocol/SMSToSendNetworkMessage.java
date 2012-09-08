@@ -15,13 +15,13 @@ import com.google.gson.JsonObject;
  * @author Paul Ecoffet
  *
  */
-public class SMSReceivedNetworkMessage extends NetworkMessage
+public class SMSToSendNetworkMessage extends NetworkMessage
 {
 	/**
 	 * @param messages
 	 *            The list of received messages.
 	 */
-	public SMSReceivedNetworkMessage(ArrayList<SmsMessage> messages)
+	public SMSToSendNetworkMessage(ArrayList<SmsMessage> messages)
 	{
 		super("messages", null);
 		JsonArray data = new JsonArray();
