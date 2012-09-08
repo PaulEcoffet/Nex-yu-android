@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nexyu.nexyuAndroid.SMSManagement;
 
@@ -15,15 +15,25 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 
 /**
+ * Receiver which catch SMS broadcast so as to send its content to Nex yu core
+ * service. Activated only when asked by the Nex yu core service.
+ *
  * @author Paul Ecoffet
- * 
  */
 public class SMSReceiver extends BroadcastReceiver
 {
 	private static final String	SMS_RECEIVED	= "android.provider.Telephony.SMS_RECEIVED";
-	private static final String	TAG	= "SMSReceiver";
-	private NexyuService	mService;
-	
+	private static final String	TAG				= "SMSReceiver";
+	private NexyuService		mService;
+
+	/**
+	 * Default constructor
+	 *
+	 * @param service
+	 *            The NexyuService that started the broadcast receiver. The
+	 *            SMSReceiver will communicate with it.
+	 * @author Paul Ecoffet
+	 */
 	public SMSReceiver(NexyuService service)
 	{
 		super();
@@ -31,6 +41,10 @@ public class SMSReceiver extends BroadcastReceiver
 	}
 
 	/**
+	 * Callback called when SMS are received. It forwards the SMS to the Nexyu
+	 * core service so that it sends them to Nexyu Comp.
+	 *
+	 * @author Paul Ecoffet
 	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context,
 	 *      android.content.Intent)
 	 */
@@ -38,14 +52,14 @@ public class SMSReceiver extends BroadcastReceiver
 	public void onReceive(Context context, Intent intent)
 	{
 		Log.i(TAG, "SMS received.");
-		if(intent.getAction().equals(SMS_RECEIVED))
+		if (intent.getAction().equals(SMS_RECEIVED))
 		{
 			Bundle bundle = intent.getExtras();
 			if (bundle != null)
 			{
 				Object[] pdus = (Object[]) bundle.get("pdus");
 				ArrayList<SmsMessage> messages = new ArrayList<SmsMessage>();
-				for(Object pdu :pdus)
+				for (Object pdu : pdus)
 				{
 					messages.add(SmsMessage.createFromPdu((byte[]) pdu));
 				}
