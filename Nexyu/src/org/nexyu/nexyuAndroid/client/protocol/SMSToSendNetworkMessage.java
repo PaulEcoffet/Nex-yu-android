@@ -12,6 +12,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 /**
+ * SMS messages to send formatted so as to be sent over the network.
+ * 
  * @author Paul Ecoffet
  *
  */
