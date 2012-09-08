@@ -15,14 +15,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 /**
- * Message handler that call the service function depending on the message
+ * Message handler that call NexyuService's functions depending on the message
  * received.
  *
  * @author Paul Ecoffet
  */
 class ServiceHandler extends Handler
 {
-	private static final String					TAG	= "IncomingHandler";
+	private static final String					TAG	= "NexYuServiceHandler";
 	private final WeakReference<NexyuService>	mService;
 
 	/**
@@ -37,8 +37,8 @@ class ServiceHandler extends Handler
 	}
 
 	/**
-	 * Callback called when a message is received. It manage which function of
-	 * the service is called depending of the type of message received
+	 * Callback called when a message is received. It manages which function of
+	 * the service is called depending of the type of message received.
 	 *
 	 * @author Paul Ecoffet
 	 * @see android.os.Handler#handleMessage(android.os.Message)
