@@ -7,15 +7,17 @@ import java.lang.ref.WeakReference;
 
 import org.nexyu.nexyuAndroid.R;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
+import android.content.ContentValues;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 /**
  * Message handler that call NexyuService's functions depending on the message
@@ -69,8 +71,16 @@ class ServiceHandler extends Handler
 		case NexyuService.MSG_SEND_SMS:
 			SmsManager smsManager = SmsManager.getDefault();
 			json = ((JsonElement) msg.obj).getAsJsonObject();
-			smsManager.sendTextMessage(json.get("recipient").getAsString(), null,
-					json.get("body").getAsString(), null, null);
+			String recipient = json.get("recipient").getAsString();
+			String body = json.get("body").getAsString();
+
+			smsManager.sendMultipartTextMessage(recipient, null, smsManager.divideMessage(body),
+					null, null);
+			ContentValues values = new ContentValues();
+			values.put("address", recipient);
+			values.put("body", body);
+
+			service.getContentResolver().insert(Uri.parse("content://sms/sent"), values);
 			break;
 		default:
 			super.handleMessage(msg);
