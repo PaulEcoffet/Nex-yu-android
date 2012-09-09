@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+
 public class MainActivity extends Activity implements View.OnClickListener
 {
 	private Messenger			mService	= null;
@@ -84,7 +86,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 			{
 				Message connect = Message.obtain(null, NexyuService.MSG_CONNECT);
 				Bundle data = new Bundle();
-				IntentIntegrator integrator = new IntentIntegrator(yourActivity);
+				IntentIntegrator integrator = new IntentIntegrator(this);
 				integrator.initiateScan();
 				data.putString("ip", "192.168.1.14");
 				data.putInt("port", NexyuService.DEF_PORT);
