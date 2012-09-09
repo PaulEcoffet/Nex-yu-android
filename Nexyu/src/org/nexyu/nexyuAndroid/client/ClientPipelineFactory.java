@@ -18,21 +18,22 @@ import android.os.Messenger;
 /**
  * Pipeline factory that creates the pipeline used by netty to format the
  * messages to send and received over the network.
- * 
+ *
  * @author Paul Ecoffet
- * 
+ *
  */
 public final class ClientPipelineFactory implements ChannelPipelineFactory
 {
-	private Messenger				mService;
+	private Messenger	mService;
+
 	/**
 	 * Constructor of the class which requires a NexyuService binder so as to
 	 * communicate with the Nexyu core service.
-	 * 
+	 *
 	 * @param serviceBinder
 	 *            NexyuService binder with whom the network thread will
 	 *            communicate.
-	 * 
+	 *
 	 * @author Paul Ecoffet
 	 */
 	public ClientPipelineFactory(IBinder serviceBinder)
@@ -41,8 +42,9 @@ public final class ClientPipelineFactory implements ChannelPipelineFactory
 	}
 
 	/**
-	 * 
-	 * 
+	 * Create the Pipeline that encodes the messages to send over the network and decode
+	 * the messages from it. All these messages are caught by messageClientHandler before.
+	 *
 	 * @author Paul Ecoffet
 	 * @see org.jboss.netty.channel.ChannelPipelineFactory#getPipeline()
 	 */

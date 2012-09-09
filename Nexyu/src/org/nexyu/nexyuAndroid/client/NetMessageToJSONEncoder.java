@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nexyu.nexyuAndroid.client;
 
@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 public class NetMessageToJSONEncoder extends OneToOneEncoder
 {
 	/**
-	 * encodes a NetworkMessage into a JsonObject thanks to gson, then forward
+	 * Encodes a NetworkMessage into a JsonObject thanks to gson, then forward
 	 * it to the next encoder.
 	 * 
 	 * @param ctx

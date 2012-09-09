@@ -31,10 +31,18 @@ import com.google.gson.JsonObject;
  */
 public class MessageClientHandler extends SimpleChannelHandler
 {
-	private Messenger	mService;
+	/**
+	 * 
+	 */
+	private static final String	TAG	= "MessageClientHandler";
+	private Messenger			mService;
 
 	/**
+	 * Default constructor of MessageClientHandler, which requires a messenger
+	 * to communicate with the Nex yu core service.
+	 * 
 	 * @param service
+	 *            The Messenger of the Nex yu core service.
 	 */
 	public MessageClientHandler(Messenger service)
 	{
@@ -42,18 +50,19 @@ public class MessageClientHandler extends SimpleChannelHandler
 	}
 
 	/**
-	 * Callback called when the connection between Nex yu Android is connected to Nex yu Comp.
+	 * Callback called when the connection between Nex yu Android is connected
+	 * to Nex yu Comp.
 	 * 
 	 * @author Paul Ecoffet
 	 * @see org.jboss.netty.channel.SimpleChannelHandler#channelConnected(org.jboss.netty.channel.ChannelHandlerContext,
 	 *      org.jboss.netty.channel.ChannelStateEvent)
 	 */
-	
-	//TODO Really Useful? Could be done with a ChannelFutureListener
+
+	// TODO Really Useful? Could be done with a ChannelFutureListener
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e)
 	{
-		Log.d("NEX", "Connected");
+		Log.d(TAG, "Connected");
 		Message to_service = Message.obtain(null, NexyuService.MSG_CONNECTED);
 		try
 		{
@@ -82,12 +91,11 @@ public class MessageClientHandler extends SimpleChannelHandler
 		// )
 		if (e.getCause() instanceof SocketTimeoutException)
 		{
-			Log.w("Nex", "fail de connection");
 			Message message = Message.obtain(null, NexyuService.MSG_IMPOSSIBLE_CONNECT);
 			try
 			{
 				mService.send(message);
-				Log.w("NEX", "Impossible de se connecter");
+				Log.w(TAG, "Impossible de se connecter");
 			}
 			catch (RemoteException e1)
 			{
@@ -99,8 +107,8 @@ public class MessageClientHandler extends SimpleChannelHandler
 	}
 
 	/**
-	 * Triggers different actions depending of the type of request written in the
-	 * received data.
+	 * Triggers different actions depending of the type of request written in
+	 * the received data.
 	 * 
 	 * @param message
 	 *            The data received from the computer application of Nex yu in
@@ -128,9 +136,9 @@ public class MessageClientHandler extends SimpleChannelHandler
 			}
 		}
 		else if (type.equals("ok"))
-			Log.i("NEX", "ok");
+			Log.i(TAG, "ok");
 		else
-			Log.d("NEX", "Unknown type");
+			Log.d(TAG, "Unknown type");
 	}
 
 	/**
@@ -156,15 +164,23 @@ public class MessageClientHandler extends SimpleChannelHandler
 			manageReceivedData(data, ch);
 		}
 		else
-			Log.e("NEX", "Message received is not a JsonObject");
+			Log.e(TAG, "Message received is not a JsonObject");
 	}
 
+	/**
+	 * Callback called when a write is requested. It checked if the data that
+	 * must be sent is a NetworkMessage, if it is not, it aborts the operation.
+	 * 
+	 * @author Paul Ecoffet
+	 * @see org.jboss.netty.channel.SimpleChannelHandler#writeRequested(org.jboss.netty.channel.ChannelHandlerContext,
+	 *      org.jboss.netty.channel.MessageEvent)
+	 */
 	@Override
 	public void writeRequested(ChannelHandlerContext ctx, MessageEvent evt)
 	{
 		if (evt.getMessage() instanceof NetworkMessage)
 			ctx.sendDownstream(evt);
 		else
-			Log.e("NEX", "Message to send is not a NetworkMessage object.");
+			Log.e(TAG, "Message to send is not a NetworkMessage object.");
 	}
 }

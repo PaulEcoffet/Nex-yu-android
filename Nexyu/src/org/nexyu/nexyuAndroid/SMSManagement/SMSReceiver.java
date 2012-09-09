@@ -27,7 +27,8 @@ public class SMSReceiver extends BroadcastReceiver
 	private NexyuService		mService;
 
 	/**
-	 * Default constructor
+	 * Default constructor, it needs the NexyuService that has started it so as
+	 * to communicate with it.
 	 *
 	 * @param service
 	 *            The NexyuService that started the broadcast receiver. The
