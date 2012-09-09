@@ -32,7 +32,7 @@ public class SMSReceiver extends BroadcastReceiver
 	 * @param service
 	 *            The NexyuService that started the broadcast receiver. The
 	 *            SMSReceiver will communicate with it.
-	 * @author Paul Ecoffet
+	 * @author Paul Ecoffet
 	 */
 	public SMSReceiver(NexyuService service)
 	{
