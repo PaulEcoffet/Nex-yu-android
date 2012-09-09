@@ -7,7 +7,6 @@ import java.lang.ref.WeakReference;
 
 import org.nexyu.nexyuAndroid.R;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.SmsManager;
@@ -17,7 +16,7 @@ import android.widget.Toast;
 /**
  * Message handler that call NexyuService's functions depending on the message
  * received.
- *
+ * 
  * @author Paul Ecoffet
  */
 class ServiceHandler extends Handler
@@ -28,7 +27,7 @@ class ServiceHandler extends Handler
 	/**
 	 * Unique constructor, create a reference to the service that must be
 	 * manipulated.
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 */
 	public ServiceHandler(NexyuService service)
@@ -39,7 +38,7 @@ class ServiceHandler extends Handler
 	/**
 	 * Callback called when a message is received. It manages which function of
 	 * the service is called depending of the type of message received.
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 * @see android.os.Handler#handleMessage(android.os.Message)
 	 */

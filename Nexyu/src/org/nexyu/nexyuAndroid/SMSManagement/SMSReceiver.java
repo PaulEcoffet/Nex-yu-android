@@ -17,7 +17,7 @@ import android.util.Log;
 /**
  * Receiver which catch SMS broadcast so as to send its content to Nex yu core
  * service. Activated only when asked by the Nex yu core service.
- *
+ * 
  * @author Paul Ecoffet
  */
 public class SMSReceiver extends BroadcastReceiver
@@ -29,7 +29,7 @@ public class SMSReceiver extends BroadcastReceiver
 	/**
 	 * Default constructor, it needs the NexyuService that has started it so as
 	 * to communicate with it.
-	 *
+	 * 
 	 * @param service
 	 *            The NexyuService that started the broadcast receiver. The
 	 *            SMSReceiver will communicate with it.
@@ -44,7 +44,7 @@ public class SMSReceiver extends BroadcastReceiver
 	/**
 	 * Callback called when SMS are received. It forwards the SMS to the Nexyu
 	 * core service so that it sends them to Nexyu Comp.
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context,
 	 *      android.content.Intent)

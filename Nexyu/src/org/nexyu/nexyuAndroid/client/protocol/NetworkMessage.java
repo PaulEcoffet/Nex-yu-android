@@ -7,16 +7,18 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 /**
- * Class that represents a message (not a SMS) received or to send over the network.
- *
+ * Class that represents a message (not a SMS) received or to send over the
+ * network.
+ * 
  * Note: Should be abstract but gson doesn't support it.
+ * 
  * @author Paul Ecoffet
- *
+ * 
  */
 public class NetworkMessage
 {
-	protected String type;
-	protected JsonElement data;
+	protected String		type;
+	protected JsonElement	data;
 
 	/**
 	 * Default constructor as recommended by Gson.
@@ -43,7 +45,8 @@ public class NetworkMessage
 	}
 
 	/**
-	 * @param type the type to set
+	 * @param type
+	 *            the type to set
 	 */
 	public void setType(String type)
 	{
@@ -59,7 +62,8 @@ public class NetworkMessage
 	}
 
 	/**
-	 * @param data the data to set
+	 * @param data
+	 *            the data to set
 	 */
 	public void setData(JsonElement data)
 	{

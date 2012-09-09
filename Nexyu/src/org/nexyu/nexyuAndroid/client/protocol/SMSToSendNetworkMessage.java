@@ -4,7 +4,6 @@
 package org.nexyu.nexyuAndroid.client.protocol;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import android.telephony.SmsMessage;
 
@@ -15,7 +14,7 @@ import com.google.gson.JsonObject;
  * SMS messages to send formatted so as to be sent over the network.
  * 
  * @author Paul Ecoffet
- *
+ * 
  */
 public class SMSToSendNetworkMessage extends NetworkMessage
 {
@@ -28,9 +27,8 @@ public class SMSToSendNetworkMessage extends NetworkMessage
 		super("messages", null);
 		JsonArray data = new JsonArray();
 
-		for (Iterator<SmsMessage> iterator = messages.iterator(); iterator.hasNext();)
+		for (SmsMessage message : messages)
 		{
-			SmsMessage message = iterator.next();
 			JsonObject jsonMess = new JsonObject();
 			jsonMess.addProperty("body", message.getMessageBody());
 			jsonMess.addProperty("sender", message.getOriginatingAddress());

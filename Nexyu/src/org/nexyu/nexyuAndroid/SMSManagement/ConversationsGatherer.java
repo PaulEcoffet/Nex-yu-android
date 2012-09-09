@@ -12,7 +12,7 @@ import android.support.v4.app.FragmentActivity;
  */
 public class ConversationsGatherer
 {
-	protected Uri		mconversDatabase;
+	protected Uri				mconversDatabase;
 	protected FragmentActivity	mCtx;
 
 	public ConversationsGatherer(FragmentActivity ctx)
@@ -27,6 +27,6 @@ public class ConversationsGatherer
 	public void gatherSMS()
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 }
