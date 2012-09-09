@@ -7,6 +7,10 @@ import java.lang.ref.WeakReference;
 
 import org.nexyu.nexyuAndroid.R;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.SmsManager;
@@ -45,13 +49,14 @@ class ServiceHandler extends Handler
 	@Override
 	public void handleMessage(Message msg)
 	{
-		// TODO Find how to organize this part, knowing that some message may
-		// come from the inner app or from the network
 		NexyuService service = mService.get();
-		String data = msg.getData().getString("data");
+		Bundle data;
+		JsonObject json;
+
 		switch (msg.what)
 		{
 		case NexyuService.MSG_CONNECT:
+			data = msg.getData();
 			service.connect(data.getString("ip"), msg.getData().getInt("port"));
 			break;
 		case NexyuService.MSG_CONNECTED:
@@ -63,8 +68,9 @@ class ServiceHandler extends Handler
 			break;
 		case NexyuService.MSG_SEND_SMS:
 			SmsManager smsManager = SmsManager.getDefault();
-			smsManager.sendTextMessage(data.getString(key), scAddress, text, sentIntent,
-					deliveryIntent);
+			json = ((JsonElement) msg.obj).getAsJsonObject();
+			smsManager.sendTextMessage(json.get("recipient").getAsString(), null,
+					json.get("body").getAsString(), null, null);
 			break;
 		default:
 			super.handleMessage(msg);

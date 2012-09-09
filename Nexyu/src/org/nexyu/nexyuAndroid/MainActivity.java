@@ -84,7 +84,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 			{
 				Message connect = Message.obtain(null, NexyuService.MSG_CONNECT);
 				Bundle data = new Bundle();
-				data.putString("ip", "192.168.1.14");
+				data.putString("ip", "10.0.2.2");
 				data.putInt("port", NexyuService.DEF_PORT);
 				connect.setData(data);
 				try
