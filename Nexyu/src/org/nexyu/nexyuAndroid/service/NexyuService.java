@@ -26,9 +26,9 @@ import android.util.Log;
  * Core service of Nex yu Android. It receive message from the UI thread, the
  * SMS receiver thread & the client thread and trigger main action of the
  * software.
- * 
+ *
  * @author Paul Ecoffet
- * 
+ *
  */
 public class NexyuService extends Service
 {
@@ -42,10 +42,11 @@ public class NexyuService extends Service
 	protected Channel			chan;
 	private Messenger			messenger;
 	private SMSReceiver			smsReceiver;
+	private boolean				smsReceiverRegistered	= false;
 
 	/**
 	 * Default constructor.
-	 * 
+	 *
 	 * @author Paul Ecoffet
 	 */
 	public NexyuService()
@@ -59,7 +60,7 @@ public class NexyuService extends Service
 	/**
 	 * Activate the SMSReceiver which will notify the service when a SMS is
 	 * received.
-	 * 
+	 *
 	 * @author Paul Ecoffet
 	 */
 	public void activateSMSReceiver()
@@ -67,22 +68,24 @@ public class NexyuService extends Service
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("android.provider.Telephony.SMS_RECEIVED");
 		registerReceiver(smsReceiver, filter);
+		smsReceiverRegistered = true;
 		Log.d(TAG, "SMSReceiver registered.");
 	}
 
 	/**
 	 * Deactivate the SMSReceiver which communicate with this service.
-	 * 
+	 *
 	 * @author Paul Ecoffet
 	 */
 	public void deactivateSMSReceiver()
 	{
-		unregisterReceiver(smsReceiver);
+		if (smsReceiverRegistered)
+			unregisterReceiver(smsReceiver);
 	}
 
 	/**
 	 * Connect the service to the IP given on port PORT.
-	 * 
+	 *
 	 * @param ip
 	 *            The IP to connect to.
 	 * @param port
@@ -120,7 +123,7 @@ public class NexyuService extends Service
 	/**
 	 * Called when the service is destroy. It close the connection between the
 	 * phone & the computer if any, then free resources (netty side)
-	 * 
+	 *
 	 * @see android.app.Service#onDestroy()
 	 */
 	@Override
@@ -135,7 +138,7 @@ public class NexyuService extends Service
 	/**
 	 * Disconnect the android application from the computer server if the
 	 * connection exist.
-	 * 
+	 *
 	 * @author Paul Ecoffet
 	 */
 	private void disconnect()
@@ -157,7 +160,7 @@ public class NexyuService extends Service
 	/**
 	 * Test if the connection between the Nex yu Android application and the Nex
 	 * yu Comp software is made.
-	 * 
+	 *
 	 * @return whether the application is connected to Nex yu Comp or not.
 	 */
 	private boolean isConnected()
@@ -168,7 +171,7 @@ public class NexyuService extends Service
 	/**
 	 * Return the binder from the messenger so that others threads could
 	 * communicate with the service.
-	 * 
+	 *
 	 * @see android.app.Service#onBind(android.content.Intent)
 	 */
 	@Override
@@ -179,7 +182,7 @@ public class NexyuService extends Service
 
 	/**
 	 * Send the list of messages given to the computer through network.
-	 * 
+	 *
 	 * @param messages
 	 *            The list of messages to send to the computer.
 	 */
