@@ -80,7 +80,10 @@ public class NexyuService extends Service
 	public void deactivateSMSReceiver()
 	{
 		if (smsReceiverRegistered)
+		{
 			unregisterReceiver(smsReceiver);
+			smsReceiverRegistered = false;
+		}
 	}
 
 	/**
