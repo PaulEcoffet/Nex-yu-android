@@ -23,7 +23,7 @@ public class SMSToSendNetworkMessage extends NetworkMessage
 	 */
 	public SMSToSendNetworkMessage(ArrayList<SmsMessage> messages)
 	{
-		super("messages", null);
+		super("message", null);
 		JsonObject data = new JsonObject();
 		SmsMessage sms = messages.get(0);
 		StringBuilder body = new StringBuilder();

@@ -85,8 +85,20 @@ public class MainActivity extends Activity implements View.OnClickListener
 		{
 			if (mBound)
 			{
-				IntentIntegrator integrator = new IntentIntegrator(this);
-				integrator.initiateScan();
+				// TODO: Remove this not really pretty snippet.
+				// Test if a device is an emulator by empirical testing.
+				if (android.os.Build.PRODUCT.equals("google_sdk"))
+				{
+					// emulator
+					sendConnectionMessage("10.0.2.2", 34340, "");
+				}
+				else
+				{
+					// not emulator
+					IntentIntegrator integrator = new IntentIntegrator(this);
+					integrator.initiateScan();
+				}
+
 			}
 			else
 			{
@@ -108,7 +120,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 				String host = path.getHost();
 				int port = path.getPort();
 				String verificationCode = path.getQueryParameter("verif");
-				if(host != null && port != -1 && verificationCode != null)
+				if (host != null && port != -1 && verificationCode != null)
 					sendConnectionMessage(host, port, verificationCode);
 			}
 		}
