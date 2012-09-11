@@ -190,8 +190,6 @@ public class NexyuService extends Service
 	public void sendMessagesToComputer(SMSToSendNetworkMessage toSend)
 	{
 		if (isConnected())
-		{
 			chan.write(toSend);
-		}
 	}
 }
