@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import android.telephony.SmsMessage;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 /**
@@ -25,16 +24,17 @@ public class SMSToSendNetworkMessage extends NetworkMessage
 	public SMSToSendNetworkMessage(ArrayList<SmsMessage> messages)
 	{
 		super("messages", null);
-		JsonArray data = new JsonArray();
-
+		JsonObject data = new JsonObject();
+		SmsMessage sms = messages.get(0);
+		StringBuilder body = new StringBuilder();
 		for (SmsMessage message : messages)
 		{
-			JsonObject jsonMess = new JsonObject();
-			jsonMess.addProperty("body", message.getMessageBody());
-			jsonMess.addProperty("sender", message.getOriginatingAddress());
-			jsonMess.addProperty("timestamp", message.getTimestampMillis());
-			data.add(jsonMess);
+			body.append(message.getMessageBody());
 		}
+		data.addProperty("sender", sms.getOriginatingAddress());
+		data.addProperty("timestamp", sms.getTimestampMillis());
+		data.addProperty("body", body.toString());
+
 		super.setData(data);
 	}
 }

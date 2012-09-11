@@ -1,7 +1,6 @@
 package org.nexyu.nexyuAndroid.service;
 
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
@@ -19,7 +18,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 import android.os.Messenger;
-import android.telephony.SmsMessage;
 import android.util.Log;
 
 /**
@@ -186,14 +184,13 @@ public class NexyuService extends Service
 	/**
 	 * Send the list of messages given to the computer through network.
 	 *
-	 * @param messages
-	 *            The list of messages to send to the computer.
+	 * @param toSend
+	 *            The message to send to the computer.
 	 */
-	public void sendMessagesToComputer(ArrayList<SmsMessage> messages)
+	public void sendMessagesToComputer(SMSToSendNetworkMessage toSend)
 	{
 		if (isConnected())
 		{
-			SMSToSendNetworkMessage toSend = new SMSToSendNetworkMessage(messages);
 			chan.write(toSend);
 		}
 	}
