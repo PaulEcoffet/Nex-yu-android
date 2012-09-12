@@ -161,7 +161,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 			manageReceivedData(data, ch);
 		}
 		else
-			Log.e(TAG, "Message received is not a JsonObject");
+			Log.e(TAG, "Message received is not a NetworkMessage");
 	}
 
 	/**
