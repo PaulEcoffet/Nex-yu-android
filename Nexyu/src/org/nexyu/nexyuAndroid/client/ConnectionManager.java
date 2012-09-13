@@ -12,6 +12,8 @@ import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.socket.oio.OioClientSocketChannelFactory;
 import org.nexyu.nexyuAndroid.client.protocol.NetworkMessage;
+import org.nexyu.nexyuAndroid.client.protocol.NetworkMessageable;
+import org.nexyu.nexyuAndroid.client.protocol.SMSToComputer;
 import org.nexyu.nexyuAndroid.service.NexyuService;
 
 import android.util.Log;
@@ -103,9 +105,9 @@ public class ConnectionManager
 		return (chan != null) && chan.isConnected();
 	}
 
-	public void send(NetworkMessage msg)
+	public void send(NetworkMessageable toSend)
 	{
 		if (isConnected())
-			chan.write(msg);
+			chan.write(toSend.toNetworkMessage());
 	}
 }

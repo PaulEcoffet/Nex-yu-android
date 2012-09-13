@@ -14,10 +14,10 @@ import com.google.gson.JsonElement;
  * @author Paul Ecoffet
  *
  */
-public class NetworkMessage
+public final class NetworkMessage
 {
-	protected String		type;
-	protected JsonElement	data;
+	private String		type;
+	private JsonElement	data;
 
 	/**
 	 * Default constructor as recommended by Gson.
@@ -28,10 +28,10 @@ public class NetworkMessage
 		data = null;
 	}
 
-	protected NetworkMessage(String what)
+	public NetworkMessage(String what, JsonElement _data)
 	{
 		type = what;
-		this.data = null;
+		this.data = _data;
 	}
 
 	/**
