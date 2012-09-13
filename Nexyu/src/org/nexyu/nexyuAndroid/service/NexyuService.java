@@ -1,16 +1,7 @@
 package org.nexyu.nexyuAndroid.service;
 
-import java.net.InetSocketAddress;
-import java.util.concurrent.Executors;
-
-import org.jboss.netty.bootstrap.ClientBootstrap;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelFactory;
-import org.jboss.netty.channel.ChannelFuture;
-import org.jboss.netty.channel.ChannelFutureListener;
-import org.jboss.netty.channel.socket.oio.OioClientSocketChannelFactory;
 import org.nexyu.nexyuAndroid.SMSManagement.SMSReceiver;
-import org.nexyu.nexyuAndroid.client.ClientPipelineFactory;
+import org.nexyu.nexyuAndroid.client.ConnectionManager;
 import org.nexyu.nexyuAndroid.client.protocol.SMSToSendNetworkMessage;
 
 import android.app.Service;
@@ -36,11 +27,10 @@ public class NexyuService extends Service
 	public static final int		MSG_CONNECTED			= 2;
 	public static final int		MSG_IMPOSSIBLE_CONNECT	= 3;
 	public static final int		MSG_SEND_SMS			= 4;
-	protected ChannelFactory	factory;
-	protected Channel			chan;
 	private Messenger			messenger;
 	private SMSReceiver			smsReceiver;
 	private boolean				smsReceiverRegistered	= false;
+	private ConnectionManager	connectionManager;
 
 	/**
 	 * Default constructor.
@@ -49,10 +39,9 @@ public class NexyuService extends Service
 	 */
 	public NexyuService()
 	{
-		chan = null;
-		factory = null;
 		messenger = new Messenger(new NexyuServiceHandler(this));
 		smsReceiver = new SMSReceiver(this);
+		connectionManager = new ConnectionManager(this);
 	}
 
 	/**
@@ -84,42 +73,7 @@ public class NexyuService extends Service
 		}
 	}
 
-	/**
-	 * Connect the service to the IP given on port PORT.
-	 *
-	 * @param ip
-	 *            The IP to connect to.
-	 * @param port
-	 *            The port to connect on.
-	 * @author Paul Ecoffet
-	 */
-	void connect(String ip, int port)
-	{
-		factory = new OioClientSocketChannelFactory(Executors.newCachedThreadPool());
 
-		ClientBootstrap bootstrap = new ClientBootstrap(factory);
-		bootstrap.setPipelineFactory(new ClientPipelineFactory(messenger.getBinder()));
-		bootstrap.setOption("tcpNoDelay", true);
-		bootstrap.setOption("keepAlive", true);
-
-		ChannelFuture fuConn = bootstrap.connect(new InetSocketAddress(ip, port));
-		fuConn.addListener(new ChannelFutureListener() {
-			@Override
-			public void operationComplete(ChannelFuture fuConn) throws Exception
-			{
-				if (fuConn.isSuccess())
-				{
-					chan = fuConn.getChannel();
-					activateSMSReceiver();
-				}
-				else
-				{
-					Log.w(TAG, "Impossible to connect");
-				}
-			}
-		});
-
-	}
 
 	/**
 	 * Called when the service is destroy. It close the connection between the
@@ -131,43 +85,12 @@ public class NexyuService extends Service
 	public void onDestroy()
 	{
 		deactivateSMSReceiver();
-		disconnect();
+		connectionManager.disconnect();
 		Log.i(TAG, "Service destroyed");
 		super.onDestroy();
 	}
 
-	/**
-	 * Disconnect the android application from the computer server if the
-	 * connection exist.
-	 *
-	 * @author Paul Ecoffet
-	 */
-	private void disconnect()
-	{
-		if (isConnected())
-		{
-			ChannelFuture f = chan.close();
-			f.addListener(new ChannelFutureListener() {
-				@Override
-				public void operationComplete(ChannelFuture future) throws Exception
-				{
-					Log.d(TAG, "Disconnected");
-					factory.releaseExternalResources();
-				}
-			});
-		}
-	}
 
-	/**
-	 * Test if the connection between the Nex yu Android application and the Nex
-	 * yu Comp software is made.
-	 *
-	 * @return whether the application is connected to Nex yu Comp or not.
-	 */
-	private boolean isConnected()
-	{
-		return (chan != null) && chan.isConnected();
-	}
 
 	/**
 	 * Return the binder from the messenger so that others threads could
@@ -189,7 +112,14 @@ public class NexyuService extends Service
 	 */
 	public void sendMessagesToComputer(SMSToSendNetworkMessage toSend)
 	{
-		if (isConnected())
-			chan.write(toSend);
+		connectionManager.send(toSend);
+	}
+
+	/**
+	 * @return
+	 */
+	public Messenger getMessenger()
+	{
+		return messenger;
 	}
 }
