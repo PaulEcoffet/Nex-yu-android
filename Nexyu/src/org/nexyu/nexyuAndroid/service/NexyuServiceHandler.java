@@ -5,17 +5,8 @@ package org.nexyu.nexyuAndroid.service;
 
 import java.lang.ref.WeakReference;
 
-import org.nexyu.nexyuAndroid.R;
-import org.nexyu.nexyuAndroid.SMSManagement.SMSSender;
-
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 /**
  * Message handler that call NexyuService's functions depending on the message
@@ -25,7 +16,6 @@ import com.google.gson.JsonObject;
  */
 class NexyuServiceHandler extends Handler
 {
-	private static final String					TAG	= "NexYuServiceHandler";
 	private final WeakReference<NexyuService>	mService;
 
 	/**
@@ -52,28 +42,7 @@ class NexyuServiceHandler extends Handler
 		NexyuService service = mService.get();
 		if (service != null)
 		{
-			Bundle data;
-
-			switch (NexyuService.whatList[msg.what])
-			{
-			case MSG_CONNECT:
-				data = msg.getData();
-				service.connect(data.getString("ip"), data.getInt("port"));
-				break;
-			case MSG_CONNECTED:
-				Log.i(TAG, "Connected message received");
-				Toast.makeText(service, "Connected", Toast.LENGTH_SHORT).show();
-				break;
-			case MSG_IMPOSSIBLE_CONNECT:
-				Toast.makeText(service, R.string.impossible_to_connect, Toast.LENGTH_LONG).show();
-				break;
-			case MSG_SEND_SMS:
-				JsonObject json = ((JsonElement) msg.obj).getAsJsonObject();
-				SMSSender.sendSMSthroughCellNetwork(json, service);
-				break;
-			default:
-				super.handleMessage(msg);
-			}
+			service.handleMessage(msg);
 		}
 	}
 }

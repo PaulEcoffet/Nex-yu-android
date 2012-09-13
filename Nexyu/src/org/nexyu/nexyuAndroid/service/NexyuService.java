@@ -1,15 +1,21 @@
 package org.nexyu.nexyuAndroid.service;
 
+import org.nexyu.nexyuAndroid.R;
 import org.nexyu.nexyuAndroid.SMSManagement.SMSReceiver;
+import org.nexyu.nexyuAndroid.SMSManagement.SMSSender;
 import org.nexyu.nexyuAndroid.client.ConnectionManager;
+import org.nexyu.nexyuAndroid.client.protocol.SMSToCell;
 import org.nexyu.nexyuAndroid.client.protocol.SMSToComputer;
 
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Core service of Nex yu Android. It receive message from the UI thread, the
@@ -122,11 +128,30 @@ public class NexyuService extends Service
 	}
 
 	/**
-	 * @param string
-	 * @param int1
+	 * @param msg
 	 */
-	public void connect(String host, int port)
+	public void handleMessage(Message msg)
 	{
-		connectionManager.connect(host, port);
+		Bundle data;
+
+		switch (NexyuService.whatList[msg.what])
+		{
+		case MSG_CONNECT:
+			data = msg.getData();
+			connectionManager.connect(data.getString("ip"), data.getInt("port"));
+			break;
+		case MSG_CONNECTED:
+			Log.i(TAG, "Connected message received");
+			Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
+			break;
+		case MSG_IMPOSSIBLE_CONNECT:
+			Toast.makeText(this, R.string.impossible_to_connect, Toast.LENGTH_LONG).show();
+			break;
+		case MSG_SEND_SMS:
+			SMSSender.sendSMSthroughCellNetwork((SMSToCell) msg.obj, this);
+			break;
+		default:
+			break;
+		}
 	}
 }

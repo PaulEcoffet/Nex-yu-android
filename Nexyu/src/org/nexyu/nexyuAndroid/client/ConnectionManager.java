@@ -11,9 +11,7 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.socket.oio.OioClientSocketChannelFactory;
-import org.nexyu.nexyuAndroid.client.protocol.NetworkMessage;
 import org.nexyu.nexyuAndroid.client.protocol.NetworkMessageable;
-import org.nexyu.nexyuAndroid.client.protocol.SMSToComputer;
 import org.nexyu.nexyuAndroid.service.NexyuService;
 
 import android.util.Log;

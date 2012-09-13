@@ -3,13 +3,12 @@
  */
 package org.nexyu.nexyuAndroid.SMSManagement;
 
+import org.nexyu.nexyuAndroid.client.protocol.SMSToCell;
 import org.nexyu.nexyuAndroid.service.NexyuService;
 
 import android.content.ContentValues;
 import android.net.Uri;
 import android.telephony.SmsManager;
-
-import com.google.gson.JsonObject;
 
 /**
  * @author Paul Ecoffet
@@ -18,21 +17,17 @@ import com.google.gson.JsonObject;
 public class SMSSender
 {
 	/**
-	 * @param msg
+	 * @param sms
 	 * @param service
 	 */
-	public static void sendSMSthroughCellNetwork(JsonObject msg, NexyuService service)
+	public static void sendSMSthroughCellNetwork(SMSToCell sms, NexyuService service)
 	{
 		SmsManager smsManager = SmsManager.getDefault();
-
-		String recipient = msg.get("recipient").getAsString();
-		String body = msg.get("body").getAsString();
-
-		smsManager.sendMultipartTextMessage(recipient, null, smsManager.divideMessage(body), null,
-				null);
+		smsManager.sendMultipartTextMessage(sms.getRecipient(), null,
+				smsManager.divideMessage(sms.getBody()), null, null);
 		ContentValues values = new ContentValues();
-		values.put("address", recipient);
-		values.put("body", body);
+		values.put("address", sms.getRecipient());
+		values.put("body", sms.getBody());
 
 		service.getContentResolver().insert(Uri.parse("content://sms/sent"), values);
 	}
