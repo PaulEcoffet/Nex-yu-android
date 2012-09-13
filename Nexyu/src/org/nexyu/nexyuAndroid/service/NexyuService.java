@@ -21,12 +21,15 @@ import android.util.Log;
  */
 public class NexyuService extends Service
 {
-	public static final int		DEF_PORT				= 34340;
-	private static final String	TAG						= "ConnectService";
-	public static final int		MSG_CONNECT				= 1;
-	public static final int		MSG_CONNECTED			= 2;
-	public static final int		MSG_IMPOSSIBLE_CONNECT	= 3;
-	public static final int		MSG_SEND_SMS			= 4;
+	public static final int		DEF_PORT	= 34340;
+	private static final String	TAG			= "ConnectService";
+
+	public static enum whatTypeEnum
+	{
+		MSG_CONNECT, MSG_CONNECTED, MSG_IMPOSSIBLE_CONNECT, MSG_SEND_SMS
+	};
+
+	static whatTypeEnum[]		whatType				= whatTypeEnum.values();
 	private Messenger			messenger;
 	private SMSReceiver			smsReceiver;
 	private boolean				smsReceiverRegistered	= false;
@@ -73,8 +76,6 @@ public class NexyuService extends Service
 		}
 	}
 
-
-
 	/**
 	 * Called when the service is destroy. It close the connection between the
 	 * phone & the computer if any, then free resources (netty side)
@@ -89,8 +90,6 @@ public class NexyuService extends Service
 		Log.i(TAG, "Service destroyed");
 		super.onDestroy();
 	}
-
-
 
 	/**
 	 * Return the binder from the messenger so that others threads could

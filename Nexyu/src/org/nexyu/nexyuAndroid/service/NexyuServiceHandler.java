@@ -54,20 +54,20 @@ class NexyuServiceHandler extends Handler
 		{
 			Bundle data;
 
-			switch (msg.what)
+			switch (NexyuService.whatType[msg.what])
 			{
-			case NexyuService.MSG_CONNECT:
+			case MSG_CONNECT:
 				data = msg.getData();
 				service.connect(data.getString("ip"), data.getInt("port"));
 				break;
-			case NexyuService.MSG_CONNECTED:
+			case MSG_CONNECTED:
 				Log.i(TAG, "Connected message received");
 				Toast.makeText(service, "Connected", Toast.LENGTH_SHORT).show();
 				break;
-			case NexyuService.MSG_IMPOSSIBLE_CONNECT:
+			case MSG_IMPOSSIBLE_CONNECT:
 				Toast.makeText(service, R.string.impossible_to_connect, Toast.LENGTH_LONG).show();
 				break;
-			case NexyuService.MSG_SEND_SMS:
+			case MSG_SEND_SMS:
 				JsonObject json = ((JsonElement) msg.obj).getAsJsonObject();
 				SMSSender.sendSMSthroughCellNetwork(json, service);
 				break;
