@@ -12,6 +12,7 @@ import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.nexyu.nexyuAndroid.client.protocol.NetworkMessage;
+import org.nexyu.nexyuAndroid.client.protocol.SMSToCell;
 import org.nexyu.nexyuAndroid.service.NexyuService;
 
 import android.os.Message;
@@ -123,7 +124,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 		if (type.equals("messageToSend"))
 		{
 			Message toService = Message.obtain(null, NexyuService.What.MSG_SEND_SMS.ordinal());
-			toService.obj = message.getData();
+			toService.obj = new SMSToCell(message);
 			try
 			{
 				mService.send(toService);
