@@ -11,9 +11,9 @@ import com.google.gson.JsonObject;
 
 /**
  * SMS messages to send formatted so as to be sent over the network.
- * 
+ *
  * @author Paul Ecoffet
- * 
+ *
  */
 public class SMSToComputerNetworkMessage extends NetworkMessage
 {
@@ -23,7 +23,7 @@ public class SMSToComputerNetworkMessage extends NetworkMessage
 	 */
 	public SMSToComputerNetworkMessage(ArrayList<SmsMessage> messages)
 	{
-		super("message", null);
+		super("message");
 		JsonObject data = new JsonObject();
 		SmsMessage sms = messages.get(0);
 		StringBuilder body = new StringBuilder();

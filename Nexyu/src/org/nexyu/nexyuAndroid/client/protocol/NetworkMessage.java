@@ -3,17 +3,16 @@
  */
 package org.nexyu.nexyuAndroid.client.protocol;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 /**
  * Class that represents a message (not a SMS) received or to send over the
  * network.
- * 
+ *
  * Note: Should be abstract but gson doesn't support it.
- * 
+ *
  * @author Paul Ecoffet
- * 
+ *
  */
 public class NetworkMessage
 {
@@ -29,11 +28,10 @@ public class NetworkMessage
 		data = null;
 	}
 
-	protected NetworkMessage(String what, Object data)
+	protected NetworkMessage(String what)
 	{
-		Gson gson = new Gson();
 		type = what;
-		this.data = gson.toJsonTree(data);
+		this.data = null;
 	}
 
 	/**
