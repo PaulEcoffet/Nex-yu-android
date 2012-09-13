@@ -51,16 +51,4 @@ public class SMSToComputer implements NetworkMessageable
 		data.addProperty("body", body);
 		return new NetworkMessage("message", data);
 	}
-
-	/**
-	 * @see org.nexyu.nexyuAndroid.client.protocol.NetworkMessageable#fromNetworkMessage(org.nexyu.nexyuAndroid.client.protocol.NetworkMessage)
-	 */
-	@Override
-	public void fromNetworkMessage(NetworkMessage msg)
-	{
-		JsonObject data = msg.getData().getAsJsonObject();
-		sender = data.get("sender").getAsString();
-		timestamp = data.get("timestamp").getAsLong();
-		body = data.get("body").getAsString();
-	}
 }

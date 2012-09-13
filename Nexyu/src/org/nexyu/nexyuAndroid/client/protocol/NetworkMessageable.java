@@ -10,5 +10,4 @@ package org.nexyu.nexyuAndroid.client.protocol;
 public interface NetworkMessageable
 {
 	public NetworkMessage toNetworkMessage();
-	public void	fromNetworkMessage(NetworkMessage msg);
 }
