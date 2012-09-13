@@ -128,7 +128,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 
 	private void sendConnectionMessage(String host, int port, String verificationCode)
 	{
-		Message connect = Message.obtain(null, NexyuService.MSG_CONNECT);
+		Message connect = Message.obtain(null, NexyuService.What.MSG_CONNECT.ordinal());
 		Bundle data = new Bundle();
 		data.putString("ip", host);
 		data.putInt("port", port);
