@@ -110,7 +110,7 @@ public class NexyuService extends Service
 	 */
 	public void sendMessagesToComputer(SMSToComputer toSend)
 	{
-		connectionManager.send(toSend.toNetworkMessage());
+		connectionManager.send(toSend);
 	}
 
 	/**
