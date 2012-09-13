@@ -15,21 +15,21 @@ import android.util.Log;
  * Core service of Nex yu Android. It receive message from the UI thread, the
  * SMS receiver thread & the client thread and trigger main action of the
  * software.
- *
+ * 
  * @author Paul Ecoffet
- *
+ * 
  */
 public class NexyuService extends Service
 {
 	public static final int		DEF_PORT	= 34340;
 	private static final String	TAG			= "ConnectService";
 
-	public static enum whatTypeEnum
+	public static enum What
 	{
 		MSG_CONNECT, MSG_CONNECTED, MSG_IMPOSSIBLE_CONNECT, MSG_SEND_SMS
 	};
 
-	static whatTypeEnum[]		whatType				= whatTypeEnum.values();
+	static What[]				whatList				= What.values();
 	private Messenger			messenger;
 	private SMSReceiver			smsReceiver;
 	private boolean				smsReceiverRegistered	= false;
@@ -37,7 +37,7 @@ public class NexyuService extends Service
 
 	/**
 	 * Default constructor.
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 */
 	public NexyuService()
@@ -50,7 +50,7 @@ public class NexyuService extends Service
 	/**
 	 * Activate the SMSReceiver which will notify the service when a SMS is
 	 * received.
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 */
 	public void activateSMSReceiver()
@@ -64,7 +64,7 @@ public class NexyuService extends Service
 
 	/**
 	 * Deactivate the SMSReceiver which communicate with this service.
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 */
 	public void deactivateSMSReceiver()
@@ -79,7 +79,7 @@ public class NexyuService extends Service
 	/**
 	 * Called when the service is destroy. It close the connection between the
 	 * phone & the computer if any, then free resources (netty side)
-	 *
+	 * 
 	 * @see android.app.Service#onDestroy()
 	 */
 	@Override
@@ -94,7 +94,7 @@ public class NexyuService extends Service
 	/**
 	 * Return the binder from the messenger so that others threads could
 	 * communicate with the service.
-	 *
+	 * 
 	 * @see android.app.Service#onBind(android.content.Intent)
 	 */
 	@Override
@@ -105,7 +105,7 @@ public class NexyuService extends Service
 
 	/**
 	 * Send the list of messages given to the computer through network.
-	 *
+	 * 
 	 * @param toSend
 	 *            The message to send to the computer.
 	 */
@@ -120,5 +120,14 @@ public class NexyuService extends Service
 	public Messenger getMessenger()
 	{
 		return messenger;
+	}
+
+	/**
+	 * @param string
+	 * @param int1
+	 */
+	public void connect(String host, int port)
+	{
+		connectionManager.connect(host, port);
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nexyu.nexyuAndroid.client;
 
@@ -18,7 +18,7 @@ import android.util.Log;
 
 /**
  * @author Paul Ecoffet
- * 
+ *
  */
 public class ConnectionManager
 {
@@ -27,7 +27,7 @@ public class ConnectionManager
 	private Channel							chan;
 	private NexyuService					service;
 
-	
+
 	public ConnectionManager(NexyuService mService)
 	{
 		service = mService;
@@ -35,14 +35,14 @@ public class ConnectionManager
 
 	/**
 	 * Connect the service to the IP given on port PORT.
-	 * 
+	 *
 	 * @param ip
 	 *            The IP to connect to.
 	 * @param port
 	 *            The port to connect on.
 	 * @author Paul Ecoffet
 	 */
-	void connect(String ip, int port)
+	public void connect(String host, int port)
 	{
 		factory = new OioClientSocketChannelFactory(Executors.newCachedThreadPool());
 
@@ -51,7 +51,7 @@ public class ConnectionManager
 		bootstrap.setOption("tcpNoDelay", true);
 		bootstrap.setOption("keepAlive", true);
 
-		ChannelFuture fuConn = bootstrap.connect(new InetSocketAddress(ip, port));
+		ChannelFuture fuConn = bootstrap.connect(new InetSocketAddress(host, port));
 		fuConn.addListener(new ChannelFutureListener() {
 
 			@Override
@@ -68,13 +68,12 @@ public class ConnectionManager
 				}
 			}
 		});
-
 	}
 
 	/**
 	 * Disconnect the android application from the computer server if the
 	 * connection exist.
-	 * 
+	 *
 	 * @author Paul Ecoffet
 	 */
 	public void disconnect()
@@ -96,14 +95,14 @@ public class ConnectionManager
 	/**
 	 * Test if the connection between the Nex yu Android application and the Nex
 	 * yu Comp software is made.
-	 * 
+	 *
 	 * @return whether the application is connected to Nex yu Comp or not.
 	 */
 	public boolean isConnected()
 	{
 		return (chan != null) && chan.isConnected();
 	}
-	
+
 	public void send(NetworkMessage msg)
 	{
 		if (isConnected())

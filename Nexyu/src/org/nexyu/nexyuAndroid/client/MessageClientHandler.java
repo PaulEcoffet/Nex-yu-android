@@ -24,7 +24,7 @@ import com.google.gson.JsonObject;
 /**
  * Handler that triggers the different actions of the application depending of
  * the received data.
- *
+ * 
  * @author Paul Ecoffet
  * @see org.jboss.netty.channel.SimpleChannelHandler
  */
@@ -39,7 +39,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	/**
 	 * Default constructor of MessageClientHandler, which requires a messenger
 	 * to communicate with the Nex yu core service.
-	 *
+	 * 
 	 * @param service
 	 *            The Messenger of the Nex yu core service.
 	 */
@@ -51,7 +51,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	/**
 	 * Callback called when the connection between Nex yu Android is connected
 	 * to Nex yu Comp.
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 * @see org.jboss.netty.channel.SimpleChannelHandler#channelConnected(org.jboss.netty.channel.ChannelHandlerContext,
 	 *      org.jboss.netty.channel.ChannelStateEvent)
@@ -62,7 +62,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e)
 	{
 		Log.d(TAG, "Connected");
-		Message to_service = Message.obtain(null, NexyuService.MSG_CONNECTED);
+		Message to_service = Message.obtain(null, NexyuService.What.MSG_CONNECTED.ordinal());
 		try
 		{
 			mService.send(to_service);
@@ -77,7 +77,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	 * Callback triggered when a exception is caught during the process of
 	 * gathering data. it displays the error in LogCat and then prints the Stack
 	 * Trace. Then it closes the channel.
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 * @see org.jboss.netty.channel.SimpleChannelHandler#exceptionCaught(org.jboss.netty.channel.ChannelHandlerContext,
 	 *      org.jboss.netty.channel.ExceptionEvent)
@@ -90,7 +90,8 @@ public class MessageClientHandler extends SimpleChannelHandler
 		// )
 		if (e.getCause() instanceof SocketTimeoutException)
 		{
-			Message message = Message.obtain(null, NexyuService.MSG_IMPOSSIBLE_CONNECT);
+			Message message = Message.obtain(null,
+					NexyuService.What.MSG_IMPOSSIBLE_CONNECT.ordinal());
 			try
 			{
 				mService.send(message);
@@ -108,7 +109,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	/**
 	 * Triggers different actions depending of the type of request written in
 	 * the received data.
-	 *
+	 * 
 	 * @param message
 	 *            The data received from the computer application of Nex yu in
 	 *            JSON
@@ -121,7 +122,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 		String type = message.getType();
 		if (type.equals("messageToSend"))
 		{
-			Message toService = Message.obtain(null, NexyuService.MSG_SEND_SMS);
+			Message toService = Message.obtain(null, NexyuService.What.MSG_SEND_SMS.ordinal());
 			toService.obj = message.getData();
 			try
 			{
@@ -146,7 +147,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	 * call the function
 	 * {@link MessageClientHandler#manageReceivedData(JsonObject, Channel)} that
 	 * trigger the action requested by the received data
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 * @see org.jboss.netty.channel.SimpleChannelHandler#messageReceived(org.jboss.netty.channel.ChannelHandlerContext,
 	 *      org.jboss.netty.channel.MessageEvent)
@@ -167,7 +168,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	/**
 	 * Callback called when a write is requested. It checked if the data that
 	 * must be sent is a NetworkMessage, if it is not, it aborts the operation.
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 * @see org.jboss.netty.channel.SimpleChannelHandler#writeRequested(org.jboss.netty.channel.ChannelHandlerContext,
 	 *      org.jboss.netty.channel.MessageEvent)

@@ -54,7 +54,7 @@ class NexyuServiceHandler extends Handler
 		{
 			Bundle data;
 
-			switch (NexyuService.whatType[msg.what])
+			switch (NexyuService.whatList[msg.what])
 			{
 			case MSG_CONNECT:
 				data = msg.getData();
