@@ -87,7 +87,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 			{
 				// TODO: Remove this not really pretty snippet.
 				// Test if a device is an emulator by empirical testing.
-				if (android.os.Build.PRODUCT.equals("google_sdk"))
+				if (android.os.Build.PRODUCT.equals("sdk"))
 				{
 					// emulator
 					sendConnectionMessage("10.0.2.2", 34340, "");
