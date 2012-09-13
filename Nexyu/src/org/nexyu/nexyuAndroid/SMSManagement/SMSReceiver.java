@@ -5,7 +5,7 @@ package org.nexyu.nexyuAndroid.SMSManagement;
 
 import java.util.ArrayList;
 
-import org.nexyu.nexyuAndroid.client.protocol.SMSToSendNetworkMessage;
+import org.nexyu.nexyuAndroid.client.protocol.SMSToComputerNetworkMessage;
 import org.nexyu.nexyuAndroid.service.NexyuService;
 
 import android.content.BroadcastReceiver;
@@ -65,7 +65,7 @@ public class SMSReceiver extends BroadcastReceiver
 				{
 					messages.add(SmsMessage.createFromPdu((byte[]) pdu));
 				}
-				SMSToSendNetworkMessage toSend = new SMSToSendNetworkMessage(messages);
+				SMSToComputerNetworkMessage toSend = new SMSToComputerNetworkMessage(messages);
 				mService.sendMessagesToComputer(toSend);
 			}
 		}

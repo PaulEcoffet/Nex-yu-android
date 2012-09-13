@@ -2,7 +2,7 @@ package org.nexyu.nexyuAndroid.service;
 
 import org.nexyu.nexyuAndroid.SMSManagement.SMSReceiver;
 import org.nexyu.nexyuAndroid.client.ConnectionManager;
-import org.nexyu.nexyuAndroid.client.protocol.SMSToSendNetworkMessage;
+import org.nexyu.nexyuAndroid.client.protocol.SMSToComputerNetworkMessage;
 
 import android.app.Service;
 import android.content.Intent;
@@ -108,7 +108,7 @@ public class NexyuService extends Service
 	 * @param toSend
 	 *            The message to send to the computer.
 	 */
-	public void sendMessagesToComputer(SMSToSendNetworkMessage toSend)
+	public void sendMessagesToComputer(SMSToComputerNetworkMessage toSend)
 	{
 		connectionManager.send(toSend);
 	}
