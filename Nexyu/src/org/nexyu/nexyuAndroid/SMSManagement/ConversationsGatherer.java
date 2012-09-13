@@ -9,9 +9,9 @@ import android.support.v4.app.FragmentActivity;
 /**
  * Likely to be never implemented since it must use undocumented API methods
  * which should evolve in the next releases of Android.
- *
+ * 
  * @author Paul Ecoffet
- *
+ * 
  */
 public class ConversationsGatherer
 {

@@ -8,11 +8,11 @@ import com.google.gson.JsonElement;
 /**
  * Class that represents a message (not a SMS) received or to send over the
  * network.
- *
+ * 
  * Note: Should be abstract but gson doesn't support it.
- *
+ * 
  * @author Paul Ecoffet
- *
+ * 
  */
 public final class NetworkMessage
 {

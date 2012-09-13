@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 
 /**
  * @author Paul Ecoffet
- *
+ * 
  */
 public class SMSToCell
 {

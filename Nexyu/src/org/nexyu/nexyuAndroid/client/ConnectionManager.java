@@ -18,7 +18,7 @@ import android.util.Log;
 
 /**
  * @author Paul Ecoffet
- *
+ * 
  */
 public class ConnectionManager
 {
@@ -27,7 +27,6 @@ public class ConnectionManager
 	private Channel							chan;
 	private NexyuService					service;
 
-
 	public ConnectionManager(NexyuService mService)
 	{
 		service = mService;
@@ -35,7 +34,7 @@ public class ConnectionManager
 
 	/**
 	 * Connect the service to the IP given on port PORT.
-	 *
+	 * 
 	 * @param ip
 	 *            The IP to connect to.
 	 * @param port
@@ -73,7 +72,7 @@ public class ConnectionManager
 	/**
 	 * Disconnect the android application from the computer server if the
 	 * connection exist.
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 */
 	public void disconnect()
@@ -95,7 +94,7 @@ public class ConnectionManager
 	/**
 	 * Test if the connection between the Nex yu Android application and the Nex
 	 * yu Comp software is made.
-	 *
+	 * 
 	 * @return whether the application is connected to Nex yu Comp or not.
 	 */
 	public boolean isConnected()

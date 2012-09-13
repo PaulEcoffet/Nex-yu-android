@@ -11,9 +11,9 @@ import com.google.gson.JsonObject;
 
 /**
  * SMS messages to send formatted so as to be sent over the network.
- *
+ * 
  * @author Paul Ecoffet
- *
+ * 
  */
 public class SMSToComputer implements NetworkMessageable
 {

@@ -27,7 +27,7 @@ import android.widget.Toast;
  */
 public class NexyuService extends Service
 {
-	private static final String	TAG			= "ConnectService";
+	private static final String	TAG	= "ConnectService";
 
 	public static enum What
 	{

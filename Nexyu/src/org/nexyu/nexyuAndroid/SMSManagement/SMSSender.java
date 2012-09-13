@@ -12,7 +12,7 @@ import android.telephony.SmsManager;
 
 /**
  * @author Paul Ecoffet
- *
+ * 
  */
 public class SMSSender
 {

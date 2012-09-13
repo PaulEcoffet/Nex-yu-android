@@ -121,14 +121,14 @@ public class MainActivity extends Activity implements View.OnClickListener
 				String host = path.getHost();
 				int port = path.getPort();
 				String verificationCode = path.getQueryParameter("verif");
-				if (host != null && port != -1 && verificationCode != null)
+				if ((host != null) && (port != -1) && (verificationCode != null))
 				{
 					sendConnectionMessage(host, port, verificationCode);
 					validQr = true;
 				}
 			}
 		}
-		if(!validQr)
+		if (!validQr)
 		{
 			Toast.makeText(this, "Invalid QRCode", Toast.LENGTH_SHORT).show();
 		}
