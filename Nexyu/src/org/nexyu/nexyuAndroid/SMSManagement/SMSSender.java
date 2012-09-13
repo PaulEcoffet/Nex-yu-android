@@ -9,10 +9,8 @@ import org.nexyu.nexyuAndroid.service.NexyuService;
 
 import android.content.ContentValues;
 import android.net.Uri;
-import android.os.Message;
 import android.telephony.SmsManager;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 /**
@@ -25,16 +23,13 @@ public class SMSSender
 	 * @param msg
 	 * @param refService
 	 */
-	public static void sendSMSthroughMobile(Message msg, WeakReference<NexyuService> refService)
+	public static void sendSMSthroughCellNetwork(JsonObject msg, WeakReference<NexyuService> refService)
 	{
-		JsonObject json;
 		SmsManager smsManager = SmsManager.getDefault();
 		NexyuService service = refService.get();
 
-		json = ((JsonElement) msg.obj).getAsJsonObject();
-
-		String recipient = json.get("recipient").getAsString();
-		String body = json.get("body").getAsString();
+		String recipient = msg.get("recipient").getAsString();
+		String body = msg.get("body").getAsString();
 
 		smsManager.sendMultipartTextMessage(recipient, null, smsManager.divideMessage(body), null,
 				null);

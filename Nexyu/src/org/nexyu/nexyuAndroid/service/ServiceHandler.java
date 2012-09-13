@@ -14,6 +14,9 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 /**
  * Message handler that call NexyuService's functions depending on the message
  * received.
@@ -63,7 +66,8 @@ class ServiceHandler extends Handler
 			Toast.makeText(service, R.string.impossible_to_connect, Toast.LENGTH_LONG).show();
 			break;
 		case NexyuService.MSG_SEND_SMS:
-			SMSSender.sendSMSthroughMobile(msg, mService);
+			JsonObject json = ((JsonElement) msg.obj).getAsJsonObject();
+			SMSSender.sendSMSthroughCellNetwork(json, mService);
 			break;
 		default:
 			super.handleMessage(msg);
