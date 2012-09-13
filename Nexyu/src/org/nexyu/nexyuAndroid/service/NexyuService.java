@@ -21,7 +21,6 @@ import android.util.Log;
  */
 public class NexyuService extends Service
 {
-	public static final int		DEF_PORT	= 34340;
 	private static final String	TAG			= "ConnectService";
 
 	public static enum What
