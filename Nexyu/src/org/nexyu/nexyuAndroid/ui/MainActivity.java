@@ -1,5 +1,6 @@
-package org.nexyu.nexyuAndroid;
+package org.nexyu.nexyuAndroid.ui;
 
+import org.nexyu.nexyuAndroid.R;
 import org.nexyu.nexyuAndroid.service.NexyuService;
 import org.nexyu.nexyuAndroid.utils.IntentIntegrator;
 import org.nexyu.nexyuAndroid.utils.IntentResult;
@@ -98,7 +99,6 @@ public class MainActivity extends Activity implements View.OnClickListener
 					IntentIntegrator integrator = new IntentIntegrator(this);
 					integrator.initiateScan();
 				}
-
 			}
 			else
 			{
@@ -111,6 +111,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 	public void onActivityResult(int requestCode, int resultCode, Intent intent)
 	{
 		IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+		boolean validQr = false;
 		if (result != null)
 		{
 			String contents = result.getContents();
@@ -121,8 +122,15 @@ public class MainActivity extends Activity implements View.OnClickListener
 				int port = path.getPort();
 				String verificationCode = path.getQueryParameter("verif");
 				if (host != null && port != -1 && verificationCode != null)
+				{
 					sendConnectionMessage(host, port, verificationCode);
+					validQr = true;
+				}
 			}
+		}
+		if(!validQr)
+		{
+			Toast.makeText(this, "Invalid QRCode", Toast.LENGTH_SHORT).show();
 		}
 	}
 
