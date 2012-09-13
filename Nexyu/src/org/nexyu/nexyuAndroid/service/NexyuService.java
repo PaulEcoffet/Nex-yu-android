@@ -51,7 +51,7 @@ public class NexyuService extends Service
 	{
 		chan = null;
 		factory = null;
-		messenger = new Messenger(new ServiceHandler(this));
+		messenger = new Messenger(new NexyuServiceHandler(this));
 		smsReceiver = new SMSReceiver(this);
 	}
 

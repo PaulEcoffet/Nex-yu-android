@@ -23,7 +23,7 @@ import com.google.gson.JsonObject;
  * 
  * @author Paul Ecoffet
  */
-class ServiceHandler extends Handler
+class NexyuServiceHandler extends Handler
 {
 	private static final String					TAG	= "NexYuServiceHandler";
 	private final WeakReference<NexyuService>	mService;
@@ -34,7 +34,7 @@ class ServiceHandler extends Handler
 	 * 
 	 * @author Paul Ecoffet
 	 */
-	public ServiceHandler(NexyuService service)
+	public NexyuServiceHandler(NexyuService service)
 	{
 		mService = new WeakReference<NexyuService>(service);
 	}
