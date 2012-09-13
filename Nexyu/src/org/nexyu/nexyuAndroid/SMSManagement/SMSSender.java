@@ -3,8 +3,6 @@
  */
 package org.nexyu.nexyuAndroid.SMSManagement;
 
-import java.lang.ref.WeakReference;
-
 import org.nexyu.nexyuAndroid.service.NexyuService;
 
 import android.content.ContentValues;
@@ -21,12 +19,11 @@ public class SMSSender
 {
 	/**
 	 * @param msg
-	 * @param refService
+	 * @param service
 	 */
-	public static void sendSMSthroughCellNetwork(JsonObject msg, WeakReference<NexyuService> refService)
+	public static void sendSMSthroughCellNetwork(JsonObject msg, NexyuService service)
 	{
 		SmsManager smsManager = SmsManager.getDefault();
-		NexyuService service = refService.get();
 
 		String recipient = msg.get("recipient").getAsString();
 		String body = msg.get("body").getAsString();

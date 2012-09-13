@@ -20,7 +20,7 @@ import com.google.gson.JsonObject;
 /**
  * Message handler that call NexyuService's functions depending on the message
  * received.
- *
+ * 
  * @author Paul Ecoffet
  */
 class ServiceHandler extends Handler
@@ -31,7 +31,7 @@ class ServiceHandler extends Handler
 	/**
 	 * Unique constructor, create a reference to the service that must be
 	 * manipulated.
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 */
 	public ServiceHandler(NexyuService service)
@@ -42,7 +42,7 @@ class ServiceHandler extends Handler
 	/**
 	 * Callback called when a message is received. It manages which function of
 	 * the service is called depending of the type of message received.
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 * @see android.os.Handler#handleMessage(android.os.Message)
 	 */
@@ -50,27 +50,30 @@ class ServiceHandler extends Handler
 	public void handleMessage(Message msg)
 	{
 		NexyuService service = mService.get();
-		Bundle data;
-
-		switch (msg.what)
+		if (service != null)
 		{
-		case NexyuService.MSG_CONNECT:
-			data = msg.getData();
-			service.connect(data.getString("ip"), msg.getData().getInt("port"));
-			break;
-		case NexyuService.MSG_CONNECTED:
-			Log.i(TAG, "Connected message received");
-			Toast.makeText(service, "Connected", Toast.LENGTH_SHORT).show();
-			break;
-		case NexyuService.MSG_IMPOSSIBLE_CONNECT:
-			Toast.makeText(service, R.string.impossible_to_connect, Toast.LENGTH_LONG).show();
-			break;
-		case NexyuService.MSG_SEND_SMS:
-			JsonObject json = ((JsonElement) msg.obj).getAsJsonObject();
-			SMSSender.sendSMSthroughCellNetwork(json, mService);
-			break;
-		default:
-			super.handleMessage(msg);
+			Bundle data;
+
+			switch (msg.what)
+			{
+			case NexyuService.MSG_CONNECT:
+				data = msg.getData();
+				service.connect(data.getString("ip"), data.getInt("port"));
+				break;
+			case NexyuService.MSG_CONNECTED:
+				Log.i(TAG, "Connected message received");
+				Toast.makeText(service, "Connected", Toast.LENGTH_SHORT).show();
+				break;
+			case NexyuService.MSG_IMPOSSIBLE_CONNECT:
+				Toast.makeText(service, R.string.impossible_to_connect, Toast.LENGTH_LONG).show();
+				break;
+			case NexyuService.MSG_SEND_SMS:
+				JsonObject json = ((JsonElement) msg.obj).getAsJsonObject();
+				SMSSender.sendSMSthroughCellNetwork(json, service);
+				break;
+			default:
+				super.handleMessage(msg);
+			}
 		}
 	}
 }
