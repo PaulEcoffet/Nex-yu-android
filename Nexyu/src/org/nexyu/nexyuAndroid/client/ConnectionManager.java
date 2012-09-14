@@ -60,6 +60,7 @@ public class ConnectionManager
 				{
 					chan = fuConn.getChannel();
 					service.activateSMSReceiver();
+					service.activateSMSSentChecker();
 				}
 				else
 				{

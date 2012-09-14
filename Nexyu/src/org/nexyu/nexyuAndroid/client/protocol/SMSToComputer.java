@@ -7,13 +7,14 @@ import java.util.ArrayList;
 
 import android.telephony.SmsMessage;
 
-import com.google.gson.JsonObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 /**
  * SMS messages to send formatted so as to be sent over the network.
- * 
+ *
  * @author Paul Ecoffet
- * 
+ *
  */
 public class SMSToComputer implements NetworkMessageable
 {
@@ -33,9 +34,9 @@ public class SMSToComputer implements NetworkMessageable
 		{
 			bodyGen.append(message.getMessageBody());
 		}
-		sender = sms.getOriginatingAddress();
-		timestamp = sms.getTimestampMillis();
-		body = bodyGen.toString();
+		setSender(sms.getOriginatingAddress());
+		setTimestamp(sms.getTimestampMillis());
+		setBody(bodyGen.toString());
 	}
 
 	/**
@@ -44,11 +45,56 @@ public class SMSToComputer implements NetworkMessageable
 	@Override
 	public NetworkMessage toNetworkMessage()
 	{
-		JsonObject data = new JsonObject();
-
-		data.addProperty("sender", sender);
-		data.addProperty("timestamp", timestamp);
-		data.addProperty("body", body);
+		Gson gson = new Gson();
+		JsonElement data = gson.toJsonTree(this, getClass());
 		return new NetworkMessage("message", data);
+	}
+
+	/**
+	 * @return the sender
+	 */
+	public String getSender()
+	{
+		return sender;
+	}
+
+	/**
+	 * @param sender the sender to set
+	 */
+	public void setSender(String sender)
+	{
+		this.sender = sender;
+	}
+
+	/**
+	 * @return the timestamp
+	 */
+	public long getTimestamp()
+	{
+		return timestamp;
+	}
+
+	/**
+	 * @param timestamp the timestamp to set
+	 */
+	public void setTimestamp(long timestamp)
+	{
+		this.timestamp = timestamp;
+	}
+
+	/**
+	 * @return the body
+	 */
+	public String getBody()
+	{
+		return body;
+	}
+
+	/**
+	 * @param body the body to set
+	 */
+	public void setBody(String body)
+	{
+		this.body = body;
 	}
 }

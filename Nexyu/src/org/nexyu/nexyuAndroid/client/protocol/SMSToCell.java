@@ -3,7 +3,7 @@
  */
 package org.nexyu.nexyuAndroid.client.protocol;
 
-import com.google.gson.JsonObject;
+import com.google.gson.Gson;
 
 /**
  * @author Paul Ecoffet
@@ -17,19 +17,28 @@ public class SMSToCell
 
 	public SMSToCell(NetworkMessage msg) throws ClassCastException
 	{
+		Gson gson = new Gson();
 		if (!msg.getType().equals("messageToCell"))
 			throw new ClassCastException("the NetworkMessage is not castable into a SMSToCell");
 		try
 		{
-			JsonObject data = msg.getData().getAsJsonObject();
-			recipient = data.get("recipient").getAsString();
-			body = data.get("body").getAsString();
-			id = data.get("id").getAsInt();
+			copy(gson.fromJson(msg.getData(), getClass()));
 		}
 		catch (ClassCastException e)
 		{
 			throw new ClassCastException("the NetworkMessage is not castable into a SMSToCell");
 		}
+	}
+
+	/**
+	 * @param fromJson 
+	 */
+	private void copy(SMSToCell copy)
+	{
+		//FIXME Clearly not the most beautiful implementation. Got to make something better. 
+		this.id = copy.getId();
+		this.body = copy.getBody();
+		this.recipient = copy.getRecipient();
 	}
 
 	/**
