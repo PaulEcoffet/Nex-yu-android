@@ -7,6 +7,7 @@ import java.lang.ref.WeakReference;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 /**
  * Message handler that call NexyuService's functions depending on the message
@@ -16,6 +17,7 @@ import android.os.Message;
  */
 class NexyuServiceHandler extends Handler
 {
+	private static final String	TAG	= "NexyuServiceHandler";
 	private final WeakReference<NexyuService>	mService;
 
 	/**
@@ -43,6 +45,10 @@ class NexyuServiceHandler extends Handler
 		if (service != null)
 		{
 			service.handleMessage(msg);
+		}
+		else
+		{
+			Log.i(TAG, "The service is dead");
 		}
 	}
 }

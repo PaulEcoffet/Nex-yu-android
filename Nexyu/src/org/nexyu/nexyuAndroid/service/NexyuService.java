@@ -34,7 +34,7 @@ public class NexyuService extends Service
 		MSG_CONNECT, MSG_CONNECTED, MSG_IMPOSSIBLE_CONNECT, MSG_SEND_SMS
 	};
 
-	static What[]				whatList				= What.values();
+	static public What[]		whatList				= What.values();
 	private Messenger			messenger;
 	private SMSReceiver			smsReceiver;
 	private boolean				smsReceiverRegistered	= false;

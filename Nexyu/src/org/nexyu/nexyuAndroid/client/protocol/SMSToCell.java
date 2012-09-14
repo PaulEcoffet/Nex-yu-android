@@ -15,9 +15,9 @@ public class SMSToCell
 	private String	body;
 	private int		id;
 
-	public SMSToCell(NetworkMessage msg)
+	public SMSToCell(NetworkMessage msg) throws ClassCastException
 	{
-		if (!msg.getType().equals("messageToSend"))
+		if (!msg.getType().equals("messageToCell"))
 			throw new ClassCastException("the NetworkMessage is not castable into a SMSToCell");
 		try
 		{
