@@ -3,6 +3,8 @@
  */
 package org.nexyu.nexyuAndroid.SMSManagement;
 
+import java.util.ArrayList;
+
 import org.nexyu.nexyuAndroid.client.protocol.SMSToCell;
 import org.nexyu.nexyuAndroid.service.NexyuService;
 
@@ -23,8 +25,11 @@ public class SMSSender
 	public static void sendSMSthroughCellNetwork(SMSToCell sms, NexyuService service)
 	{
 		SmsManager smsManager = SmsManager.getDefault();
-		smsManager.sendMultipartTextMessage(sms.getRecipient(), null,
-				smsManager.divideMessage(sms.getBody()), null, null);
+		ArrayList<String> bodyParts = smsManager.divideMessage(sms.getBody());
+		for (String bodyPart : bodyParts)
+		{
+			smsManager.sendTextMessage(sms.getRecipient(), null, bodyPart, null, null);
+		}
 		ContentValues values = new ContentValues();
 		values.put("address", sms.getRecipient());
 		values.put("body", sms.getBody());
