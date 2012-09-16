@@ -40,8 +40,7 @@ public class SMSSender
 			sentIntent.putExtra("size", bodyParts.size());
 			// (ms.getId() * 100 + i) forces the PendingIntent to create a real
 			// new PI and not to reuse an existing one
-			PendingIntent sentPI = PendingIntent.getBroadcast(service, sms.getId() * 100 + i,
-					sentIntent, 0);
+			PendingIntent sentPI = PendingIntent.getBroadcast(service, (sms.getId() * 100 + i), sentIntent, 0);
 
 			sentPIs.add(sentPI);
 		}
