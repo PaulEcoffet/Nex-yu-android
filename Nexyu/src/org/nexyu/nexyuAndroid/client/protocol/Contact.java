@@ -21,7 +21,7 @@ public class Contact implements NetworkMessageable
 	private ArrayList<Pair<String, Integer>>	phoneNumbers;
 	private boolean								starred;
 
-	protected Contact() // For Gson purpose
+	public Contact() // For Gson purpose
 	{
 		name = new String();
 		phoneNumbers = new ArrayList<Pair<String,Integer>>();

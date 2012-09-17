@@ -18,7 +18,7 @@ public class SMSSent implements NetworkMessageable
 	private int	id;
 	private int	result;
 
-	protected SMSSent() //For Gson purpose.
+	public SMSSent() //For Gson purpose.
 	{
 		id = 0;
 		result = FAILURE;

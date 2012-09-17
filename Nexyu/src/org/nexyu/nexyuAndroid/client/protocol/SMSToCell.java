@@ -15,7 +15,7 @@ public class SMSToCell
 	private String	body;
 	private int		id;
 
-	protected SMSToCell() // For Gson Purpose
+	public SMSToCell() // For Gson Purpose
 	{
 		recipient = new String();
 		body = new String();

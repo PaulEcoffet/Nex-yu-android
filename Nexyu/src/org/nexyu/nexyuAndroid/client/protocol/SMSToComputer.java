@@ -22,7 +22,7 @@ public class SMSToComputer implements NetworkMessageable
 	private long	timestamp;
 	private String	body;
 
-	protected SMSToComputer() // For Gson purpose.
+	public SMSToComputer() // For Gson purpose.
 	{
 		sender = new String();
 		body = new String();
