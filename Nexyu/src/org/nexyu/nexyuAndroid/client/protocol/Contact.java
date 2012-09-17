@@ -1,9 +1,12 @@
 /**
  * 
  */
-package org.nexyu.nexyuAndroid.ContactsManagement;
+package org.nexyu.nexyuAndroid.client.protocol;
 
 import java.util.ArrayList;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import android.util.Pair;
 
@@ -11,7 +14,7 @@ import android.util.Pair;
  * @author Paul Ecoffet
  * 
  */
-public class Contact
+public class Contact implements NetworkMessageable
 {
 
 	private String								name;
@@ -81,5 +84,16 @@ public class Contact
 	public void setStarred(boolean starred)
 	{
 		this.starred = starred;
+	}
+
+	/**
+	 * @see org.nexyu.nexyuAndroid.client.protocol.NetworkMessageable#toNetworkMessage()
+	 */
+	@Override
+	public NetworkMessage toNetworkMessage()
+	{
+		Gson gson = new Gson();
+		JsonElement data = gson.toJsonTree(this, getClass());
+		return new NetworkMessage("contact", data);
 	}
 }

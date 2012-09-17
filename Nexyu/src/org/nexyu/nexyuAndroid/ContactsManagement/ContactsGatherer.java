@@ -5,6 +5,7 @@ package org.nexyu.nexyuAndroid.ContactsManagement;
 
 import java.util.ArrayList;
 
+import org.nexyu.nexyuAndroid.client.protocol.Contact;
 import org.nexyu.nexyuAndroid.service.NexyuService;
 import org.nexyu.nexyuAndroid.utils.ArrayUtils;
 
