@@ -12,15 +12,22 @@ import com.google.gson.JsonElement;
 
 /**
  * SMS messages to send formatted so as to be sent over the network.
- *
+ * 
  * @author Paul Ecoffet
- *
+ * 
  */
 public class SMSToComputer implements NetworkMessageable
 {
 	private String	sender;
 	private long	timestamp;
 	private String	body;
+
+	protected SMSToComputer() // For Gson purpose.
+	{
+		sender = new String();
+		body = new String();
+		timestamp = 0;
+	}
 
 	/**
 	 * @param messages
@@ -59,7 +66,8 @@ public class SMSToComputer implements NetworkMessageable
 	}
 
 	/**
-	 * @param sender the sender to set
+	 * @param sender
+	 *            the sender to set
 	 */
 	public void setSender(String sender)
 	{
@@ -75,7 +83,8 @@ public class SMSToComputer implements NetworkMessageable
 	}
 
 	/**
-	 * @param timestamp the timestamp to set
+	 * @param timestamp
+	 *            the timestamp to set
 	 */
 	public void setTimestamp(long timestamp)
 	{
@@ -91,7 +100,8 @@ public class SMSToComputer implements NetworkMessageable
 	}
 
 	/**
-	 * @param body the body to set
+	 * @param body
+	 *            the body to set
 	 */
 	public void setBody(String body)
 	{

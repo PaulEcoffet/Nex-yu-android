@@ -13,6 +13,18 @@ import android.util.Pair;
  */
 public class Contact
 {
+
+	private String								name;
+	private ArrayList<Pair<String, Integer>>	phoneNumbers;
+	private boolean								starred;
+
+	protected Contact() // For Gson purpose
+	{
+		name = new String();
+		phoneNumbers = new ArrayList<Pair<String,Integer>>();
+		starred = false;
+	}
+
 	/**
 	 * @param name
 	 * @param phoneNumbers
@@ -23,13 +35,10 @@ public class Contact
 		this.name = name;
 		this.phoneNumbers = new ArrayList<Pair<String, Integer>>();
 		this.starred = (starred != 0) ? true : false;
-		
+
 		this.addPhone(phoneNumber, phoneType);
 	}
 
-	private String								name;
-	private ArrayList<Pair<String, Integer>>	phoneNumbers;
-	private boolean								starred;
 	/**
 	 * @param phoneNumber
 	 * @param phoneType
@@ -39,6 +48,7 @@ public class Contact
 		Pair<String, Integer> phone = new Pair<String, Integer>(phoneNumber, phoneType);
 		phoneNumbers.add(phone);
 	}
+
 	/**
 	 * @return the name
 	 */
@@ -46,13 +56,16 @@ public class Contact
 	{
 		return name;
 	}
+
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	public void setName(String name)
 	{
 		this.name = name;
 	}
+
 	/**
 	 * @return the starred
 	 */
@@ -60,8 +73,10 @@ public class Contact
 	{
 		return starred;
 	}
+
 	/**
-	 * @param starred the starred to set
+	 * @param starred
+	 *            the starred to set
 	 */
 	public void setStarred(boolean starred)
 	{

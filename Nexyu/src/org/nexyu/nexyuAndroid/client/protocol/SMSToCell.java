@@ -15,6 +15,13 @@ public class SMSToCell
 	private String	body;
 	private int		id;
 
+	protected SMSToCell() // For Gson Purpose
+	{
+		recipient = new String();
+		body = new String();
+		id = 0;
+	}
+	
 	public SMSToCell(NetworkMessage msg) throws ClassCastException
 	{
 		Gson gson = new Gson();
