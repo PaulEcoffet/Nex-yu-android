@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nexyu.nexyuAndroid.utils;
 
@@ -15,8 +15,8 @@ public class ArrayUtils
 {
 
 	/**
-	 * @param contactsList
-	 * @return
+	 * @param sparseArray The SparseArray to convert
+	 * @return A ArrayList containing the elements of the SparseArray.
 	 */
 	public static <T> ArrayList<T> SparseArrayToArrayList(SparseArray<T> sparseArray)
 	{
