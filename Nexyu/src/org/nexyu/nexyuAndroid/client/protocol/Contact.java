@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nexyu.nexyuAndroid.client.protocol;
 
@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
-import android.util.Pair;
-
 /**
  * @author Paul Ecoffet
  * 
@@ -17,14 +15,14 @@ import android.util.Pair;
 public class Contact implements NetworkMessageable
 {
 
-	private String								name;
-	private ArrayList<Pair<String, Integer>>	phoneNumbers;
-	private boolean								starred;
+	private String					name;
+	private ArrayList<PhoneNumber>	phoneNumbers;
+	private boolean					starred;
 
 	public Contact() // For Gson purpose
 	{
 		name = new String();
-		phoneNumbers = new ArrayList<Pair<String,Integer>>();
+		phoneNumbers = new ArrayList<PhoneNumber>();
 		starred = false;
 	}
 
@@ -36,7 +34,7 @@ public class Contact implements NetworkMessageable
 	public Contact(String name, String phoneNumber, int phoneType, int starred)
 	{
 		this.name = name;
-		this.phoneNumbers = new ArrayList<Pair<String, Integer>>();
+		this.phoneNumbers = new ArrayList<PhoneNumber>();
 		this.starred = (starred != 0) ? true : false;
 
 		this.addPhone(phoneNumber, phoneType);
@@ -48,7 +46,7 @@ public class Contact implements NetworkMessageable
 	 */
 	public void addPhone(String phoneNumber, int phoneType)
 	{
-		Pair<String, Integer> phone = new Pair<String, Integer>(phoneNumber, phoneType);
+		PhoneNumber phone = new PhoneNumber(phoneNumber, phoneType);
 		phoneNumbers.add(phone);
 	}
 
@@ -95,5 +93,20 @@ public class Contact implements NetworkMessageable
 		Gson gson = new Gson();
 		JsonElement data = gson.toJsonTree(this, getClass());
 		return new NetworkMessage("contact", data);
+	}
+	
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append(name + "\n");
+		builder.append(starred);
+		builder.append("\n");
+		for(PhoneNumber phone : phoneNumbers)
+		{
+			builder.append("\t" +phone.toString());
+		}
+		return builder.toString();
+		
 	}
 }

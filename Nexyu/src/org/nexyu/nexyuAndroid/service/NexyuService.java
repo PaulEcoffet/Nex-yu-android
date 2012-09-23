@@ -2,11 +2,11 @@ package org.nexyu.nexyuAndroid.service;
 
 import org.nexyu.nexyuAndroid.R;
 import org.nexyu.nexyuAndroid.ContactsManagement.ContactsGatherer;
-import org.nexyu.nexyuAndroid.ContactsManagement.ContactsSender;
 import org.nexyu.nexyuAndroid.SMSManagement.SMSReceiver;
 import org.nexyu.nexyuAndroid.SMSManagement.SMSSender;
 import org.nexyu.nexyuAndroid.SMSManagement.SMSSentChecker;
 import org.nexyu.nexyuAndroid.client.ConnectionManager;
+import org.nexyu.nexyuAndroid.client.protocol.ContactsList;
 import org.nexyu.nexyuAndroid.client.protocol.SMSToCell;
 import org.nexyu.nexyuAndroid.client.protocol.SMSToComputer;
 
@@ -53,6 +53,7 @@ public class NexyuService extends Service
 		messenger = new Messenger(new NexyuServiceHandler(this));
 		connectionManager = new ConnectionManager(this);
 	}
+	
 
 	/**
 	 * Activate the SMSReceiver which will notify the service when a SMS is
@@ -158,7 +159,7 @@ public class NexyuService extends Service
 			break;
 		case MSG_SEND_CONTACT_LIST:
 			ContactsGatherer cg = new ContactsGatherer(this);
-			connectionManager.send(new ContactsList(cg.gatherContacts());
+			connectionManager.send(new ContactsList(cg.gatherContacts()));
 		default:
 			break;
 		}

@@ -28,7 +28,7 @@ public class ContactsGatherer
 			ContactsContract.CommonDataKinds.Phone.STARRED,
 			ContactsContract.CommonDataKinds.Phone.CONTACT_ID };
 	private String			order		= ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
-												+ "ASC";
+												+ " ASC";
 
 	/**
 	 * @param service
@@ -51,7 +51,8 @@ public class ContactsGatherer
 		int indexStarred = cur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.STARRED);
 		while (cur.moveToNext())
 		{
-			Contact curContact = contactsList.get(cur.getInt(indexContactId));
+			int id = cur.getInt(indexContactId);
+			Contact curContact = contactsList.get(id);
 			String displayedName = cur.getString(indexDisplayedName);
 			String phoneNumber = cur.getString(indexPhoneNumber);
 			int phoneType = cur.getInt(indexPhoneType);
@@ -65,6 +66,7 @@ public class ContactsGatherer
 			{
 				curContact.addPhone(phoneNumber, phoneType);
 			}
+			contactsList.append(id, curContact);
 		}
 		return ArrayUtils.SparseArrayToArrayList(contactsList);
 	}
