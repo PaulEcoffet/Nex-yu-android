@@ -1,6 +1,8 @@
 package org.nexyu.nexyuAndroid.service;
 
 import org.nexyu.nexyuAndroid.R;
+import org.nexyu.nexyuAndroid.ContactsManagement.ContactsGatherer;
+import org.nexyu.nexyuAndroid.ContactsManagement.ContactsSender;
 import org.nexyu.nexyuAndroid.SMSManagement.SMSReceiver;
 import org.nexyu.nexyuAndroid.SMSManagement.SMSSender;
 import org.nexyu.nexyuAndroid.SMSManagement.SMSSentChecker;
@@ -32,7 +34,7 @@ public class NexyuService extends Service
 
 	public static enum What
 	{
-		MSG_CONNECT, MSG_CONNECTED, MSG_IMPOSSIBLE_CONNECT, MSG_SEND_SMS
+		MSG_CONNECT, MSG_CONNECTED, MSG_IMPOSSIBLE_CONNECT, MSG_SEND_SMS, MSG_SEND_CONTACT_LIST
 	};
 
 	static public What[]		whatList	= What.values();
@@ -154,6 +156,9 @@ public class NexyuService extends Service
 		case MSG_SEND_SMS:
 			SMSSender.sendSMSthroughCellNetwork((SMSToCell) msg.obj, this);
 			break;
+		case MSG_SEND_CONTACT_LIST:
+			ContactsGatherer cg = new ContactsGatherer(this);
+			connectionManager.send(new ContactsList(cg.gatherContacts());
 		default:
 			break;
 		}
