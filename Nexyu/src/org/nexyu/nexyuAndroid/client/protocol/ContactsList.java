@@ -6,17 +6,19 @@ package org.nexyu.nexyuAndroid.client.protocol;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 
 /**
+ * List of contacts "ready-to-be-sent" because it implements {@link NetworkMessageable}.
  * @author Paul Ecoffet
- * 
  */
 public class ContactsList implements NetworkMessageable
 {
 
 	private ArrayList<Contact>	contacts;
 
+	/**
+	 * Default constructor as recommended by Gson.
+	 */
 	public ContactsList()
 	{
 		contacts = new ArrayList<Contact>();
@@ -24,6 +26,8 @@ public class ContactsList implements NetworkMessageable
 
 	/**
 	 * @param gatherContacts
+	 *            A List of contacts. It is supposed to be used after the use of
+	 *            GatherContactsWithPhoneNumbers
 	 */
 	public ContactsList(ArrayList<Contact> gatheredContacts)
 	{
@@ -31,14 +35,16 @@ public class ContactsList implements NetworkMessageable
 	}
 
 	/**
+	 * Transform this contactsList into a NetworkMessage so as to be send over
+	 * the network.
+	 * 
 	 * @see org.nexyu.nexyuAndroid.client.protocol.NetworkMessageable#toNetworkMessage()
 	 */
 	@Override
 	public NetworkMessage toNetworkMessage()
 	{
 		Gson gson = new Gson();
-		JsonElement data = gson.toJsonTree(contacts);
-		return new NetworkMessage("ContactsList", data);
+		return new NetworkMessage("ContactsList", gson.toJsonTree(contacts));
 	}
 
 	/**

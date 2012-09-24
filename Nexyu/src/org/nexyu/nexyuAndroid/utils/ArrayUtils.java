@@ -15,6 +15,7 @@ public class ArrayUtils
 {
 
 	/**
+	 * Convert a sparseArray into an ArrayList
 	 * @param sparseArray The SparseArray to convert
 	 * @return A ArrayList containing the elements of the SparseArray.
 	 */

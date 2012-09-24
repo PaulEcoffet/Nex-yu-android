@@ -56,7 +56,7 @@ public class NexyuService extends Service
 	
 
 	/**
-	 * Activate the SMSReceiver which will notify the service when a SMS is
+	 * Activate the {@link SMSReceiver} which will notify the service when a SMS is
 	 * received.
 	 *
 	 * @author Paul Ecoffet
@@ -74,7 +74,7 @@ public class NexyuService extends Service
 	}
 
 	/**
-	 * Deactivate the SMSReceiver which communicate with this service.
+	 * Deactivate the {@link SMSReceiver} which communicate with this service.
 	 *
 	 * @author Paul Ecoffet
 	 */
@@ -135,7 +135,9 @@ public class NexyuService extends Service
 	}
 
 	/**
-	 * @param msg
+	 * Manage the Message sent by other processes and forwarded by the {@link NexyuServiceHandler}
+	 * @param msg The message forwarded by the {@link NexyuServiceHandler}
+	 * @see NexyuServiceHandler
 	 */
 	public void handleMessage(Message msg)
 	{
@@ -159,14 +161,17 @@ public class NexyuService extends Service
 			break;
 		case MSG_SEND_CONTACT_LIST:
 			ContactsGatherer cg = new ContactsGatherer(this);
-			connectionManager.send(new ContactsList(cg.gatherContacts()));
+			connectionManager.send(new ContactsList(cg.gatherContactsWithPhoneNumbers()));
 		default:
 			break;
 		}
 	}
 
 	/**
-	 *
+	 * Activate the BroadcastReceiver {@link SMSSentChecker}. This BroadcastReceiver will trigger action
+	 * when a SMS is sent over the cell network.
+	 * @see SMSSentChecker
+	 * @see NexyuService#activateSMSSentChecker()
 	 */
 	public void activateSMSSentChecker()
 	{
@@ -177,6 +182,11 @@ public class NexyuService extends Service
 		}
 	}
 
+	/**
+	 * Deactivate the BroadcastReceiver SMSSentChecker
+	 * @see SMSSentChecker
+	 * @see NexyuService#activateSMSSentChecker()
+	 */
 	public void deactivateSMSSentChecker()
 	{
 		if (smsSentChecker != null)

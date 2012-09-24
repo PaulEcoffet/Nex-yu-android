@@ -9,8 +9,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 /**
- * @author Paul Ecoffet
+ * Object that represents a contact with only the useful information needed by
+ * Nex yu.
  * 
+ * @author Paul Ecoffet
  */
 public class Contact implements NetworkMessageable
 {
@@ -94,7 +96,7 @@ public class Contact implements NetworkMessageable
 		JsonElement data = gson.toJsonTree(this, getClass());
 		return new NetworkMessage("contact", data);
 	}
-	
+
 	@Override
 	public String toString()
 	{
@@ -102,11 +104,11 @@ public class Contact implements NetworkMessageable
 		builder.append(name + "\n");
 		builder.append(starred);
 		builder.append("\n");
-		for(PhoneNumber phone : phoneNumbers)
+		for (PhoneNumber phone : phoneNumbers)
 		{
-			builder.append("\t" +phone.toString());
+			builder.append("\t" + phone.toString());
 		}
 		return builder.toString();
-		
+
 	}
 }
