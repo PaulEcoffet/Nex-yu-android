@@ -36,7 +36,7 @@ public class SMSToCell
 		body = new String();
 		id = 0;
 	}
-	
+
 	public SMSToCell(NetworkMessage msg) throws ClassCastException
 	{
 		Gson gson = new Gson();
@@ -53,11 +53,12 @@ public class SMSToCell
 	}
 
 	/**
-	 * @param fromJson 
+	 * @param fromJson
 	 */
 	private void copy(SMSToCell copy)
 	{
-		//FIXME Clearly not the most beautiful implementation. Got to make something better. 
+		// FIXME Clearly not the most beautiful implementation. Got to make
+		// something better.
 		this.id = copy.getId();
 		this.body = copy.getBody();
 		this.recipient = copy.getRecipient();

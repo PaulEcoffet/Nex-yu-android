@@ -29,7 +29,6 @@ public class PhoneNumber
 	private String	number;
 	private int		type;
 
-	
 	/**
 	 * Default constructor as recommended by Gson
 	 */
@@ -40,8 +39,11 @@ public class PhoneNumber
 	}
 
 	/**
-	 * @param number The phone number
-	 * @param type The type of the phone number, correspond to Android id for this.
+	 * @param number
+	 *            The phone number
+	 * @param type
+	 *            The type of the phone number, correspond to Android id for
+	 *            this.
 	 */
 	public PhoneNumber(String number, int type)
 	{

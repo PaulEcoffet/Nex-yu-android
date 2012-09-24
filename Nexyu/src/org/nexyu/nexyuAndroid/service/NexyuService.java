@@ -42,9 +42,9 @@ import android.widget.Toast;
  * Core service of Nex yu Android. It receive message from the UI thread, the
  * SMS receiver thread & the client thread and trigger main action of the
  * software.
- *
+ * 
  * @author Paul Ecoffet
- *
+ * 
  */
 public class NexyuService extends Service
 {
@@ -63,7 +63,7 @@ public class NexyuService extends Service
 
 	/**
 	 * Default constructor.
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 */
 	public NexyuService()
@@ -71,12 +71,11 @@ public class NexyuService extends Service
 		messenger = new Messenger(new NexyuServiceHandler(this));
 		connectionManager = new ConnectionManager(this);
 	}
-	
 
 	/**
-	 * Activate the {@link SMSReceiver} which will notify the service when a SMS is
-	 * received.
-	 *
+	 * Activate the {@link SMSReceiver} which will notify the service when a SMS
+	 * is received.
+	 * 
 	 * @author Paul Ecoffet
 	 */
 	public void activateSMSReceiver()
@@ -93,7 +92,7 @@ public class NexyuService extends Service
 
 	/**
 	 * Deactivate the {@link SMSReceiver} which communicate with this service.
-	 *
+	 * 
 	 * @author Paul Ecoffet
 	 */
 	public void deactivateSMSReceiver()
@@ -108,7 +107,7 @@ public class NexyuService extends Service
 	/**
 	 * Called when the service is destroy. It close the connection between the
 	 * phone & the computer if any, then free resources (netty side)
-	 *
+	 * 
 	 * @see android.app.Service#onDestroy()
 	 */
 	@Override
@@ -124,7 +123,7 @@ public class NexyuService extends Service
 	/**
 	 * Return the binder from the messenger so that others threads could
 	 * communicate with the service.
-	 *
+	 * 
 	 * @see android.app.Service#onBind(android.content.Intent)
 	 */
 	@Override
@@ -135,7 +134,7 @@ public class NexyuService extends Service
 
 	/**
 	 * Send the list of messages given to the computer through network.
-	 *
+	 * 
 	 * @param toSend
 	 *            The message to send to the computer.
 	 */
@@ -153,8 +152,11 @@ public class NexyuService extends Service
 	}
 
 	/**
-	 * Manage the Message sent by other processes and forwarded by the {@link NexyuServiceHandler}
-	 * @param msg The message forwarded by the {@link NexyuServiceHandler}
+	 * Manage the Message sent by other processes and forwarded by the
+	 * {@link NexyuServiceHandler}
+	 * 
+	 * @param msg
+	 *            The message forwarded by the {@link NexyuServiceHandler}
 	 * @see NexyuServiceHandler
 	 */
 	public void handleMessage(Message msg)
@@ -186,8 +188,10 @@ public class NexyuService extends Service
 	}
 
 	/**
-	 * Activate the BroadcastReceiver {@link SMSSentChecker}. This BroadcastReceiver will trigger action
-	 * when a SMS is sent over the cell network.
+	 * Activate the BroadcastReceiver {@link SMSSentChecker}. This
+	 * BroadcastReceiver will trigger action when a SMS is sent over the cell
+	 * network.
+	 * 
 	 * @see SMSSentChecker
 	 * @see NexyuService#activateSMSSentChecker()
 	 */
@@ -202,6 +206,7 @@ public class NexyuService extends Service
 
 	/**
 	 * Deactivate the BroadcastReceiver SMSSentChecker
+	 * 
 	 * @see SMSSentChecker
 	 * @see NexyuService#activateSMSSentChecker()
 	 */

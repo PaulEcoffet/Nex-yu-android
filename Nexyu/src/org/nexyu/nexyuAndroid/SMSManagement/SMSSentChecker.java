@@ -31,7 +31,7 @@ import android.util.SparseArray;
 
 /**
  * @author Paul Ecoffet
- *
+ * 
  */
 public class SMSSentChecker extends BroadcastReceiver
 {
@@ -62,7 +62,8 @@ public class SMSSentChecker extends BroadcastReceiver
 		case Activity.RESULT_OK:
 			int id = intent.getIntExtra("id", -1);
 			SMSList.append(id, SMSList.get(id, 0) + 1);
-			Log.i("SMSSentChecker", id + ": " + SMSList.get(id) + " out of " + intent.getIntExtra("size", 0));
+			Log.i("SMSSentChecker",
+					id + ": " + SMSList.get(id) + " out of " + intent.getIntExtra("size", 0));
 			if (id != -1 && SMSList.get(id) >= intent.getIntExtra("size", 1))
 			{
 				SMSList.delete(id);

@@ -23,21 +23,22 @@ import com.google.gson.JsonElement;
 
 /**
  * @author Paul Ecoffet
- *
+ * 
  */
 public class SMSSent implements NetworkMessageable
 {
 
-	public static final int	SUCCESS	= 0;
+	public static final int		SUCCESS	= 0;
 	private static final int	FAILURE	= 1;
-	private int	id;
-	private int	result;
+	private int					id;
+	private int					result;
 
-	public SMSSent() //For Gson purpose.
+	public SMSSent() // For Gson purpose.
 	{
 		id = 0;
 		result = FAILURE;
 	}
+
 	/**
 	 * @param id
 	 * @param success2
@@ -68,7 +69,8 @@ public class SMSSent implements NetworkMessageable
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(int id)
 	{
@@ -84,7 +86,8 @@ public class SMSSent implements NetworkMessageable
 	}
 
 	/**
-	 * @param result the result to set
+	 * @param result
+	 *            the result to set
 	 */
 	public void setResult(int result)
 	{

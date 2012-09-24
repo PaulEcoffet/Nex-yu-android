@@ -32,7 +32,7 @@ import android.util.Log;
  */
 class NexyuServiceHandler extends Handler
 {
-	private static final String	TAG	= "NexyuServiceHandler";
+	private static final String					TAG	= "NexyuServiceHandler";
 	private final WeakReference<NexyuService>	mService;
 
 	/**
