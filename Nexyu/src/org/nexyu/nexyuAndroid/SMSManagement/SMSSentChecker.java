@@ -64,7 +64,7 @@ public class SMSSentChecker extends BroadcastReceiver
 			SMSList.append(id, SMSList.get(id, 0) + 1);
 			Log.i("SMSSentChecker",
 					id + ": " + SMSList.get(id) + " out of " + intent.getIntExtra("size", 0));
-			if (id != -1 && SMSList.get(id) >= intent.getIntExtra("size", 1))
+			if ((id != -1) && (SMSList.get(id) >= intent.getIntExtra("size", 1)))
 			{
 				SMSList.delete(id);
 				cm.send(new SMSSent(id, SMSSent.SUCCESS));
