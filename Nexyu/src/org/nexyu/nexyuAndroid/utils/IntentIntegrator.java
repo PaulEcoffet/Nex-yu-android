@@ -173,16 +173,6 @@ public class IntentIntegrator
 																											// Scanner+
 																				"com.srowen.bs.android.simple" // Barcode
 																												// Scanner+
-																												// Simple
-																		// TODO
-																		// add
-																		// more
-																		// --
-																		// what
-																		// else
-																		// supports
-																		// this
-																		// intent?
 																		);
 
 	private final Activity					activity;
