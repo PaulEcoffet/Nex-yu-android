@@ -79,12 +79,14 @@ public class MessageClientHandler extends SimpleChannelHandler
 	{
 		Log.d(TAG, "Connected");
 		Message connected = Message.obtain(null, NexyuService.What.MSG_CONNECTED.ordinal());
+		@SuppressWarnings("unused") //TODO Remove me.
 		Message askContactsList = Message.obtain(null,
 				NexyuService.What.MSG_SEND_CONTACT_LIST.ordinal());
 		try
 		{
 			mService.send(connected);
-			mService.send(askContactsList);
+			//TODO Send the contactsList only when asked.
+			//mService.send(askContactsList);
 		}
 		catch (RemoteException ex)
 		{
@@ -157,10 +159,22 @@ public class MessageClientHandler extends SimpleChannelHandler
 				e.printStackTrace();
 			}
 		}
+		else if (type.equals("askVerifCode"))
+		{
+			Message toService = Message.obtain(null, NexyuService.What.MSG_SEND_VERIF.ordinal());
+			try
+			{
+				mService.send(toService);
+			}
+			catch (RemoteException e)
+			{
+				e.printStackTrace();
+			}
+		}
 		else if (type.equals("ok"))
 			Log.i(TAG, "ok");
 		else
-			Log.d(TAG, "Unknown type");
+			Log.d(TAG, "Unknown type: " + type);
 	}
 
 	/**

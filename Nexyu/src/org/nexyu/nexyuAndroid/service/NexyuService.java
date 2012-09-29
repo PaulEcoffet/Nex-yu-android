@@ -27,6 +27,7 @@ import org.nexyu.nexyuAndroid.client.ConnectionManager;
 import org.nexyu.nexyuAndroid.client.protocol.ContactsList;
 import org.nexyu.nexyuAndroid.client.protocol.SMSToCell;
 import org.nexyu.nexyuAndroid.client.protocol.SMSToComputer;
+import org.nexyu.nexyuAndroid.client.protocol.VerifCode;
 
 import android.app.Service;
 import android.content.Intent;
@@ -52,7 +53,7 @@ public class NexyuService extends Service
 
 	public static enum What
 	{
-		MSG_CONNECT, MSG_CONNECTED, MSG_IMPOSSIBLE_CONNECT, MSG_SEND_SMS, MSG_SEND_CONTACT_LIST
+		MSG_CONNECT, MSG_CONNECTED, MSG_IMPOSSIBLE_CONNECT, MSG_SEND_SMS, MSG_SEND_CONTACT_LIST, MSG_SEND_VERIF
 	};
 
 	static public What[]		whatList	= What.values();
@@ -60,6 +61,7 @@ public class NexyuService extends Service
 	private SMSReceiver			smsReceiver;
 	private ConnectionManager	connectionManager;
 	private SMSSentChecker		smsSentChecker;
+	private String	verifCode;
 
 	/**
 	 * Default constructor.
@@ -68,6 +70,7 @@ public class NexyuService extends Service
 	 */
 	public NexyuService()
 	{
+		verifCode = new String();
 		messenger = new Messenger(new NexyuServiceHandler(this));
 		connectionManager = new ConnectionManager(this);
 	}
@@ -167,6 +170,7 @@ public class NexyuService extends Service
 		{
 		case MSG_CONNECT:
 			data = msg.getData();
+			verifCode = data.getString("verificationCode");
 			connectionManager.connect(data.getString("ip"), data.getInt("port"));
 			break;
 		case MSG_CONNECTED:
@@ -182,6 +186,9 @@ public class NexyuService extends Service
 		case MSG_SEND_CONTACT_LIST:
 			ContactsGatherer cg = new ContactsGatherer(this);
 			connectionManager.send(new ContactsList(cg.gatherContactsWithPhoneNumbers()));
+			break;
+		case MSG_SEND_VERIF:
+			connectionManager.send(new VerifCode(verifCode));
 		default:
 			break;
 		}
