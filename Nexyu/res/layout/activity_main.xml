@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/relLay"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
 
     <TextView
         android:id="@+id/infoText"
@@ -11,24 +11,21 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="25dp"
-        android:text="@string/infoUI" />
-
-    <Button
-        android:id="@+id/startServBut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/infoText"
         android:layout_marginTop="@dimen/info_marginTop"
-        android:text="@string/start_service" />
-
+        android:text="@string/infoUI" />
+
     <Button
         android:id="@+id/ConnectBut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/startServBut"
+        android:layout_below="@+id/infoText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="27dp"
+        android:gravity="center"
+        android:paddingLeft="40dip"
+        android:paddingRight="40dip"
+        android:background="@drawable/connect_but"
+        android:textColor="#d4d2fd"
         android:text="@string/connect_to_the_comp" />
 
 </RelativeLayout>
