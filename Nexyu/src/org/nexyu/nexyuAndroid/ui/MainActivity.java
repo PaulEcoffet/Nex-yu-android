@@ -33,7 +33,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -67,9 +66,8 @@ public class MainActivity extends Activity implements View.OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Button startServButton = (Button) findViewById(R.id.startServBut);
 		Button connectButton = (Button) findViewById(R.id.ConnectBut);
-		startServButton.setOnClickListener(this);
+		bindService(new Intent(this, NexyuService.class), mConnection, BIND_AUTO_CREATE);
 		connectButton.setOnClickListener(this);
 	}
 
@@ -94,13 +92,7 @@ public class MainActivity extends Activity implements View.OnClickListener
 	@Override
 	public void onClick(View v)
 	{
-		Log.d("NEX", "onclick triggered");
-		if (v.getId() == R.id.startServBut)
-		{
-			Log.d("NEX", "start triggered");
-			bindService(new Intent(this, NexyuService.class), mConnection, BIND_AUTO_CREATE);
-		}
-		else if (v.getId() == R.id.ConnectBut)
+		if (v.getId() == R.id.ConnectBut)
 		{
 			if (mBound)
 			{
