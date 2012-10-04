@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/infoText"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="@dimen/info_marginTop"
         android:text="@string/start_service" />
 
     <Button
