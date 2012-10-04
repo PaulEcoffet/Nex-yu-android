@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">Nex yu - Send and receive SMS from your computer</string>
+    <string name="app_name">Nex yu</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">Nex yu</string>
     <string name="impossible_to_connect">Impossible to connect.</string>
@@ -10,5 +10,8 @@
     <string name="start_service">Start the service</string>
     <string name="connect_to_the_comp">Connect to the computer</string>
     <string name="no_state">No state</string>
+    <string name="infoUI">You must have the Nex Yu application on your computer so as to manage your SMS from it.
+        
+    </string>
 
 </resources>

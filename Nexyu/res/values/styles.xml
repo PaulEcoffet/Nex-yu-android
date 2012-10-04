@@ -1,5 +1,10 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppTheme" parent="android:Theme.Light" />
+    <style name="NexyuTheme" parent="android:Theme.Light" />
+
+    <style name="info" parent="android:style/TextAppearance">
+        <item name="android:background">@drawable/info</item>
+        <item name="android:textColor">#777</item>
+    </style>
 
 </resources>

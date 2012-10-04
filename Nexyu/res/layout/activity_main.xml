@@ -2,14 +2,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/relLay"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/infoText"
+        style="@style/info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp"
+        android:text="@string/infoUI" />
 
     <Button
         android:id="@+id/startServBut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/infoText"
+        android:layout_marginTop="18dp"
         android:text="@string/start_service" />
 
     <Button
@@ -19,13 +30,5 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/startServBut"
         android:text="@string/connect_to_the_comp" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/no_state" />
 
 </RelativeLayout>
