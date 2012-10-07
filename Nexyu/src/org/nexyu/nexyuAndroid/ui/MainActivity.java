@@ -37,6 +37,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 
 public class MainActivity extends SherlockActivity implements View.OnClickListener
 {
@@ -77,6 +79,14 @@ public class MainActivity extends SherlockActivity implements View.OnClickListen
 		if (mBound)
 			unbindService(mConnection);
 		super.onDestroy();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.main_menu, (com.actionbarsherlock.view.Menu) menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	/**

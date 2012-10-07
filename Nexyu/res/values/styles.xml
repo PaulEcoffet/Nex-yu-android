@@ -4,7 +4,7 @@
 
     <style name="info" parent="android:style/TextAppearance">
         <item name="android:background">@drawable/info</item>
-        <item name="android:textColor">#777</item>
+        <item name="android:textColor">@color/text</item>
     </style>
 
     <style name="connectButton" parent="android:Widget.Holo.Light.Button">
@@ -18,5 +18,9 @@
         <item name="android:paddingRight">20dip</item>
         <item name="android:paddingTop">15dip</item>
         <item name="android:textColor">#d4f2fd</item>
+    </style>
+
+    <style name="autoConnectCheckBox">
+        <item name="android:textColor">@color/text</item>
     </style>
 </resources>

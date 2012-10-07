@@ -25,4 +25,14 @@
         android:layout_centerHorizontal="true"
         android:text="@string/connect_to_the_comp" />
 
+    <CheckBox
+        android:id="@+id/autoConnection"
+        style="@style/autoConnectCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/ConnectBut"
+        android:layout_below="@id/ConnectBut"
+        android:layout_marginTop="7dp"
+        android:text="@string/ask_autoConnection" />
+
 </RelativeLayout>
