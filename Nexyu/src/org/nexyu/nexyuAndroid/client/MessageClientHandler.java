@@ -79,14 +79,11 @@ public class MessageClientHandler extends SimpleChannelHandler
 	{
 		Log.d(TAG, "Connected");
 		Message connected = Message.obtain(null, NexyuService.What.MSG_CONNECTED.ordinal());
-		@SuppressWarnings("unused") //TODO Remove me.
-		Message askContactsList = Message.obtain(null,
-				NexyuService.What.MSG_SEND_CONTACT_LIST.ordinal());
 		try
 		{
 			mService.send(connected);
-			//TODO Send the contactsList only when asked.
-			//mService.send(askContactsList);
+			// TODO Send the contactsList only when asked.
+			// mService.send(askContactsList);
 		}
 		catch (RemoteException ex)
 		{
@@ -141,18 +138,13 @@ public class MessageClientHandler extends SimpleChannelHandler
 	private void manageReceivedData(NetworkMessage message, Channel ch)
 	{
 		String type = message.getType();
+		Message toService == null;
 		if (type.equals("messageToCell"))
 		{
-			Message toService = Message.obtain(null, NexyuService.What.MSG_SEND_SMS.ordinal());
-
+			toService = Message.obtain(null, NexyuService.What.MSG_SEND_SMS.ordinal());
 			try
 			{
 				toService.obj = new SMSToCell(message);
-				mService.send(toService);
-			}
-			catch (RemoteException e)
-			{
-				e.printStackTrace();
 			}
 			catch (ClassCastException e)
 			{
@@ -161,7 +153,19 @@ public class MessageClientHandler extends SimpleChannelHandler
 		}
 		else if (type.equals("askVerifCode"))
 		{
-			Message toService = Message.obtain(null, NexyuService.What.MSG_SEND_VERIF.ordinal());
+			toService = Message.obtain(null, NexyuService.What.MSG_SEND_VERIF.ordinal());
+		}
+		else if (type.equals("askContacts"))
+		{
+			toService = Message.obtain(null, NexyuService.What.MSG_SEND_CONTACT_LIST.ordinal());
+		}
+		else if (type.equals("ok"))
+			Log.i(TAG, "ok");
+		else
+			Log.d(TAG, "Unknown type: " + type);
+
+		if (toService != null)
+		{
 			try
 			{
 				mService.send(toService);
@@ -171,10 +175,6 @@ public class MessageClientHandler extends SimpleChannelHandler
 				e.printStackTrace();
 			}
 		}
-		else if (type.equals("ok"))
-			Log.i(TAG, "ok");
-		else
-			Log.d(TAG, "Unknown type: " + type);
 	}
 
 	/**
