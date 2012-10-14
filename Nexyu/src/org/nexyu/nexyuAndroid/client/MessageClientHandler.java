@@ -138,7 +138,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	private void manageReceivedData(NetworkMessage message, Channel ch)
 	{
 		String type = message.getType();
-		Message toService == null;
+		Message toService = null;
 		if (type.equals("messageToCell"))
 		{
 			toService = Message.obtain(null, NexyuService.What.MSG_SEND_SMS.ordinal());
