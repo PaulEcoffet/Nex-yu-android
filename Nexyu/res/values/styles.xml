@@ -23,4 +23,13 @@
     <style name="autoConnectCheckBox">
         <item name="android:textColor">@color/text</item>
     </style>
+
+    <style name="qrInfo" parent="android:style/TextAppearance">
+        <item name="android:textColor">@color/text</item>
+        <item name="android:background">@drawable/qr_info</item>
+    </style>
+    
+    <style name="connectionHelper" parent="android:style/TextAppearance">
+        <item name="android:textColor">@color/linkText</item>
+    </style>
 </resources>

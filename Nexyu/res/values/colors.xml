@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="text">#777</color>
+    <color name="infoText">#777</color>
+    <color name="linkText">#3c219a</color>
     
 </resources>

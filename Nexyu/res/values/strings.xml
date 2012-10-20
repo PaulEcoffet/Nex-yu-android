@@ -8,5 +8,7 @@
     <string name="infoUI">You must have the Nex Yu application on your computer so as to manage your SMS from it.</string>
     <string name="app_settings">Settings</string>
     <string name="ask_autoConnection">Remember me</string>
+    <string name="qrInfo">The sync between the two app is done by scanning the QR code displayed by the Nex yu application of your computer</string>
+    <string name="help_connection">Impossible to sync?</string>
 
 </resources>
