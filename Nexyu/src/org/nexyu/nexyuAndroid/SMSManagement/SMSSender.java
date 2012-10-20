@@ -66,6 +66,7 @@ public class SMSSender
 		ContentValues values = new ContentValues();
 		values.put("address", sms.getRecipient());
 		values.put("body", sms.getBody());
+		values.put("read", 1);
 
 		service.getContentResolver().insert(Uri.parse("content://sms/sent"), values);
 	}
