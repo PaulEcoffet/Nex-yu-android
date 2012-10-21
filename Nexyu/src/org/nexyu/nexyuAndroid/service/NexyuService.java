@@ -206,7 +206,7 @@ public class NexyuService extends Service
 	{
 		if (smsSentChecker == null)
 		{
-			smsSentChecker = new SMSSentChecker(connectionManager);
+			smsSentChecker = new SMSSentChecker(this);
 			registerReceiver(smsSentChecker, new IntentFilter(SMSSender.ACTION_SMS_SENT));
 		}
 	}
@@ -224,5 +224,13 @@ public class NexyuService extends Service
 			unregisterReceiver(smsSentChecker);
 			smsSentChecker = null;
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	public ConnectionManager getConnectionManager()
+	{
+		return connectionManager;
 	}
 }

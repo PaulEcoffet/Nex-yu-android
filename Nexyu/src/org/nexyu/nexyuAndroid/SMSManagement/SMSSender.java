@@ -24,9 +24,7 @@ import org.nexyu.nexyuAndroid.client.protocol.SMSToCell;
 import org.nexyu.nexyuAndroid.service.NexyuService;
 
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.net.Uri;
 import android.telephony.SmsManager;
 
 /**
@@ -53,6 +51,8 @@ public class SMSSender
 			Intent sentIntent = new Intent(ACTION_SMS_SENT);
 			sentIntent.putExtra("id", sms.getId());
 			sentIntent.putExtra("size", bodyParts.size());
+			sentIntent.putExtra("recipient", sms.getRecipient());
+			sentIntent.putExtra("body", sms.getBody());
 			// (ms.getId() * 100 + i) forces the PendingIntent to create a real
 			// new PI and not to reuse an existing one
 			PendingIntent sentPI = PendingIntent.getBroadcast(service, ((sms.getId() * 100) + i),
@@ -60,14 +60,6 @@ public class SMSSender
 
 			sentPIs.add(sentPI);
 		}
-
 		smsManager.sendMultipartTextMessage(sms.getRecipient(), null, bodyParts, sentPIs, null);
-
-		ContentValues values = new ContentValues();
-		values.put("address", sms.getRecipient());
-		values.put("body", sms.getBody());
-		values.put("read", 1);
-
-		service.getContentResolver().insert(Uri.parse("content://sms/sent"), values);
 	}
 }
