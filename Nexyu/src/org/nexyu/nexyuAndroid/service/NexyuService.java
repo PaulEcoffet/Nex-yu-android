@@ -57,9 +57,9 @@ public class NexyuService extends Service
 	};
 
 	static public What[]		whatList	= What.values();
-	private Messenger			messenger;
+	private final Messenger			messenger;
 	private SMSReceiver			smsReceiver;
-	private ConnectionManager	connectionManager;
+	private final ConnectionManager	connectionManager;
 	private SMSSentChecker		smsSentChecker;
 	private String	verifCode;
 
@@ -147,7 +147,7 @@ public class NexyuService extends Service
 	}
 
 	/**
-	 * @return
+	 * @return the messenger
 	 */
 	public Messenger getMessenger()
 	{
@@ -227,7 +227,7 @@ public class NexyuService extends Service
 	}
 
 	/**
-	 * @return
+	 * @return the connectionManager bound to the service
 	 */
 	public ConnectionManager getConnectionManager()
 	{
