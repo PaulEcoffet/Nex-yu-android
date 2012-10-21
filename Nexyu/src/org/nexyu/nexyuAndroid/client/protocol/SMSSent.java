@@ -28,10 +28,10 @@ import com.google.gson.JsonElement;
 public class SMSSent implements NetworkMessageable
 {
 
-	public static final int		SUCCESS	= 0;
-	private static final int	FAILURE	= 1;
-	private int					id;
-	private int					result;
+	public static final int	SUCCESS	= 0;
+	public static final int	FAILURE	= 1;
+	private int				id;
+	private int				result;
 
 	public SMSSent() // For Gson purpose.
 	{

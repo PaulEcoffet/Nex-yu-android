@@ -26,7 +26,6 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.telephony.SmsManager;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -57,9 +56,9 @@ public class SMSSentChecker extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		String message = "Message sent";
 		int id = intent.getIntExtra("id", -1);
-
+		String recipient = intent.getStringExtra("recipient");
+		String body = intent.getStringExtra("body");
 		if (id != -1 && getResultCode() == Activity.RESULT_OK)
 		{
 			SMSList.append(id, SMSList.get(id, 0) + 1);
@@ -67,35 +66,37 @@ public class SMSSentChecker extends BroadcastReceiver
 					id + ": " + SMSList.get(id) + " out of " + intent.getIntExtra("size", 0));
 			if (SMSList.get(id) >= intent.getIntExtra("size", 1))
 			{
-				String recipient = intent.getStringExtra("recipient");
-				String body = intent.getStringExtra("body");
-				SMSList.delete(id);
-				cm.send(new SMSSent(id, SMSSent.SUCCESS));
-				if (recipient != null && body != null)
-					SMSDatabaseHelper.addSMSSentToDatabase(service, recipient, body);
+				manageSuccessfullySentSMS(id, recipient, body);
 			}
 		}
 		else if (id != -1)
 		{
-			switch (getResultCode())
-			{
-			case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-				message = "Generic Error.";
-				break;
-			case SmsManager.RESULT_ERROR_NO_SERVICE:
-				message = "Error: No service.";
-				break;
-			case SmsManager.RESULT_ERROR_NULL_PDU:
-				message = "Error: Null PDU.";
-				break;
-			case SmsManager.RESULT_ERROR_RADIO_OFF:
-				message = "Error: Radio off.";
-				break;
-			default:
-				message = "Unknown Error";
-				break;
-			}
-			Log.d("SMSSentChecker", message);
+			manageFailedSMSSending(id);
 		}
+	}
+
+	/**
+	 * @param id
+	 *            The id of the SMS defined by Nex yu
+	 */
+	private void manageFailedSMSSending(int id)
+	{
+		cm.send(new SMSSent(id, SMSSent.FAILURE));
+	}
+
+	/**
+	 * @param id
+	 *            The id of the SMS defined by Nex yu
+	 * @param recipient
+	 *            The recipient of the SMS
+	 * @param body
+	 *            The body of the SMS
+	 */
+	private void manageSuccessfullySentSMS(int id, String recipient, String body)
+	{
+		SMSList.delete(id);
+		cm.send(new SMSSent(id, SMSSent.SUCCESS));
+		if (recipient != null && body != null)
+			SMSDatabaseHelper.addSMSSentToDatabase(service, recipient, body);
 	}
 }
