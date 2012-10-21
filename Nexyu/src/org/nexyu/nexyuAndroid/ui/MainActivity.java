@@ -40,6 +40,10 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 
+/**
+ * @author Paul Ecoffet
+ * 
+ */
 public class MainActivity extends SherlockActivity implements View.OnClickListener
 {
 	private Messenger			mService	= null;
@@ -69,6 +73,9 @@ public class MainActivity extends SherlockActivity implements View.OnClickListen
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		Button connectButton = (Button) findViewById(R.id.ConnectBut);
+		startService(new Intent(this, NexyuService.class)); // To prevent the
+															// service from
+															// being killed
 		bindService(new Intent(this, NexyuService.class), mConnection, BIND_AUTO_CREATE);
 		connectButton.setOnClickListener(this);
 	}
@@ -76,9 +83,9 @@ public class MainActivity extends SherlockActivity implements View.OnClickListen
 	@Override
 	public void onDestroy()
 	{
+		super.onDestroy();
 		if (mBound)
 			unbindService(mConnection);
-		super.onDestroy();
 	}
 
 	@Override
