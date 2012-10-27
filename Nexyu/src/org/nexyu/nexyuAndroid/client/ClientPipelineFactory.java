@@ -25,6 +25,7 @@ import org.jboss.netty.handler.codec.frame.LengthFieldBasedFrameDecoder;
 import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
 import org.jboss.netty.handler.codec.string.StringDecoder;
 import org.jboss.netty.handler.codec.string.StringEncoder;
+import org.jboss.netty.handler.ssl.SslHandler;
 import org.jboss.netty.util.CharsetUtil;
 
 import android.os.IBinder;
@@ -39,7 +40,7 @@ import android.os.Messenger;
  */
 public final class ClientPipelineFactory implements ChannelPipelineFactory
 {
-	private Messenger	mService;
+	private final Messenger	mService;
 
 	/**
 	 * Constructor of the class which requires a NexyuService binder so as to
@@ -67,14 +68,24 @@ public final class ClientPipelineFactory implements ChannelPipelineFactory
 	@Override
 	public ChannelPipeline getPipeline() throws Exception
 	{
+		SslHandler sslHandler = new SslHandler(engine, true);
+		
 		LengthFieldBasedFrameDecoder lengthDecod = new LengthFieldBasedFrameDecoder(
 				Integer.MAX_VALUE, 0, Integer.SIZE / Byte.SIZE, 0, Integer.SIZE / Byte.SIZE);
+		
 		StringDecoder stringDecod = new StringDecoder(CharsetUtil.UTF_8);
+		
 		StringJSONtoNetMessageDecoder jsonDecoder = new StringJSONtoNetMessageDecoder();
+		
 		NetMessageToJSONEncoder jsonEncoder = new NetMessageToJSONEncoder();
+		
 		LengthFieldPrepender lengthFieldPrepender = new LengthFieldPrepender(4);
+		
 		StringEncoder stringEncoder = new StringEncoder(CharsetUtil.UTF_8);
+		
 		MessageClientHandler messageClientHandler = new MessageClientHandler(mService);
+		
+		
 		return Channels.pipeline(lengthDecod, stringDecod, jsonDecoder, lengthFieldPrepender,
 				stringEncoder, jsonEncoder, messageClientHandler);
 	}
