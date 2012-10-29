@@ -18,6 +18,10 @@
  */
 package org.nexyu.nexyuAndroid.client;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.TrustManager;
+
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
@@ -68,26 +72,32 @@ public final class ClientPipelineFactory implements ChannelPipelineFactory
 	@Override
 	public ChannelPipeline getPipeline() throws Exception
 	{
-		SslHandler sslHandler = new SslHandler(engine, true);
-		
+		SSLContext context = SSLContext.getInstance("TLS");
+		// FIXME ONLY CRYPT, DOESN'T PREVENT MITM, DON'T THINK ANY SOLUTION
+		// EXISTS.
+		TrustManager[] trustAllCerts = new TrustManager[] { new TrustAllCert() };
+		context.init(null, trustAllCerts, null);
+		SSLEngine engine = context.createSSLEngine();
+		engine.setUseClientMode(true);
+		SslHandler sslHandler = new SslHandler(engine);
+
 		LengthFieldBasedFrameDecoder lengthDecod = new LengthFieldBasedFrameDecoder(
 				Integer.MAX_VALUE, 0, Integer.SIZE / Byte.SIZE, 0, Integer.SIZE / Byte.SIZE);
-		
+
 		StringDecoder stringDecod = new StringDecoder(CharsetUtil.UTF_8);
-		
+
 		StringJSONtoNetMessageDecoder jsonDecoder = new StringJSONtoNetMessageDecoder();
-		
+
 		NetMessageToJSONEncoder jsonEncoder = new NetMessageToJSONEncoder();
-		
+
 		LengthFieldPrepender lengthFieldPrepender = new LengthFieldPrepender(4);
-		
+
 		StringEncoder stringEncoder = new StringEncoder(CharsetUtil.UTF_8);
-		
+
 		MessageClientHandler messageClientHandler = new MessageClientHandler(mService);
-		
-		
-		return Channels.pipeline(lengthDecod, stringDecod, jsonDecoder, lengthFieldPrepender,
-				stringEncoder, jsonEncoder, messageClientHandler);
+
+		return Channels.pipeline(sslHandler, lengthDecod, stringDecod, jsonDecoder,
+				lengthFieldPrepender, stringEncoder, jsonEncoder, messageClientHandler);
 	}
 
 }

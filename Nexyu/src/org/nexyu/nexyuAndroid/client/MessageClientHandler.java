@@ -26,6 +26,7 @@ import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
+import org.jboss.netty.handler.ssl.SslHandler;
 import org.nexyu.nexyuAndroid.client.protocol.NetworkMessage;
 import org.nexyu.nexyuAndroid.client.protocol.SMSToCell;
 import org.nexyu.nexyuAndroid.service.NexyuService;
@@ -50,7 +51,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	 *
 	 */
 	private static final String	TAG	= "MessageClientHandler";
-	private Messenger			mService;
+	private final Messenger			mService;
 
 	/**
 	 * Default constructor of MessageClientHandler, which requires a messenger
@@ -78,6 +79,9 @@ public class MessageClientHandler extends SimpleChannelHandler
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e)
 	{
 		Log.d(TAG, "Connected");
+		SslHandler sslHandler = ctx.getPipeline().get(SslHandler.class);
+		sslHandler.handshake();
+		
 		Message connected = Message.obtain(null, NexyuService.What.MSG_CONNECTED.ordinal());
 		try
 		{
