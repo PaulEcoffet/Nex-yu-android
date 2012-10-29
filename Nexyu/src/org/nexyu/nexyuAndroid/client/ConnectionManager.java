@@ -42,7 +42,7 @@ public class ConnectionManager
 	protected static final String			TAG	= "ConnectionManager";
 	private OioClientSocketChannelFactory	factory;
 	private Channel							chan;
-	private NexyuService					service;
+	private final NexyuService				service;
 
 	public ConnectionManager(NexyuService mService)
 	{
@@ -58,12 +58,13 @@ public class ConnectionManager
 	 *            The port to connect on.
 	 * @author Paul Ecoffet
 	 */
-	public void connect(String host, int port)
+	public void connect(String host, int port, String fingerprint)
 	{
 		factory = new OioClientSocketChannelFactory(Executors.newCachedThreadPool());
 
 		ClientBootstrap bootstrap = new ClientBootstrap(factory);
-		bootstrap.setPipelineFactory(new ClientPipelineFactory(service.getMessenger().getBinder()));
+		bootstrap.setPipelineFactory(new ClientPipelineFactory(service.getMessenger().getBinder(),
+				fingerprint));
 		bootstrap.setOption("tcpNoDelay", true);
 		bootstrap.setOption("keepAlive", true);
 

@@ -86,8 +86,6 @@ public class MessageClientHandler extends SimpleChannelHandler
 		try
 		{
 			mService.send(connected);
-			// TODO Send the contactsList only when asked.
-			// mService.send(askContactsList);
 		}
 		catch (RemoteException ex)
 		{
@@ -154,10 +152,6 @@ public class MessageClientHandler extends SimpleChannelHandler
 			{
 				e.printStackTrace();
 			}
-		}
-		else if (type.equals("askVerifCode"))
-		{
-			toService = Message.obtain(null, NexyuService.What.MSG_SEND_VERIF.ordinal());
 		}
 		else if (type.equals("askContacts"))
 		{

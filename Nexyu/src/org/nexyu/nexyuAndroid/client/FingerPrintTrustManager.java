@@ -3,17 +3,36 @@
  */
 package org.nexyu.nexyuAndroid.client;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import javax.net.ssl.X509TrustManager;
 
+import org.nexyu.nexyuAndroid.utils.StringUtils;
+
 /**
  * @author Paul Ecoffet
  *
  */
-public class TrustAllCert implements X509TrustManager
+public class FingerPrintTrustManager implements X509TrustManager
 {
+	String fingerprint = null;
+
+	/**
+	 * @param fingerprint
+	 */
+	public FingerPrintTrustManager(String fingerprint)
+	{
+		super();
+		this.fingerprint = fingerprint;
+	}
+	
+	protected FingerPrintTrustManager()
+	{
+		super();
+	}
 
 	/**
 	 * @see javax.net.ssl.X509TrustManager#checkClientTrusted(java.security.cert.X509Certificate[], java.lang.String)
@@ -31,6 +50,23 @@ public class TrustAllCert implements X509TrustManager
 	public void checkServerTrusted(X509Certificate[] chain, String authType)
 			throws CertificateException
 	{
+		for (X509Certificate cert : chain)
+		{
+			MessageDigest md;
+			try
+			{
+				md = MessageDigest.getInstance("SHA-1");
+			}
+			catch (NoSuchAlgorithmException e)
+			{
+				throw new CertificateException();
+			}
+	    	byte[] der = cert.getEncoded();
+	    	md.update(der);
+	    	byte[] digest = md.digest();
+	    	if(StringUtils.getHex(digest).equals(fingerprint))
+	    		throw new CertificateException();
+		}
 	}
 
 	/**

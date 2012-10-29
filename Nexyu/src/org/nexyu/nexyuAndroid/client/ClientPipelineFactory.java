@@ -45,6 +45,7 @@ import android.os.Messenger;
 public final class ClientPipelineFactory implements ChannelPipelineFactory
 {
 	private final Messenger	mService;
+	private final String fingerprint;
 
 	/**
 	 * Constructor of the class which requires a NexyuService binder so as to
@@ -56,9 +57,10 @@ public final class ClientPipelineFactory implements ChannelPipelineFactory
 	 * 
 	 * @author Paul Ecoffet
 	 */
-	public ClientPipelineFactory(IBinder serviceBinder)
+	public ClientPipelineFactory(IBinder serviceBinder, String _fingerprint)
 	{
 		mService = new Messenger(serviceBinder);
+		fingerprint = _fingerprint;
 	}
 
 	/**
@@ -75,7 +77,7 @@ public final class ClientPipelineFactory implements ChannelPipelineFactory
 		SSLContext context = SSLContext.getInstance("TLS");
 		// FIXME ONLY CRYPT, DOESN'T PREVENT MITM, DON'T THINK ANY SOLUTION
 		// EXISTS.
-		TrustManager[] trustAllCerts = new TrustManager[] { new TrustAllCert() };
+		TrustManager[] trustAllCerts = new TrustManager[] { new FingerPrintTrustManager(fingerprint) };
 		context.init(null, trustAllCerts, null);
 		SSLEngine engine = context.createSSLEngine();
 		engine.setUseClientMode(true);

@@ -48,7 +48,7 @@ public class MainActivity extends SherlockActivity implements View.OnClickListen
 {
 	private Messenger			mService	= null;
 	private boolean				mBound		= false;
-	private ServiceConnection	mConnection	= new ServiceConnection() {
+	private final ServiceConnection	mConnection	= new ServiceConnection() {
 
 												@Override
 												public void onServiceConnected(ComponentName name,
@@ -92,7 +92,7 @@ public class MainActivity extends SherlockActivity implements View.OnClickListen
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
 		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.main_menu, (com.actionbarsherlock.view.Menu) menu);
+		inflater.inflate(R.menu.main_menu, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -140,10 +140,10 @@ public class MainActivity extends SherlockActivity implements View.OnClickListen
 			{
 				String host = path.getHost();
 				int port = path.getPort();
-				String verificationCode = path.getQueryParameter("verif");
-				if ((host != null) && (port != -1) && (verificationCode != null))
+				String fingerprint = path.getQueryParameter("f");
+				if ((host != null) && (port != -1) && (fingerprint != null))
 				{
-					sendConnectionMessage(host, port, verificationCode);
+					sendConnectionMessage(host, port, fingerprint);
 					validQr = true;
 				}
 			}
@@ -154,13 +154,13 @@ public class MainActivity extends SherlockActivity implements View.OnClickListen
 		}
 	}
 
-	private void sendConnectionMessage(String host, int port, String verificationCode)
+	private void sendConnectionMessage(String host, int port, String fingerprint)
 	{
 		Message connect = Message.obtain(null, NexyuService.What.MSG_CONNECT.ordinal());
 		Bundle data = new Bundle();
 		data.putString("ip", host);
 		data.putInt("port", port);
-		data.putString("verificationCode", verificationCode);
+		data.putString("fingerprint", fingerprint);
 		connect.setData(data);
 		try
 		{
