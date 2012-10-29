@@ -75,8 +75,6 @@ public final class ClientPipelineFactory implements ChannelPipelineFactory
 	public ChannelPipeline getPipeline() throws Exception
 	{
 		SSLContext context = SSLContext.getInstance("TLS");
-		// FIXME ONLY CRYPT, DOESN'T PREVENT MITM, DON'T THINK ANY SOLUTION
-		// EXISTS.
 		TrustManager[] trustAllCerts = new TrustManager[] { new FingerPrintTrustManager(fingerprint) };
 		context.init(null, trustAllCerts, null);
 		SSLEngine engine = context.createSSLEngine();
@@ -84,7 +82,7 @@ public final class ClientPipelineFactory implements ChannelPipelineFactory
 		SslHandler sslHandler = new SslHandler(engine);
 
 		LengthFieldBasedFrameDecoder lengthDecod = new LengthFieldBasedFrameDecoder(
-				Integer.MAX_VALUE, 0, Integer.SIZE / Byte.SIZE, 0, Integer.SIZE / Byte.SIZE);
+				Integer.MAX_VALUE, 0, 4, 0, 4);
 
 		StringDecoder stringDecod = new StringDecoder(CharsetUtil.UTF_8);
 

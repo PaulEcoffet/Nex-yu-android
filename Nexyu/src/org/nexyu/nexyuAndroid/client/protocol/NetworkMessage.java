@@ -29,7 +29,7 @@ import com.google.gson.JsonElement;
  * @author Paul Ecoffet
  * 
  */
-public final class NetworkMessage
+public final class NetworkMessage implements NetworkMessageable
 {
 	private String		type;
 	private JsonElement	data;
@@ -81,5 +81,15 @@ public final class NetworkMessage
 	public void setData(JsonElement data)
 	{
 		this.data = data;
+	}
+
+	/**
+	 * @see org.nexyu.nexyuAndroid.client.protocol.NetworkMessageable#toNetworkMessage()
+	 */
+	@Override
+	public NetworkMessage toNetworkMessage()
+	{
+		// TODO Auto-generated method stub
+		return this;
 	}
 }

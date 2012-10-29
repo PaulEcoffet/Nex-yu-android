@@ -12,6 +12,8 @@ import javax.net.ssl.X509TrustManager;
 
 import org.nexyu.nexyuAndroid.utils.StringUtils;
 
+import android.util.Log;
+
 /**
  * @author Paul Ecoffet
  *
@@ -64,8 +66,10 @@ public class FingerPrintTrustManager implements X509TrustManager
 	    	byte[] der = cert.getEncoded();
 	    	md.update(der);
 	    	byte[] digest = md.digest();
-	    	if(StringUtils.getHex(digest).equals(fingerprint))
+	    	if(!StringUtils.getHex(digest).equals(fingerprint))
 	    		throw new CertificateException();
+	    	else
+	    		Log.i("fingerprint", "fingerprints match");
 		}
 	}
 

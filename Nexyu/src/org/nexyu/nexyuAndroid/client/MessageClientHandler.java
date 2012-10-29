@@ -21,6 +21,8 @@ package org.nexyu.nexyuAndroid.client;
 import java.net.SocketTimeoutException;
 
 import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelFuture;
+import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
@@ -51,7 +53,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	 *
 	 */
 	private static final String	TAG	= "MessageClientHandler";
-	private final Messenger			mService;
+	private final Messenger		mService;
 
 	/**
 	 * Default constructor of MessageClientHandler, which requires a messenger
@@ -80,8 +82,23 @@ public class MessageClientHandler extends SimpleChannelHandler
 	{
 		Log.d(TAG, "Connected");
 		SslHandler sslHandler = ctx.getPipeline().get(SslHandler.class);
-		sslHandler.handshake();
-		
+		ChannelFuture fu = sslHandler.handshake();
+		fu.addListener(new ChannelFutureListener() {
+			@Override
+			public void operationComplete(ChannelFuture fu) throws Exception
+			{
+				Log.d(TAG, "operationComplete");
+				if(fu.isSuccess())
+				{
+					Log.d(TAG, "handshake is successful");
+				}
+				else
+				{
+					//TODO handle wrong certificate
+					Log.d(TAG, "handshake failed", fu.getCause());
+				}
+			}
+		});
 		Message connected = Message.obtain(null, NexyuService.What.MSG_CONNECTED.ordinal());
 		try
 		{

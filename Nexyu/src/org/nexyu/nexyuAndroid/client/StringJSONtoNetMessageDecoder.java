@@ -23,6 +23,8 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
 import org.nexyu.nexyuAndroid.client.protocol.NetworkMessage;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -69,6 +71,8 @@ public class StringJSONtoNetMessageDecoder extends OneToOneDecoder
 		String str = (String) buf;
 		Gson gson = new Gson();
 		NetworkMessage message = null;
+		
+		Log.i("StringJSONtoNetMessageDecoder", str);
 		try
 		{
 			message = gson.fromJson(str, NetworkMessage.class);
