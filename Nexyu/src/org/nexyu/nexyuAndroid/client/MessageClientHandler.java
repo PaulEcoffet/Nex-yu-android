@@ -76,7 +76,6 @@ public class MessageClientHandler extends SimpleChannelHandler
 	 *      org.jboss.netty.channel.ChannelStateEvent)
 	 */
 
-	// TODO Really Useful? Could be done with a ChannelFutureListener
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e)
 	{
@@ -87,15 +86,15 @@ public class MessageClientHandler extends SimpleChannelHandler
 			@Override
 			public void operationComplete(ChannelFuture fu) throws Exception
 			{
-				Log.d(TAG, "operationComplete");
-				if(fu.isSuccess())
+				Log.i(TAG, "operationComplete");
+				if (fu.isSuccess())
 				{
-					Log.d(TAG, "handshake is successful");
+					Log.i(TAG, "handshake is successful");
 				}
 				else
 				{
-					//TODO handle wrong certificate
-					Log.d(TAG, "handshake failed", fu.getCause());
+					// TODO handle wrong certificate
+					Log.e(TAG, "handshake failed", fu.getCause());
 				}
 			}
 		});
@@ -108,6 +107,23 @@ public class MessageClientHandler extends SimpleChannelHandler
 		{
 			ex.printStackTrace();
 		}
+	}
+
+	@Override
+	public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e)
+	{
+		Log.i(TAG, "disconnected");
+		Message disconnected = Message.obtain(null, 
+				NexyuService.What.MSG_DISCONNECTED.ordinal());
+		try
+		{
+			mService.send(disconnected);
+		}
+		catch (RemoteException ex)
+		{
+			ex.printStackTrace();
+		}
+
 	}
 
 	/**

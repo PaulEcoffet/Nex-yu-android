@@ -30,8 +30,11 @@ import org.nexyu.nexyuAndroid.client.protocol.SMSToCell;
 import org.nexyu.nexyuAndroid.client.protocol.SMSToComputer;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
+import android.net.wifi.WifiManager.WifiLock;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -54,7 +57,7 @@ public class NexyuService extends Service
 	public static enum What
 	{
 		MSG_CONNECT, MSG_CONNECTED, MSG_IMPOSSIBLE_CONNECT, MSG_SEND_SMS,
-		MSG_SEND_CONTACT_LIST
+		MSG_SEND_CONTACT_LIST, MSG_DISCONNECTED
 	};
 
 	static public What[]			whatList	= What.values();
@@ -62,6 +65,7 @@ public class NexyuService extends Service
 	private SMSReceiver				smsReceiver;
 	private final ConnectionManager	connectionManager;
 	private SMSSentChecker			smsSentChecker;
+	private WifiLock	lock;
 
 	/**
 	 * Default constructor.
@@ -171,12 +175,15 @@ public class NexyuService extends Service
 			data = msg.getData();
 			connectionManager.connect(data.getString("ip"), data.getInt("port"),
 					data.getString("fingerprint"));
+			setWifiLock();
 			break;
 		case MSG_CONNECTED:
 			Log.i(TAG, "Connected message received");
 			Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
 			connectionManager.send(new NetworkMessage("ready", null));
 			break;
+		case MSG_DISCONNECTED:
+			unsetWifiLock();
 		case MSG_IMPOSSIBLE_CONNECT:
 			Toast.makeText(this, R.string.impossible_to_connect, Toast.LENGTH_LONG).show();
 			break;
@@ -190,6 +197,24 @@ public class NexyuService extends Service
 		default:
 			break;
 		}
+	}
+
+	/**
+	 * 
+	 */
+	private void setWifiLock()
+	{
+		WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		lock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL, "LockTag");
+		lock.acquire();		
+	}
+
+	/**
+	 * 
+	 */
+	private void unsetWifiLock()
+	{
+		lock.release();
 	}
 
 	/**
