@@ -65,7 +65,7 @@ public class NexyuService extends Service
 	private SMSReceiver				smsReceiver;
 	private final ConnectionManager	connectionManager;
 	private SMSSentChecker			smsSentChecker;
-	private WifiLock	lock;
+	private final WifiLock	lock;
 
 	/**
 	 * Default constructor.
@@ -76,6 +76,9 @@ public class NexyuService extends Service
 	{
 		messenger = new Messenger(new NexyuServiceHandler(this));
 		connectionManager = new ConnectionManager(this);
+		WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		lock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL, "NexyuLock");
+		lock.setReferenceCounted(false);
 	}
 
 	/**
@@ -121,6 +124,7 @@ public class NexyuService extends Service
 	{
 		deactivateSMSReceiver();
 		deactivateSMSSentChecker();
+		unsetWifiLock();
 		connectionManager.disconnect();
 		Log.i(TAG, "Service destroyed");
 		super.onDestroy();
@@ -204,8 +208,6 @@ public class NexyuService extends Service
 	 */
 	private void setWifiLock()
 	{
-		WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-		lock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL, "LockTag");
 		lock.acquire();		
 	}
 
