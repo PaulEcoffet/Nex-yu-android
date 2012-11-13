@@ -93,8 +93,10 @@ public class MessageClientHandler extends SimpleChannelHandler
 				}
 				else
 				{
-					// TODO handle wrong certificate
-					Log.e(TAG, "handshake failed", fu.getCause());
+					Log.i(TAG, "handshake failed", fu.getCause());
+					Message handshakeFailed = Message.obtain(null,
+							NexyuService.What.MSG_HANDSHAKEFAILED.ordinal());
+					mService.send(handshakeFailed);
 				}
 			}
 		});
@@ -113,8 +115,7 @@ public class MessageClientHandler extends SimpleChannelHandler
 	public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e)
 	{
 		Log.i(TAG, "disconnected");
-		Message disconnected = Message.obtain(null, 
-				NexyuService.What.MSG_DISCONNECTED.ordinal());
+		Message disconnected = Message.obtain(null, NexyuService.What.MSG_DISCONNECTED.ordinal());
 		try
 		{
 			mService.send(disconnected);
@@ -138,9 +139,6 @@ public class MessageClientHandler extends SimpleChannelHandler
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e)
 	{
-		// TODO Handle correctly this exception (see
-		// http://stackoverflow.com/questions/3726696/setting-socket-timeout-on-netty-channel
-		// )
 		if (e.getCause() instanceof SocketTimeoutException)
 		{
 			Message message = Message.obtain(null,

@@ -56,8 +56,7 @@ public class NexyuService extends Service
 
 	public static enum What
 	{
-		MSG_CONNECT, MSG_CONNECTED, MSG_IMPOSSIBLE_CONNECT, MSG_SEND_SMS,
-		MSG_SEND_CONTACT_LIST, MSG_DISCONNECTED
+		MSG_CONNECT, MSG_CONNECTED, MSG_IMPOSSIBLE_CONNECT, MSG_SEND_SMS, MSG_SEND_CONTACT_LIST, MSG_DISCONNECTED, MSG_HANDSHAKEFAILED
 	};
 
 	static public What[]			whatList	= What.values();
@@ -65,7 +64,7 @@ public class NexyuService extends Service
 	private SMSReceiver				smsReceiver;
 	private final ConnectionManager	connectionManager;
 	private SMSSentChecker			smsSentChecker;
-	private WifiLock	lock;
+	private WifiLock				lock;
 
 	/**
 	 * Default constructor.
@@ -77,7 +76,7 @@ public class NexyuService extends Service
 		messenger = new Messenger(new NexyuServiceHandler(this));
 		connectionManager = new ConnectionManager(this);
 	}
-	
+
 	@Override
 	public void onCreate()
 	{
@@ -203,6 +202,8 @@ public class NexyuService extends Service
 			ContactsGatherer cg = new ContactsGatherer(this);
 			connectionManager.send(new ContactsList(cg.gatherContactsWithPhoneNumbers()));
 			break;
+		case MSG_HANDSHAKEFAILED:
+			Toast.makeText(this, "The connection seems to be unreliable", Toast.LENGTH_LONG).show();
 		default:
 			break;
 		}
@@ -213,7 +214,7 @@ public class NexyuService extends Service
 	 */
 	private void setWifiLock()
 	{
-		lock.acquire();		
+		lock.acquire();
 	}
 
 	/**

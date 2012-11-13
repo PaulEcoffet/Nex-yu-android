@@ -89,7 +89,6 @@ public final class NetworkMessage implements NetworkMessageable
 	@Override
 	public NetworkMessage toNetworkMessage()
 	{
-		// TODO Auto-generated method stub
 		return this;
 	}
 }
