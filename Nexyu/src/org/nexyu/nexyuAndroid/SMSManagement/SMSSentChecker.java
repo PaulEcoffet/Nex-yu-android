@@ -27,7 +27,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.util.SparseArray;
+import android.util.SparseIntArray;
 
 /**
  * @author Paul Ecoffet
@@ -35,7 +35,7 @@ import android.util.SparseArray;
  */
 public class SMSSentChecker extends BroadcastReceiver
 {
-	SparseArray<Integer>	SMSList	= null;
+	SparseIntArray	SMSList	= null;
 	ConnectionManager		cm		= null;
 	NexyuService			service	= null;
 
@@ -44,7 +44,7 @@ public class SMSSentChecker extends BroadcastReceiver
 	 */
 	public SMSSentChecker(NexyuService _service)
 	{
-		SMSList = new SparseArray<Integer>();
+		SMSList = new SparseIntArray();
 		service = _service;
 		cm = service.getConnectionManager();
 	}
