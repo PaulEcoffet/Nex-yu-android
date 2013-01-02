@@ -19,6 +19,7 @@
 package org.nexyu.nexyuAndroid.ui;
 
 import org.nexyu.nexyuAndroid.R;
+import org.nexyu.nexyuAndroid.SMSManagement.ConversationsGatherer;
 import org.nexyu.nexyuAndroid.service.NexyuService;
 import org.nexyu.nexyuAndroid.utils.IntentIntegrator;
 import org.nexyu.nexyuAndroid.utils.IntentResult;

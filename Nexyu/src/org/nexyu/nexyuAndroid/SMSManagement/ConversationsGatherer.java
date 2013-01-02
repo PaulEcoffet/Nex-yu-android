@@ -18,8 +18,13 @@
  */
 package org.nexyu.nexyuAndroid.SMSManagement;
 
+import java.util.ArrayList;
+
+import org.nexyu.nexyuAndroid.client.protocol.Conversation;
+import org.nexyu.nexyuAndroid.service.NexyuService;
+
+import android.database.Cursor;
 import android.net.Uri;
-import android.support.v4.app.FragmentActivity;
 
 /**
  * Likely to be never implemented since it must use undocumented API methods
@@ -30,21 +35,42 @@ import android.support.v4.app.FragmentActivity;
  */
 public class ConversationsGatherer
 {
-	protected Uri				mconversDatabase;
-	protected FragmentActivity	mCtx;
+	protected Uri conversDatabase;
+	protected NexyuService service;
 
-	public ConversationsGatherer(FragmentActivity ctx)
+	public ConversationsGatherer(NexyuService nexyuService)
 	{
-		mCtx = ctx;
-		mconversDatabase = Uri.parse("content://sms/");
+		service = nexyuService;
+		conversDatabase = Uri.parse("content://sms/conversations");
 	}
 
-	/**
-	 *
-	 */
-	public void gatherSMS()
+	public ArrayList<Conversation> gatherConversations()
 	{
-		// TODO Auto-generated method stub
+		ArrayList<Conversation> conversations = new ArrayList<Conversation>();
+		String address = null, snippet = null;
+		int thread_id = 0, date = 0, type = 0;
+		Cursor cursor = service.getContentResolver().query(conversDatabase,
+				null, null, null, "date DESC");
+
+		while (cursor.moveToNext())
+		{
+			thread_id = cursor.getInt(cursor.getColumnIndex("thread_id"));
+			snippet = cursor.getString(cursor.getColumnIndex("snippet"));
+			Uri convUri = Uri.parse("content://sms/conversations/" + thread_id);
+			Cursor cur = service.getContentResolver().query(convUri,
+					new String[] { "address", "date", "type" }, null, null,
+					"date DESC");
+			if (cur.moveToNext())
+			{
+				address = cur.getString(cur.getColumnIndex("address"));
+				date = cur.getInt(cur.getColumnIndex("date"));
+				type = cur.getInt(cur.getColumnIndex("type"));
+			}
+			conversations.add(new Conversation(thread_id, address, snippet,
+					date, type));
+		}
+
+		return conversations;
 
 	}
 }

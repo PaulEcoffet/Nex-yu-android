@@ -188,6 +188,10 @@ public class MessageClientHandler extends SimpleChannelHandler
 		{
 			toService = Message.obtain(null, NexyuService.What.MSG_SEND_CONTACT_LIST.ordinal());
 		}
+		else if (type.equals("askConversations"))
+		{
+			toService = Message.obtain(null, NexyuService.What.MSG_SEND_CONVERSATION_LIST.ordinal());
+		}
 		else if (type.equals("ok"))
 			Log.i(TAG, "ok");
 		else

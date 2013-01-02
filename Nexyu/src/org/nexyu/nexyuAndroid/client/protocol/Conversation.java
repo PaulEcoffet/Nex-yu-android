@@ -1,0 +1,39 @@
+/**
+ * 
+ */
+package org.nexyu.nexyuAndroid.client.protocol;
+
+import com.google.gson.Gson;
+
+/**
+ * @author paul
+ *
+ */
+public class Conversation implements NetworkMessageable {
+
+	private int thread_id;
+	private String snippet;
+	private String address;
+	private int date;
+	private int type;
+
+	public Conversation(int thread_id, String address, String snippet,
+			int date, int type)
+	{
+		this.thread_id = thread_id;
+		this.address = address;
+		this.snippet = snippet;
+		this.date = date;
+		this.type = type;
+	}
+
+	/**
+	 * @see org.nexyu.nexyuAndroid.client.protocol.NetworkMessageable#toNetworkMessage()
+	 */
+	@Override
+	public NetworkMessage toNetworkMessage() {
+		Gson gson = new Gson();
+		return new NetworkMessage("conversationsList", gson.toJsonTree(this));
+	}
+
+}

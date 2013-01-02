@@ -20,11 +20,13 @@ package org.nexyu.nexyuAndroid.service;
 
 import org.nexyu.nexyuAndroid.R;
 import org.nexyu.nexyuAndroid.ContactsManagement.ContactsGatherer;
+import org.nexyu.nexyuAndroid.SMSManagement.ConversationsGatherer;
 import org.nexyu.nexyuAndroid.SMSManagement.SMSReceiver;
 import org.nexyu.nexyuAndroid.SMSManagement.SMSSender;
 import org.nexyu.nexyuAndroid.SMSManagement.SMSSentChecker;
 import org.nexyu.nexyuAndroid.client.ConnectionManager;
 import org.nexyu.nexyuAndroid.client.protocol.ContactsList;
+import org.nexyu.nexyuAndroid.client.protocol.ConversationsList;
 import org.nexyu.nexyuAndroid.client.protocol.NetworkMessage;
 import org.nexyu.nexyuAndroid.client.protocol.SMSToCell;
 import org.nexyu.nexyuAndroid.client.protocol.SMSToComputer;
@@ -56,7 +58,9 @@ public class NexyuService extends Service
 
 	public static enum What
 	{
-		MSG_CONNECT, MSG_CONNECTED, MSG_IMPOSSIBLE_CONNECT, MSG_SEND_SMS, MSG_SEND_CONTACT_LIST, MSG_DISCONNECTED, MSG_HANDSHAKEFAILED
+		MSG_CONNECT, MSG_CONNECTED, MSG_IMPOSSIBLE_CONNECT, MSG_SEND_SMS,
+		MSG_SEND_CONTACT_LIST, MSG_DISCONNECTED, MSG_HANDSHAKEFAILED,
+		MSG_SEND_CONVERSATION_LIST
 	};
 
 	static public What[]			whatList	= What.values();
@@ -202,6 +206,9 @@ public class NexyuService extends Service
 			ContactsGatherer cg = new ContactsGatherer(this);
 			connectionManager.send(new ContactsList(cg.gatherContactsWithPhoneNumbers()));
 			break;
+		case MSG_SEND_CONVERSATION_LIST:
+			ConversationsGatherer cg1 = new ConversationsGatherer(this);
+			connectionManager.send(new ConversationsList(cg1.gatherConversations()));
 		case MSG_HANDSHAKEFAILED:
 			Toast.makeText(this, "The connection seems to be unreliable", Toast.LENGTH_LONG).show();
 		default:
