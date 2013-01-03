@@ -35,7 +35,7 @@ public class Conversation implements NetworkMessageable
 	public NetworkMessage toNetworkMessage()
 	{
 		Gson gson = new Gson();
-		return new NetworkMessage("conversationsList", gson.toJsonTree(this));
+		return new NetworkMessage("conversation", gson.toJsonTree(this));
 	}
 
 }

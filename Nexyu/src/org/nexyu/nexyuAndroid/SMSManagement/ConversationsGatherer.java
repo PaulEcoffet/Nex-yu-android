@@ -71,6 +71,5 @@ public class ConversationsGatherer
 		}
 
 		return conversations;
-
 	}
 }

@@ -27,7 +27,6 @@ import org.nexyu.nexyuAndroid.SMSManagement.SMSSentChecker;
 import org.nexyu.nexyuAndroid.client.ConnectionManager;
 import org.nexyu.nexyuAndroid.client.protocol.ContactsList;
 import org.nexyu.nexyuAndroid.client.protocol.ConversationsList;
-import org.nexyu.nexyuAndroid.client.protocol.NetworkMessage;
 import org.nexyu.nexyuAndroid.client.protocol.SMSToCell;
 import org.nexyu.nexyuAndroid.client.protocol.SMSToComputer;
 
@@ -193,7 +192,6 @@ public class NexyuService extends Service
 		case MSG_CONNECTED:
 			Log.i(TAG, "Connected message received");
 			Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
-			connectionManager.send(new NetworkMessage("ready", null));
 			break;
 		case MSG_DISCONNECTED:
 			unsetWifiLock();

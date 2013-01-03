@@ -87,14 +87,13 @@ public class MessageClientHandler extends SimpleChannelHandler
 			@Override
 			public void operationComplete(ChannelFuture fu) throws Exception
 			{
-				Log.i(TAG, "operationComplete");
 				if (fu.isSuccess())
 				{
 					Log.i(TAG, "handshake is successful");
 				}
 				else
 				{
-					Log.i(TAG, "handshake failed", fu.getCause());
+					Log.e(TAG, "handshake failed", fu.getCause());
 					Message handshakeFailed = Message.obtain(null,
 							NexyuService.What.MSG_HANDSHAKEFAILED.ordinal());
 					mService.send(handshakeFailed);
@@ -188,12 +187,12 @@ public class MessageClientHandler extends SimpleChannelHandler
 				e.printStackTrace();
 			}
 		}
-		else if (type.equals("askContacts"))
+		else if (type.equals("askContactsList"))
 		{
 			toService = Message.obtain(null,
 					NexyuService.What.MSG_SEND_CONTACTS_LIST.ordinal());
 		}
-		else if (type.equals("askConversations"))
+		else if (type.equals("askConversationsList"))
 		{
 			toService = Message.obtain(null,
 					NexyuService.What.MSG_SEND_CONVERSATIONS_LIST.ordinal());
