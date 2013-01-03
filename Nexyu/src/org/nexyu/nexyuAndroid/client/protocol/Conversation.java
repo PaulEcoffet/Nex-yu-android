@@ -6,11 +6,12 @@ package org.nexyu.nexyuAndroid.client.protocol;
 import com.google.gson.Gson;
 
 /**
- * @author paul
- *
+ * @author Paul Ecoffet
+ * 
  */
-public class Conversation implements NetworkMessageable {
-
+@SuppressWarnings("unused")
+public class Conversation implements NetworkMessageable
+{
 	private int thread_id;
 	private String snippet;
 	private String address;
@@ -31,7 +32,8 @@ public class Conversation implements NetworkMessageable {
 	 * @see org.nexyu.nexyuAndroid.client.protocol.NetworkMessageable#toNetworkMessage()
 	 */
 	@Override
-	public NetworkMessage toNetworkMessage() {
+	public NetworkMessage toNetworkMessage()
+	{
 		Gson gson = new Gson();
 		return new NetworkMessage("conversationsList", gson.toJsonTree(this));
 	}

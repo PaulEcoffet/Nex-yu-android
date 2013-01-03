@@ -54,21 +54,21 @@ import android.widget.Toast;
  */
 public class NexyuService extends Service
 {
-	private static final String	TAG	= "ConnectService";
+	private static final String TAG = "ConnectService";
 
 	public static enum What
 	{
 		MSG_CONNECT, MSG_CONNECTED, MSG_IMPOSSIBLE_CONNECT, MSG_SEND_SMS,
-		MSG_SEND_CONTACT_LIST, MSG_DISCONNECTED, MSG_HANDSHAKEFAILED,
-		MSG_SEND_CONVERSATION_LIST
+		MSG_SEND_CONTACTS_LIST, MSG_DISCONNECTED, MSG_HANDSHAKEFAILED,
+		MSG_SEND_CONVERSATIONS_LIST
 	};
 
-	static public What[]			whatList	= What.values();
-	private final Messenger			messenger;
-	private SMSReceiver				smsReceiver;
-	private final ConnectionManager	connectionManager;
-	private SMSSentChecker			smsSentChecker;
-	private WifiLock				lock;
+	static public What[] whatList = What.values();
+	private final Messenger messenger;
+	private SMSReceiver smsReceiver;
+	private final ConnectionManager connectionManager;
+	private SMSSentChecker smsSentChecker;
+	private WifiLock lock;
 
 	/**
 	 * Default constructor.
@@ -85,7 +85,8 @@ public class NexyuService extends Service
 	public void onCreate()
 	{
 		WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-		lock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL, "NexyuLock");
+		lock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL,
+				"NexyuLock");
 		lock.setReferenceCounted(false);
 	}
 
@@ -185,8 +186,8 @@ public class NexyuService extends Service
 		{
 		case MSG_CONNECT:
 			data = msg.getData();
-			connectionManager.connect(data.getString("ip"), data.getInt("port"),
-					data.getString("fingerprint"));
+			connectionManager.connect(data.getString("ip"),
+					data.getInt("port"), data.getString("fingerprint"));
 			setWifiLock();
 			break;
 		case MSG_CONNECTED:
@@ -197,20 +198,24 @@ public class NexyuService extends Service
 		case MSG_DISCONNECTED:
 			unsetWifiLock();
 		case MSG_IMPOSSIBLE_CONNECT:
-			Toast.makeText(this, R.string.impossible_to_connect, Toast.LENGTH_LONG).show();
+			Toast.makeText(this, R.string.impossible_to_connect,
+					Toast.LENGTH_LONG).show();
 			break;
 		case MSG_SEND_SMS:
 			SMSSender.sendSMSthroughCellNetwork((SMSToCell) msg.obj, this);
 			break;
-		case MSG_SEND_CONTACT_LIST:
+		case MSG_SEND_CONTACTS_LIST:
 			ContactsGatherer cg = new ContactsGatherer(this);
-			connectionManager.send(new ContactsList(cg.gatherContactsWithPhoneNumbers()));
+			connectionManager.send(new ContactsList(cg
+					.gatherContactsWithPhoneNumbers()));
 			break;
-		case MSG_SEND_CONVERSATION_LIST:
+		case MSG_SEND_CONVERSATIONS_LIST:
 			ConversationsGatherer cg1 = new ConversationsGatherer(this);
-			connectionManager.send(new ConversationsList(cg1.gatherConversations()));
+			connectionManager.send(new ConversationsList(cg1
+					.gatherConversations()));
 		case MSG_HANDSHAKEFAILED:
-			Toast.makeText(this, "The connection seems to be unreliable", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "The connection seems to be unreliable",
+					Toast.LENGTH_LONG).show();
 		default:
 			break;
 		}
@@ -245,7 +250,8 @@ public class NexyuService extends Service
 		if (smsSentChecker == null)
 		{
 			smsSentChecker = new SMSSentChecker(this);
-			registerReceiver(smsSentChecker, new IntentFilter(SMSSender.ACTION_SMS_SENT));
+			registerReceiver(smsSentChecker, new IntentFilter(
+					SMSSender.ACTION_SMS_SENT));
 		}
 	}
 

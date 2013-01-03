@@ -52,8 +52,8 @@ public class MessageClientHandler extends SimpleChannelHandler
 	/**
 	 *
 	 */
-	private static final String	TAG	= "MessageClientHandler";
-	private final Messenger		mService;
+	private static final String TAG = "MessageClientHandler";
+	private final Messenger mService;
 
 	/**
 	 * Default constructor of MessageClientHandler, which requires a messenger
@@ -82,7 +82,8 @@ public class MessageClientHandler extends SimpleChannelHandler
 		Log.d(TAG, "Connected");
 		SslHandler sslHandler = ctx.getPipeline().get(SslHandler.class);
 		ChannelFuture fu = sslHandler.handshake();
-		fu.addListener(new ChannelFutureListener() {
+		fu.addListener(new ChannelFutureListener()
+		{
 			@Override
 			public void operationComplete(ChannelFuture fu) throws Exception
 			{
@@ -100,7 +101,8 @@ public class MessageClientHandler extends SimpleChannelHandler
 				}
 			}
 		});
-		Message connected = Message.obtain(null, NexyuService.What.MSG_CONNECTED.ordinal());
+		Message connected = Message.obtain(null,
+				NexyuService.What.MSG_CONNECTED.ordinal());
 		try
 		{
 			mService.send(connected);
@@ -115,7 +117,8 @@ public class MessageClientHandler extends SimpleChannelHandler
 	public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e)
 	{
 		Log.i(TAG, "disconnected");
-		Message disconnected = Message.obtain(null, NexyuService.What.MSG_DISCONNECTED.ordinal());
+		Message disconnected = Message.obtain(null,
+				NexyuService.What.MSG_DISCONNECTED.ordinal());
 		try
 		{
 			mService.send(disconnected);
@@ -174,7 +177,8 @@ public class MessageClientHandler extends SimpleChannelHandler
 		Message toService = null;
 		if (type.equals("messageToCell"))
 		{
-			toService = Message.obtain(null, NexyuService.What.MSG_SEND_SMS.ordinal());
+			toService = Message.obtain(null,
+					NexyuService.What.MSG_SEND_SMS.ordinal());
 			try
 			{
 				toService.obj = new SMSToCell(message);
@@ -186,11 +190,13 @@ public class MessageClientHandler extends SimpleChannelHandler
 		}
 		else if (type.equals("askContacts"))
 		{
-			toService = Message.obtain(null, NexyuService.What.MSG_SEND_CONTACT_LIST.ordinal());
+			toService = Message.obtain(null,
+					NexyuService.What.MSG_SEND_CONTACTS_LIST.ordinal());
 		}
 		else if (type.equals("askConversations"))
 		{
-			toService = Message.obtain(null, NexyuService.What.MSG_SEND_CONVERSATION_LIST.ordinal());
+			toService = Message.obtain(null,
+					NexyuService.What.MSG_SEND_CONVERSATIONS_LIST.ordinal());
 		}
 		else if (type.equals("ok"))
 			Log.i(TAG, "ok");
