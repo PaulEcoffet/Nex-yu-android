@@ -35,6 +35,7 @@ public class Contact implements NetworkMessageable
 	private String					name;
 	private ArrayList<PhoneNumber>	phoneNumbers;
 	private boolean					starred;
+	private transient int collection_id;
 
 	public Contact() // For Gson purpose
 	{
@@ -109,7 +110,7 @@ public class Contact implements NetworkMessageable
 	{
 		Gson gson = new Gson();
 		JsonElement data = gson.toJsonTree(this, getClass());
-		return new NetworkMessage("contact", data);
+		return new NetworkMessage("contact", data, collection_id);
 	}
 
 	@Override
@@ -130,7 +131,6 @@ public class Contact implements NetworkMessageable
 	@Override
 	public void setCollectionId(int collection_id)
 	{
-		// TODO Auto-generated method stub
-		
+		this.collection_id = collection_id;
 	}
 }

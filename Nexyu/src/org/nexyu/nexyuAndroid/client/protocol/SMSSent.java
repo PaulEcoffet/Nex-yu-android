@@ -94,4 +94,11 @@ public class SMSSent implements NetworkMessageable
 		this.result = result;
 	}
 
+	@Override
+	public void setCollectionId(int collection_id)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

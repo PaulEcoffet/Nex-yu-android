@@ -122,4 +122,11 @@ public class SMSToComputer implements NetworkMessageable
 	{
 		this.body = body;
 	}
+
+	@Override
+	public void setCollectionId(int collection_id)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }
