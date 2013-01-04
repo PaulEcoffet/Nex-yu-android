@@ -27,10 +27,13 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.socket.oio.OioClientSocketChannelFactory;
+import org.nexyu.nexyuAndroid.client.protocol.CollectionInformation;
 import org.nexyu.nexyuAndroid.client.protocol.NetworkMessageable;
 import org.nexyu.nexyuAndroid.service.NexyuService;
 
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 /**
  * @author Paul Ecoffet
@@ -130,14 +133,18 @@ public class ConnectionManager
 	public void send(NetworkMessageable toSend)
 	{
 		if (isConnected())
+		{
+			Gson gson = new Gson();
+			Log.i(TAG, gson.toJson(toSend.toNetworkMessage()));
 			chan.write(toSend.toNetworkMessage());
+		}
 	}
 
 	public void send(ArrayList<? extends NetworkMessageable> toSend)
 	{
 		if (isConnected())
 		{
-			//send(new CollectionInformation(collection_id, toSend.size()));
+			send(new CollectionInformation(collection_id, toSend.size()));
 			for(NetworkMessageable item : toSend)
 			{
 				item.setCollectionId(collection_id);
