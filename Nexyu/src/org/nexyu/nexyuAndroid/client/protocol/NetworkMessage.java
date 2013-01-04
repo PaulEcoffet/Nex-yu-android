@@ -33,6 +33,7 @@ public final class NetworkMessage implements NetworkMessageable
 {
 	private String		type;
 	private JsonElement	data;
+	private int collection_id;
 
 	/**
 	 * Default constructor as recommended by Gson.
@@ -41,12 +42,20 @@ public final class NetworkMessage implements NetworkMessageable
 	{
 		type = "unknown";
 		data = null;
+		collection_id = 0;
 	}
 
-	public NetworkMessage(String what, JsonElement _data)
+	public NetworkMessage(String what, JsonElement data)
 	{
 		type = what;
-		this.data = _data;
+		this.data = data;
+	}
+
+	public NetworkMessage(String what, JsonElement data, int collection_id)
+	{
+		type = what;
+		this.data = data;
+		this.collection_id = collection_id;
 	}
 
 	/**
@@ -81,6 +90,22 @@ public final class NetworkMessage implements NetworkMessageable
 	public void setData(JsonElement data)
 	{
 		this.data = data;
+	}
+
+	/**
+	 * @return the collection_id
+	 */
+	public int getCollectionId()
+	{
+		return collection_id;
+	}
+
+	/**
+	 * @param collection_id the collection_id to set
+	 */
+	public void setCollectionId(int collection_id)
+	{
+		this.collection_id = collection_id;
 	}
 
 	/**

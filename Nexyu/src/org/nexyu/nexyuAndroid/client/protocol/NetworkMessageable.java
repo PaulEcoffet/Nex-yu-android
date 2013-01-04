@@ -35,4 +35,6 @@ public interface NetworkMessageable
 	 *         {@link NetworkMessage}
 	 */
 	public NetworkMessage toNetworkMessage();
+
+	public void setCollectionId(int collection_id);
 }

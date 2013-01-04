@@ -17,6 +17,7 @@ public class Conversation implements NetworkMessageable
 	private String address;
 	private int date;
 	private int type;
+	private transient int collection_id;
 
 	public Conversation(int thread_id, String address, String snippet,
 			int date, int type)
@@ -35,7 +36,13 @@ public class Conversation implements NetworkMessageable
 	public NetworkMessage toNetworkMessage()
 	{
 		Gson gson = new Gson();
-		return new NetworkMessage("conversation", gson.toJsonTree(this));
+		return new NetworkMessage("conversation", gson.toJsonTree(this), collection_id);
+	}
+
+	@Override
+	public void setCollectionId(int collection_id)
+	{
+		this.collection_id = collection_id;
 	}
 
 }

@@ -126,4 +126,11 @@ public class Contact implements NetworkMessageable
 		return builder.toString();
 
 	}
+
+	@Override
+	public void setCollectionId(int collection_id)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

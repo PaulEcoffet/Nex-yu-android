@@ -19,6 +19,7 @@
 package org.nexyu.nexyuAndroid.client;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
@@ -37,10 +38,11 @@ import android.util.Log;
  */
 public class ConnectionManager
 {
-	protected static final String			TAG	= "ConnectionManager";
-	private OioClientSocketChannelFactory	factory;
-	private Channel							chan;
-	private final NexyuService				service;
+	protected static final String TAG = "ConnectionManager";
+	private OioClientSocketChannelFactory factory;
+	private Channel chan;
+	private final NexyuService service;
+	private static int collection_id = 1;
 
 	public ConnectionManager(NexyuService mService)
 	{
@@ -58,19 +60,23 @@ public class ConnectionManager
 	 */
 	public void connect(String host, int port, String fingerprint)
 	{
-		factory = new OioClientSocketChannelFactory(Executors.newCachedThreadPool());
+		factory = new OioClientSocketChannelFactory(
+				Executors.newCachedThreadPool());
 
 		ClientBootstrap bootstrap = new ClientBootstrap(factory);
-		bootstrap.setPipelineFactory(new ClientPipelineFactory(service.getMessenger().getBinder(),
-				fingerprint));
+		bootstrap.setPipelineFactory(new ClientPipelineFactory(service
+				.getMessenger().getBinder(), fingerprint));
 		bootstrap.setOption("tcpNoDelay", true);
 		bootstrap.setOption("keepAlive", true);
 
-		ChannelFuture fuConn = bootstrap.connect(new InetSocketAddress(host, port));
-		fuConn.addListener(new ChannelFutureListener() {
+		ChannelFuture fuConn = bootstrap.connect(new InetSocketAddress(host,
+				port));
+		fuConn.addListener(new ChannelFutureListener()
+		{
 
 			@Override
-			public void operationComplete(ChannelFuture fuConn) throws Exception
+			public void operationComplete(ChannelFuture fuConn)
+					throws Exception
 			{
 				if (fuConn.isSuccess())
 				{
@@ -97,9 +103,11 @@ public class ConnectionManager
 		if (isConnected())
 		{
 			ChannelFuture f = chan.close();
-			f.addListener(new ChannelFutureListener() {
+			f.addListener(new ChannelFutureListener()
+			{
 				@Override
-				public void operationComplete(ChannelFuture future) throws Exception
+				public void operationComplete(ChannelFuture future)
+						throws Exception
 				{
 					Log.d(TAG, "Disconnected");
 					factory.releaseExternalResources();
@@ -123,5 +131,19 @@ public class ConnectionManager
 	{
 		if (isConnected())
 			chan.write(toSend.toNetworkMessage());
+	}
+
+	public void send(ArrayList<? extends NetworkMessageable> toSend)
+	{
+		if (isConnected())
+		{
+			//send(new CollectionInformation(collection_id, toSend.size()));
+			for(NetworkMessageable item : toSend)
+			{
+				item.setCollectionId(collection_id);
+				send(item);
+			}
+			collection_id++;
+		}
 	}
 }
