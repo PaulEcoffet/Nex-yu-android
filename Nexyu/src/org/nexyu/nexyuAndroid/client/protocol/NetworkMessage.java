@@ -103,6 +103,7 @@ public final class NetworkMessage implements NetworkMessageable
 	/**
 	 * @param collection_id the collection_id to set
 	 */
+	@Override
 	public void setCollectionId(int collection_id)
 	{
 		this.collection_id = collection_id;
