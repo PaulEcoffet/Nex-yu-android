@@ -37,14 +37,16 @@ import android.util.SparseArray;
  */
 public class ContactsGatherer
 {
-	private Uri			uri			= ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-	private String[]	projections	= new String[] { ContactsContract.CommonDataKinds.Phone.NUMBER,
+	private Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+	private String[] projections = new String[] {
+			ContactsContract.CommonDataKinds.Phone.NUMBER,
 			ContactsContract.CommonDataKinds.Phone.TYPE,
 			ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
 			ContactsContract.CommonDataKinds.Phone.STARRED,
 			ContactsContract.CommonDataKinds.Phone.CONTACT_ID };
-	private String		order		= ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC";
-	private Service		service;
+	private String order = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
+			+ " ASC";
+	private Service service;
 
 	/**
 	 * The default constructor
@@ -68,13 +70,18 @@ public class ContactsGatherer
 	public ArrayList<Contact> gatherContactsWithPhoneNumbers()
 	{
 		SparseArray<Contact> contactsList = new SparseArray<Contact>();
-		Cursor cur = service.getContentResolver().query(uri, projections, null, null, order);
-		int indexContactId = cur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID);
-		int indexPhoneNumber = cur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-		int indexPhoneType = cur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE);
+		Cursor cur = service.getContentResolver().query(uri, projections, null,
+				null, order);
+		int indexContactId = cur
+				.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID);
+		int indexPhoneNumber = cur
+				.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+		int indexPhoneType = cur
+				.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE);
 		int indexDisplayedName = cur
 				.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-		int indexStarred = cur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.STARRED);
+		int indexStarred = cur
+				.getColumnIndex(ContactsContract.CommonDataKinds.Phone.STARRED);
 
 		while (cur.moveToNext())
 		{
@@ -87,7 +94,8 @@ public class ContactsGatherer
 
 			if (curContact == null)
 			{
-				curContact = new Contact(displayedName, phoneNumber, phoneType, starred);
+				curContact = new Contact(id, displayedName, phoneNumber, phoneType,
+						starred);
 				contactsList.append(id, curContact);
 			}
 			else

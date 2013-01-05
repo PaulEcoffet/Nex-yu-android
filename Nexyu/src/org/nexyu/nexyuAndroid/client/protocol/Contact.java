@@ -29,12 +29,14 @@ import com.google.gson.JsonElement;
  * 
  * @author Paul Ecoffet
  */
+@SuppressWarnings("unused")
 public class Contact implements NetworkMessageable
 {
 
-	private String					name;
-	private ArrayList<PhoneNumber>	phoneNumbers;
-	private boolean					starred;
+	private String name;
+	private ArrayList<PhoneNumber> phoneNumbers;
+	private boolean starred;
+	private int id;
 	private transient int collection_id;
 
 	public Contact() // For Gson purpose
@@ -49,11 +51,12 @@ public class Contact implements NetworkMessageable
 	 * @param phoneNumbers
 	 * @param starred
 	 */
-	public Contact(String name, String phoneNumber, int phoneType, int starred)
+	public Contact(int id, String name, String phoneNumber, int phoneType, int starred)
 	{
 		this.name = name;
 		this.phoneNumbers = new ArrayList<PhoneNumber>();
 		this.starred = (starred != 0) ? true : false;
+		this.id = id;
 
 		this.addPhone(phoneNumber, phoneType);
 	}

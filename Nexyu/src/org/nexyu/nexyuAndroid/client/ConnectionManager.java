@@ -33,8 +33,6 @@ import org.nexyu.nexyuAndroid.service.NexyuService;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
-
 /**
  * @author Paul Ecoffet
  * 
@@ -134,8 +132,6 @@ public class ConnectionManager
 	{
 		if (isConnected())
 		{
-			Gson gson = new Gson();
-			Log.i(TAG, gson.toJson(toSend.toNetworkMessage()));
 			chan.write(toSend.toNetworkMessage());
 		}
 	}
