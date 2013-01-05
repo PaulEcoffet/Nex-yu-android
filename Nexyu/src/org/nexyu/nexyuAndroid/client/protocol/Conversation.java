@@ -15,12 +15,12 @@ public class Conversation implements NetworkMessageable
 	private int thread_id;
 	private String snippet;
 	private String address;
-	private int date;
+	private long date;
 	private int type;
 	private transient int collection_id;
 
 	public Conversation(int thread_id, String address, String snippet,
-			int date, int type)
+			long date, int type)
 	{
 		this.thread_id = thread_id;
 		this.address = address;

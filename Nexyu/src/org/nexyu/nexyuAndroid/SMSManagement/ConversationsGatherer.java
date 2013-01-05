@@ -48,7 +48,8 @@ public class ConversationsGatherer
 	{
 		ArrayList<Conversation> conversations = new ArrayList<Conversation>();
 		String address = null, snippet = null;
-		int thread_id = 0, date = 0, type = 0;
+		int thread_id = 0, type = 0;
+		long date = 0;
 		Cursor cursor = service.getContentResolver().query(conversDatabase,
 				null, null, null, "date DESC");
 
@@ -63,7 +64,7 @@ public class ConversationsGatherer
 			if (cur.moveToNext())
 			{
 				address = cur.getString(cur.getColumnIndex("address"));
-				date = cur.getInt(cur.getColumnIndex("date"));
+				date = cur.getLong(cur.getColumnIndex("date"));
 				type = cur.getInt(cur.getColumnIndex("type"));
 			}
 			conversations.add(new Conversation(thread_id, address, snippet,
